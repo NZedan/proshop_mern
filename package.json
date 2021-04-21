@@ -1,0 +1,20 @@
+{
+	"name": "proshop",
+	"version": "1.0.0",
+	"description": "MERN eCommerce app",
+	"main": "server.js",
+	"scripts": {
+		"start": "node backend/server",
+		"server": "nodemon backend/server",
+		"client": "npm start --prefix frontend",
+		"dev": "concurrently \"npm run server\" \"npm run client\" "
+	},
+	"author": "raggedmoon",
+	"license": "ISC",
+	"dependencies": {
+		"express": "^4.17.1"
+	},
+	"devDependencies": {
+		"concurrently": "^6.0.2"
+	}
+}
