@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BASKET_ADD_ITEM } from '../constants/basketConstants';
+import { BASKET_ADD_ITEM, BASKET_REMOVE_ITEM } from '../constants/basketConstants';
 
 // getState makes all state available to the action
 export const addToBasket = (id, qty) => async (dispatch, getState) => {
@@ -18,5 +18,14 @@ export const addToBasket = (id, qty) => async (dispatch, getState) => {
 	});
 
 	// Saves basketItems to local storage, local storage only takes strings so JSON object is stringified
+	localStorage.setItem('basketItems', JSON.stringify(getState().basket.basketItems));
+};
+
+export const removeFromBasket = (id) => (dispatch, getState) => {
+	dispatch({
+		type: BASKET_REMOVE_ITEM,
+		payload: id,
+	});
+
 	localStorage.setItem('basketItems', JSON.stringify(getState().basket.basketItems));
 };

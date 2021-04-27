@@ -1,4 +1,4 @@
-import { BASKET_ADD_ITEM } from '../constants/basketConstants';
+import { BASKET_ADD_ITEM, BASKET_REMOVE_ITEM } from '../constants/basketConstants';
 
 export const basketReducer = (state = { basketItems: [] }, { type, payload }) => {
 	switch (type) {
@@ -20,6 +20,11 @@ export const basketReducer = (state = { basketItems: [] }, { type, payload }) =>
 					basketItems: [...state.basketItems, addedItem],
 				};
 			}
+		case BASKET_REMOVE_ITEM:
+			return {
+				...state,
+				basketItems: state.basketItems.filter((item) => item.productId !== payload),
+			};
 		default:
 			return state;
 	}
