@@ -18,6 +18,7 @@ export const addToBasket = (id, qty) => async (dispatch, getState) => {
 	});
 
 	// Saves basketItems to local storage, local storage only takes strings so JSON object is stringified
+	// For production this data should be encrypted
 	localStorage.setItem('basketItems', JSON.stringify(getState().basket.basketItems));
 };
 
@@ -26,6 +27,6 @@ export const removeFromBasket = (id) => (dispatch, getState) => {
 		type: BASKET_REMOVE_ITEM,
 		payload: id,
 	});
-
+	// For production this data should be encrypted
 	localStorage.setItem('basketItems', JSON.stringify(getState().basket.basketItems));
 };

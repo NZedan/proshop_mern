@@ -10,6 +10,7 @@ import connectDB from './config/db.js';
 // import products from './data/products.js';
 
 import productRoutes from './routes/productRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 
 dotenv.config();
 
@@ -17,12 +18,18 @@ connectDB();
 
 const app = express();
 
+// Use bodyparser to access form data in request
+app.use(express.json());
+
 app.get('/', (req, res) => {
 	res.send('API is running...');
 });
 
 // Anything that goes to this route is linked to productRoutes
 app.use('/api/products', productRoutes);
+
+// Anything that goes to this route is linked to userRoutes
+app.use('/api/users', userRoutes);
 
 // // Used for initial setup before DB, now moved to productRoutes.js and handled by the above line
 // app.get('/api/products', (req, res) => {
