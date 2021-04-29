@@ -8,6 +8,7 @@ import Product from '../models/productModel.js';
 // @desc    Fetch all products
 // @route   GET /api/products
 // @access  Public
+// @called  listProducts() productActions.js
 export const getProducts = asyncHandler(async (req, res) => {
 	const products = await Product.find({});
 	// throw new Error('Test Error');
@@ -17,6 +18,7 @@ export const getProducts = asyncHandler(async (req, res) => {
 // @desc    Fetch single product
 // @route   GET /api/products/:id
 // @access  Public
+// @called  listProductDetails() productActions.js
 export const getProductById = asyncHandler(async (req, res) => {
 	const product = await Product.findById(req.params.id);
 	// throw new Error('Test Error');

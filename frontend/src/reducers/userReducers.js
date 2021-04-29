@@ -6,6 +6,11 @@ import {
 	USER_REGISTER_REQUEST,
 	USER_REGISTER_SUCCESS,
 	USER_REGISTER_FAIL,
+	USER_DETAILS_REQUEST,
+	USER_DETAILS_SUCCESS,
+	USER_DETAILS_FAIL,
+	USER_DETAILS_RESET,
+	USER_UPDATE_PROFILE_RESET,
 } from '../constants/userConstants';
 
 // state = initial state, destructured action into type and payload
@@ -48,6 +53,32 @@ export const userRegisterReducer = (state = {}, { type, payload }) => {
 				loading: false,
 				error: payload,
 			};
+		default:
+			return state;
+	}
+};
+
+export const userDetailsReducer = (state = { user: {} }, { type, payload }) => {
+	switch (type) {
+		case USER_DETAILS_REQUEST:
+			return {
+				...state,
+				loading: true,
+			};
+		case USER_DETAILS_SUCCESS:
+			return {
+				loading: false,
+				user: payload,
+			};
+		case USER_DETAILS_FAIL:
+			return {
+				loading: false,
+				error: payload,
+			};
+		case USER_DETAILS_RESET:
+			return {};
+		case USER_UPDATE_PROFILE_RESET:
+			return {};
 		default:
 			return state;
 	}

@@ -42,8 +42,8 @@ const BasketScreen = ({ match, location, history }) => {
 	};
 
 	return (
-		<Row>
-			<Col md={8}>
+		<Row className='justify-content-md-center'>
+			<Col lg={10}>
 				<h1>Shopping Basket</h1>
 				{basketItems.length === 0 ? (
 					<Message>
@@ -54,15 +54,16 @@ const BasketScreen = ({ match, location, history }) => {
 						{basketItems.map((item) => (
 							<ListGroupItem key={item.productId}>
 								<Row>
-									<Col md={2}>
+									<Col lg={3}>
 										<Image src={item.image} alt={item.name} fluid rounded />
 									</Col>
-									<Col md={3}>
+									<Col lg={3}>
 										<Link to={`/product/${item.productId}`}>{item.name}</Link>
 									</Col>
-									<Col md={2}>£{item.price}</Col>
-									<Col md={2}>
+									<Col lg={2}>£{item.price}</Col>
+									<Col lg={3}>
 										<Form.Control
+											className='qty-selector'
 											as='select'
 											value={item.qty}
 											onChange={(e) => dispatch(addToBasket(item.productId, Number(e.target.value)))}
@@ -76,7 +77,7 @@ const BasketScreen = ({ match, location, history }) => {
 											))}
 										</Form.Control>
 									</Col>
-									<Col md={2}>
+									<Col lg={1}>
 										<Button
 											type='button'
 											variant='light'
@@ -92,7 +93,7 @@ const BasketScreen = ({ match, location, history }) => {
 					</ListGroup>
 				)}
 			</Col>
-			<Col md={4}>
+			<Col lg={10}>
 				<Card>
 					<ListGroup variant='flush'>
 						<ListGroupItem>

@@ -6,7 +6,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 // Bring in reducers so all state can be made available through combineReducers
 import { productListReducer, productDetailsReducer } from './reducers/productReducers';
 import { basketReducer } from './reducers/basketReducers';
-import { userLoginReducer, userRegisterReducer } from './reducers/userReducers';
+import { userLoginReducer, userRegisterReducer, userDetailsReducer } from './reducers/userReducers';
 
 const reducer = combineReducers({
 	productList: productListReducer,
@@ -14,6 +14,7 @@ const reducer = combineReducers({
 	basket: basketReducer,
 	userLogin: userLoginReducer,
 	userRegister: userRegisterReducer,
+	userDetails: userDetailsReducer,
 });
 
 // Possibly create middleware for encrypting and storing/retrieving from local storage

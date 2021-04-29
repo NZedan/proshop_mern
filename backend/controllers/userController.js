@@ -9,6 +9,7 @@ import User from '../models/userModel.js';
 // @desc    Auth user & get token
 // @route   POST /api/users/login
 // @access  Public
+// @called  login() userActions.js
 export const authUser = asyncHandler(async (req, res) => {
 	const { email, password } = req.body;
 	// // Test to show access to request object functions
@@ -33,6 +34,7 @@ export const authUser = asyncHandler(async (req, res) => {
 // @desc    Register a new user
 // @route   POST /api/users
 // @access  Public
+// @called  register() userActions.js
 export const registerUser = asyncHandler(async (req, res) => {
 	const { name, email, password } = req.body;
 
@@ -66,6 +68,7 @@ export const registerUser = asyncHandler(async (req, res) => {
 // @desc    Get user profile
 // @route   GET /api/users/profile
 // @access  Private
+// @called  getUserDetails() userActions.js
 export const getUserProfile = asyncHandler(async (req, res) => {
 	// User is sent in the request object by the auth middleware
 	const { user } = req;
@@ -76,6 +79,38 @@ export const getUserProfile = asyncHandler(async (req, res) => {
 			name: user.name,
 			email: user.email,
 			isAdmin: user.isAdmin,
+		});
+	} else {
+		res.status(404);
+		throw new Error('User not found');
+	}
+});
+
+// @desc    Update user profile
+// @route   PUT /api/users/profile
+// @access  Private
+// @called
+export const updateUserProfile = asyncHandler(async (req, res) => {
+	// User is sent in the request object by the auth middleware
+	const { user } = req;
+
+	if (user) {
+		// Sets name and email to new details or if none then origianl value
+		user.name = req.body.name || user.name;
+		user.email = req.body.email || user.email;
+		// Only set if changed to avoid re-hashing
+		if (req.body.password) {
+			user.password = req.body.password;
+		}
+
+		const updatedUser = await user.save();
+
+		res.json({
+			_id: updatedUser._id,
+			name: updatedUser.name,
+			email: updatedUser.email,
+			isAdmin: updatedUser.isAdmin,
+			token: generateToken(updatedUser._id),
 		});
 	} else {
 		res.status(404);
