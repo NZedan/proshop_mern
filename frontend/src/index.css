@@ -27,3 +27,8 @@ h3 {
 .rating span {
 	margin: 0.1rem;
 }
+
+.qty-selector {
+	width: 50%;
+	padding: 0.75rem;
+}

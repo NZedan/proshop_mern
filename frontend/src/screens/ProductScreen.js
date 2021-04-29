@@ -66,7 +66,7 @@ const ProductScreen = ({ history, match }) => {
 						{/* Fluid is a responsive property */}
 						<Image src={product.image} alt={product.name} fluid />
 					</Col>
-					<Col md={3}>
+					<Col md={6}>
 						<ListGroup variant='flush'>
 							<ListGroupItem>
 								<h2>{product.name}</h2>
@@ -79,7 +79,7 @@ const ProductScreen = ({ history, match }) => {
 							<ListGroupItem>Description: {product.description}</ListGroupItem>
 						</ListGroup>
 					</Col>
-					<Col md={3}>
+					<Col md={6}>
 						<Card>
 							<ListGroup variant='flush'>
 								<ListGroupItem>
@@ -101,9 +101,14 @@ const ProductScreen = ({ history, match }) => {
 								{product.countInStock > 0 && (
 									<ListGroupItem>
 										<Row>
-											<Col>Qty</Col>
+											<Col>Qty:</Col>
 											<Col>
-												<Form.Control as='select' value={qty} onChange={(e) => setQty(e.target.value)}>
+												<Form.Control
+													className='qty-selector'
+													as='select'
+													value={qty}
+													onChange={(e) => setQty(e.target.value)}
+												>
 													{/* Spread operator with array constructor taking in the countInStock value then taking the key of that
                           item and mapping it ++ to give a list from 1 up */}
 													{[...Array(product.countInStock).keys()].map((key) => (

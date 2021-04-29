@@ -15,6 +15,7 @@ export const authUser = asyncHandler(async (req, res) => {
 	// res.send({email, password});
 	const user = await User.findOne({ email });
 
+	// Maybe refactor to only send id and token
 	if (user && (await user.matchPassword(password))) {
 		res.json({
 			_id: user._id,
