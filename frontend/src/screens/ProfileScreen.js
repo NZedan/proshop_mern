@@ -4,7 +4,7 @@ import { Form, Button, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { getUserDetails } from '../actions/userActions';
+import { getUserDetails, updateUserProfile } from '../actions/userActions';
 import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstants';
 
 const ProfileScreen = ({ history }) => {
@@ -16,11 +16,14 @@ const ProfileScreen = ({ history }) => {
 
 	const dispatch = useDispatch();
 
-	const userDetails = useSelector((state) => state.userDetails);
-	const { loading, error, user } = userDetails;
-
 	const userLogin = useSelector((state) => state.userLogin);
 	const { userInfo } = userLogin;
+
+	const userDetails = useSelector((state) => state.userDetails);
+	const { loading, user } = userDetails;
+
+	const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
+	const { success, error } = userUpdateProfile;
 
 	useEffect(() => {
 		// Check if logged in else redirect to login
@@ -35,16 +38,18 @@ const ProfileScreen = ({ history }) => {
 				// If logged in with user details, fill form fields
 				setName(user.name);
 				setEmail(user.email);
+				setPassword('');
+				setConfirmPassword('');
 			}
 		}
-	}, [history, dispatch, userInfo, user]);
+	}, [history, dispatch, userInfo, user, success]);
 
 	const submitHandler = (e) => {
 		e.preventDefault();
 		if (password !== confirmPassword) {
 			setMessage("Passwords don't match");
 		} else {
-			// DISPATCH UPDATE PROFILE
+			dispatch(updateUserProfile({ id: user._id, name, email, password }));
 		}
 	};
 
@@ -56,20 +61,21 @@ const ProfileScreen = ({ history }) => {
 			<Col lg={4}>
 				<h2>User Profile</h2>
 				{message && <Message variant='danger'>{message}</Message>}
+				{success && <Message variant='success'>Profile Updated</Message>}
 				{error && <Message variant='danger'>{error}</Message>}
 				{loading && <Loader />}
 
-				<Form.Group controlId='name'>
-					<Form.Label>Name</Form.Label>
-					<Form.Control
-						type='text'
-						placeholder='Enter Name'
-						onChange={(e) => setName(e.target.value)}
-						value={name}
-					></Form.Control>
-				</Form.Group>
-
 				<Form onSubmit={submitHandler}>
+					<Form.Group controlId='name'>
+						<Form.Label>Name</Form.Label>
+						<Form.Control
+							type='text'
+							placeholder='Enter Name'
+							onChange={(e) => setName(e.target.value)}
+							value={name}
+						></Form.Control>
+					</Form.Group>
+
 					<Form.Group controlId='email'>
 						<Form.Label>Email Address</Form.Label>
 						<Form.Control

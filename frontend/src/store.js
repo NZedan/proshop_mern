@@ -6,7 +6,12 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 // Bring in reducers so all state can be made available through combineReducers
 import { productListReducer, productDetailsReducer } from './reducers/productReducers';
 import { basketReducer } from './reducers/basketReducers';
-import { userLoginReducer, userRegisterReducer, userDetailsReducer } from './reducers/userReducers';
+import {
+	userLoginReducer,
+	userRegisterReducer,
+	userDetailsReducer,
+	userUpdateProfileReducer,
+} from './reducers/userReducers';
 
 const reducer = combineReducers({
 	productList: productListReducer,
@@ -15,6 +20,7 @@ const reducer = combineReducers({
 	userLogin: userLoginReducer,
 	userRegister: userRegisterReducer,
 	userDetails: userDetailsReducer,
+	userUpdateProfile: userUpdateProfileReducer,
 });
 
 // Possibly create middleware for encrypting and storing/retrieving from local storage
@@ -28,6 +34,7 @@ const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localS
 const initialState = {
 	basket: { basketItems: basketItemsFromStorage },
 	userLogin: { userInfo: userInfoFromStorage },
+	userUpdateProfile: { success: false },
 };
 
 const middleware = [thunk];
