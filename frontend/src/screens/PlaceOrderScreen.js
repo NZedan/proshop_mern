@@ -51,12 +51,19 @@ const PlaceOrderScreen = ({ history }) => {
 		// SECURITY ISSUE
 		// Should send only productId's and qty's and calculate prices in backend to avoid user sending false info
 		// eg. totalPrice: 0.01
+		let shipping;
+		if (basket.shippingPrice === 'Free') {
+			shipping = Number((0).toFixed(2));
+		} else {
+			shipping = Number(10);
+		}
+
 		dispatch(
 			createOrder({
 				orderItems: basketItems,
 				shippingAddress,
 				paymentMethod: basket.paymentMethod,
-				shippingPrice: basket.shippingPrice === 'Free' ? formatter.format(0) : basket.shippingPrice,
+				shippingPrice: shipping,
 				taxPrice: basket.taxPrice,
 				totalPrice: basket.totalPrice,
 			})

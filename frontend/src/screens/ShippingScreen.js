@@ -18,6 +18,7 @@ const ShippingScreen = ({ history }) => {
 		}
 	}, [logout, history]);
 
+	// Provides a default state to keep the element 'controlled'
 	const [address, setAddress] = useState(shippingAddress.address || '');
 	const [city, setCity] = useState(shippingAddress.city || '');
 	const [postCode, setPostCode] = useState(shippingAddress.postCode || '');
