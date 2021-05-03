@@ -21,6 +21,8 @@ import Message from '../components/Message';
 const ProductScreen = ({ history, match }) => {
 	// Now handled in reducer
 	// const [product, setProduct] = useState({});
+	const userLogin = useSelector((state) => state.userLogin);
+	const { logout } = userLogin;
 
 	const [qty, setQty] = useState(1);
 
@@ -38,12 +40,14 @@ const ProductScreen = ({ history, match }) => {
 		// // Now handled in reducer
 		// const fetchProduct = async () => {
 		// 	const { data } = await axios.get(`/api/products/${id}`);
-
 		// 	setProduct(data);
 		// };
 		// fetchProduct();
+		if (logout) {
+			history.push('/');
+		}
 		dispatch(listProductDetails(id));
-	}, [dispatch, id]);
+	}, [logout, history, dispatch, id]);
 
 	const addToBasketHandler = () => {
 		// history is a mutable object associated with routes

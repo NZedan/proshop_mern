@@ -1,5 +1,12 @@
 import axios from 'axios';
-import { BASKET_ADD_ITEM, BASKET_REMOVE_ITEM } from '../constants/basketConstants';
+import {
+	BASKET_ADD_ITEM,
+	BASKET_REMOVE_ITEM,
+	BASKET_RESET,
+	BASKET_SAVE_PAYMENT_METHOD,
+	BASKET_SAVE_SHIPPING_ADDRESS,
+} from '../constants/basketConstants';
+import { USER_LOGOUT_RESET } from '../constants/userConstants';
 
 // getState makes all state available to the action
 export const addToBasket = (id, qty) => async (dispatch, getState) => {
@@ -29,4 +36,27 @@ export const removeFromBasket = (id) => (dispatch, getState) => {
 	});
 	// For production this data should be encrypted
 	localStorage.setItem('basketItems', JSON.stringify(getState().basket.basketItems));
+};
+
+export const saveShippingAddress = (data) => (dispatch) => {
+	dispatch({
+		type: BASKET_SAVE_SHIPPING_ADDRESS,
+		payload: data,
+	});
+	// For production this data should be encrypted
+	localStorage.setItem('shippingAddress', JSON.stringify(data));
+};
+
+export const savePaymentMethod = (data) => (dispatch) => {
+	dispatch({
+		type: BASKET_SAVE_PAYMENT_METHOD,
+		payload: data,
+	});
+	// For production this data should be encrypted
+	localStorage.setItem('paymentMethod', JSON.stringify(data));
+};
+
+export const basketReset = () => (dispatch) => {
+	dispatch({ type: BASKET_RESET });
+	dispatch({ type: USER_LOGOUT_RESET });
 };

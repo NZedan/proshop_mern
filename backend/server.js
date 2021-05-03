@@ -11,6 +11,7 @@ import connectDB from './config/db.js';
 
 import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import orderRoutes from './routes/orderRoutes.js';
 
 dotenv.config();
 
@@ -30,6 +31,9 @@ app.use('/api/products', productRoutes);
 
 // Anything that goes to this route is linked to userRoutes
 app.use('/api/users', userRoutes);
+
+// Route for orders
+app.use('/api/orders', orderRoutes);
 
 // // Used for initial setup before DB, now moved to productRoutes.js and handled by the above line
 // app.get('/api/products', (req, res) => {

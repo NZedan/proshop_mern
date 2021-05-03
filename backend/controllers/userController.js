@@ -68,7 +68,7 @@ export const registerUser = asyncHandler(async (req, res) => {
 // @desc    Get user profile
 // @route   GET /api/users/profile
 // @access  Private
-// @called  getUserDetails() userActions.js
+// @called  getUserDetails() ProfileScreen.js
 export const getUserProfile = asyncHandler(async (req, res) => {
 	// User is sent in the request object by the auth middleware
 	const { user } = req;
@@ -89,7 +89,7 @@ export const getUserProfile = asyncHandler(async (req, res) => {
 // @desc    Update user profile
 // @route   PUT /api/users/profile
 // @access  Private
-// @called
+// @called  updateUserProfile() ProfileScreen.js
 export const updateUserProfile = asyncHandler(async (req, res) => {
 	// User is sent in the request object by the auth middleware
 	const { user } = req;

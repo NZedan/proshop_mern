@@ -2,6 +2,7 @@ import React, { Fragment, useEffect } from 'react';
 // dispatch to call an action and selector to select parts of state, eg. productList from store
 import { useDispatch, useSelector } from 'react-redux';
 import { listProducts } from '../actions/productActions';
+import { basketReset } from '../actions/basketActions';
 // Now handled in reducer
 // import axios from 'axios';
 import { Col, Row } from 'react-bootstrap';
@@ -19,6 +20,9 @@ const HomeScreen = () => {
 	// Destructured to get individual elements that may be passed from productListReducer
 	const { loading, error, products } = productList;
 
+	const userLogin = useSelector((state) => state.userLogin);
+	const { logout } = userLogin;
+
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -31,8 +35,11 @@ const HomeScreen = () => {
 		// };
 		// fetchProducts();
 		// * eslint-disable-next-line *
+		if (logout) {
+			dispatch(basketReset());
+		}
 		dispatch(listProducts());
-	}, [dispatch]);
+	}, [logout, dispatch]);
 
 	return (
 		<Fragment>

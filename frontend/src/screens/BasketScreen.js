@@ -11,29 +11,39 @@ const BasketScreen = ({ match, location, history }) => {
 	// the add to basket action will be fired, otherwise just the basket will be shown
 	const productId = match.params.id;
 
+	// Make items in state available to component
+	const basket = useSelector((state) => state.basket);
+	const { basketItems } = basket;
+
+	const userLogin = useSelector((state) => state.userLogin);
+	const { logout } = userLogin;
+
+	const dispatch = useDispatch();
+
 	// Search query (?qty=x) (added in productScreen addToBasketHandler)
 	// Accessed with location.search returns ?qty=x
 	// split('=') returns array [?qty, x] so the query is accessed at array position 1
 	const qty = location.search ? Number(location.search.split('=')[1]) : 1;
 
-	const dispatch = useDispatch();
-
-	// Make items in state available to component
-	const basket = useSelector((state) => state.basket);
-	const { basketItems } = basket;
+	// If route accessed from product screen (URL contains productId) add product to basket
+	useEffect(() => {
+		if (logout) {
+			history.push('/');
+		}
+		if (productId) {
+			dispatch(addToBasket(productId, qty));
+		}
+	}, [logout, history, dispatch, productId, qty]);
 
 	// Items in basket
 	const items = basketItems.reduce((acc, item) => acc + item.qty, 0);
 
-	// If route accessed from product screen (URL contains productId) add product to basket
-	useEffect(() => {
-		if (productId) {
-			dispatch(addToBasket(productId, qty));
-		}
-	}, [dispatch, productId, qty]);
-
 	const removeFromBasketHandler = (id) => {
 		dispatch(removeFromBasket(id));
+	};
+
+	const continueShoppingHandler = () => {
+		history.push('/');
 	};
 
 	const checkoutHandler = () => {
@@ -54,13 +64,13 @@ const BasketScreen = ({ match, location, history }) => {
 						{basketItems.map((item) => (
 							<ListGroupItem key={item.productId}>
 								<Row>
-									<Col lg={3}>
+									<Col sm={6}>
 										<Image src={item.image} alt={item.name} fluid rounded />
 									</Col>
-									<Col lg={3}>
+									<Col md={3}>
 										<Link to={`/product/${item.productId}`}>{item.name}</Link>
 									</Col>
-									<Col lg={2}>£{item.price}</Col>
+									<Col md={2}>£{item.price}</Col>
 									<Col lg={3}>
 										<Form.Control
 											className='qty-selector'
@@ -77,7 +87,7 @@ const BasketScreen = ({ match, location, history }) => {
 											))}
 										</Form.Control>
 									</Col>
-									<Col lg={1}>
+									<Col lg={3}>
 										<Button
 											type='button'
 											variant='light'
@@ -85,6 +95,7 @@ const BasketScreen = ({ match, location, history }) => {
 											onClick={() => removeFromBasketHandler(item.productId)}
 										>
 											<i className='fas fa-trash'></i>
+											&nbsp;Remove Item
 										</Button>
 									</Col>
 								</Row>
@@ -102,6 +113,11 @@ const BasketScreen = ({ match, location, history }) => {
 							</h2>
 							{/* toFixed(2) means to 2 decimal places */}£
 							{basketItems.reduce((acc, item) => acc + item.qty * item.price, 0).toFixed(2)}
+						</ListGroupItem>
+						<ListGroupItem>
+							<Button type='button' className='btn-block btn-light' onClick={continueShoppingHandler}>
+								Continue Shopping
+							</Button>
 						</ListGroupItem>
 						<ListGroupItem>
 							<Button type='button' className='btn-block' disabled={basketItems.length === 0} onClick={checkoutHandler}>

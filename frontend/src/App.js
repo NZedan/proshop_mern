@@ -9,6 +9,9 @@ import BasketScreen from './screens/BasketScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import ProfileScreen from './screens/ProfileScreen';
+import ShippingScreen from './screens/ShippingScreen';
+import PaymentScreen from './screens/PaymentScreen';
+import PlaceOrderScreen from './screens/PlaceOrderScreen';
 
 const App = () => {
 	return (
@@ -23,6 +26,9 @@ const App = () => {
 					{/* the question mark denotes the placeholder as optional as /basket route can be accessed without an id */}
 					<Route path='/basket/:id?' component={BasketScreen} />
 					<Route exact path='/' component={HomeScreen} />
+					<Route exact path='/shipping' component={ShippingScreen} />
+					<Route exact path='/payment' component={PaymentScreen} />
+					<Route exact path='/placeorder' component={PlaceOrderScreen} />
 				</Container>
 			</main>
 			<Footer />

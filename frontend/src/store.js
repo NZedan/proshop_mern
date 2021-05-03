@@ -12,6 +12,7 @@ import {
 	userDetailsReducer,
 	userUpdateProfileReducer,
 } from './reducers/userReducers';
+import { orderCreateReducer, orderDetailsReducer } from './reducers/orderReducers';
 
 const reducer = combineReducers({
 	productList: productListReducer,
@@ -21,6 +22,8 @@ const reducer = combineReducers({
 	userRegister: userRegisterReducer,
 	userDetails: userDetailsReducer,
 	userUpdateProfile: userUpdateProfileReducer,
+	orderCreate: orderCreateReducer,
+	orderDetails: orderDetailsReducer,
 });
 
 // Possibly create middleware for encrypting and storing/retrieving from local storage
@@ -31,9 +34,21 @@ const basketItemsFromStorage = localStorage.getItem('basketItems')
 
 const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null;
 
+const shippingAddressFromStorage = localStorage.getItem('shippingAddress')
+	? JSON.parse(localStorage.getItem('shippingAddress'))
+	: {};
+
+const paymentMethodFromStorage = localStorage.getItem('paymentMethod')
+	? JSON.parse(localStorage.getItem('paymentMethod'))
+	: null;
+
 const initialState = {
-	basket: { basketItems: basketItemsFromStorage },
-	userLogin: { userInfo: userInfoFromStorage },
+	basket: {
+		basketItems: basketItemsFromStorage,
+		shippingAddress: shippingAddressFromStorage,
+		paymentMethod: paymentMethodFromStorage,
+	},
+	userLogin: { userInfo: userInfoFromStorage, logout: false },
 	userUpdateProfile: { success: false },
 };
 

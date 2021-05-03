@@ -15,41 +15,44 @@ const ProfileScreen = ({ history }) => {
 	const [message, setMessage] = useState(null);
 
 	const dispatch = useDispatch();
-
+	// Is only filled if user logged in
 	const userLogin = useSelector((state) => state.userLogin);
-	const { userInfo } = userLogin;
-
+	const { userInfo, logout } = userLogin;
+	// Only used here? Could use userLogin instead?
 	const userDetails = useSelector((state) => state.userDetails);
 	const { loading, user } = userDetails;
-
+	// Doesn't require seperate state?
 	const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
 	const { success, error } = userUpdateProfile;
 
 	useEffect(() => {
-		// Check if logged in else redirect to login
-		if (!userInfo) {
-			history.push('/login');
+		// Check if logged in else redirect to home
+		if (!userInfo || logout) {
+			history.push('/');
 		} else {
 			// If logged in check for user, if no user get user
 			if (!user || !user.name) {
+				// Clears any previous user data from state
 				dispatch({ type: USER_UPDATE_PROFILE_RESET });
+				// Gets the current user details
 				dispatch(getUserDetails('profile'));
 			} else {
-				// If logged in with user details, fill form fields
+				// If logged in with user details, fill form fields (if password updated clears fields afterwards)
 				setName(user.name);
 				setEmail(user.email);
 				setPassword('');
 				setConfirmPassword('');
 			}
 		}
-	}, [history, dispatch, userInfo, user, success]);
+	}, [logout, history, dispatch, userInfo, user, success]);
 
 	const submitHandler = (e) => {
 		e.preventDefault();
 		if (password !== confirmPassword) {
 			setMessage("Passwords don't match");
 		} else {
-			dispatch(updateUserProfile({ id: user._id, name, email, password }));
+			// Had * id: user._id * passed in, don't think it's necessary?
+			dispatch(updateUserProfile({ name, email, password }));
 		}
 	};
 
@@ -60,6 +63,7 @@ const ProfileScreen = ({ history }) => {
 			</Col>
 			<Col lg={4}>
 				<h2>User Profile</h2>
+				{/* Messages should have a timeout */}
 				{message && <Message variant='danger'>{message}</Message>}
 				{success && <Message variant='success'>Profile Updated</Message>}
 				{error && <Message variant='danger'>{error}</Message>}

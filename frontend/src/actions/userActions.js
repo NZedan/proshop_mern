@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { ORDER_DETAILS_RESET } from '../constants/orderConstants';
 import {
 	USER_DETAILS_FAIL,
 	USER_DETAILS_REQUEST,
@@ -45,9 +46,10 @@ export const login = (email, password) => async (dispatch) => {
 };
 
 export const logout = () => (dispatch) => {
-	localStorage.removeItem('userInfo');
+	localStorage.clear();
 	dispatch({ type: USER_LOGOUT });
 	dispatch({ type: USER_DETAILS_RESET });
+	dispatch({ type: ORDER_DETAILS_RESET });
 };
 
 export const register = (name, email, password) => async (dispatch) => {
@@ -137,17 +139,17 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
 		};
 
 		const { data } = await axios.put('/api/users/profile', user, config);
-
+		// Sets success and outputs errors for updateProfile messages
 		dispatch({
 			type: USER_UPDATE_PROFILE_SUCCESS,
 			payload: data,
 		});
-
+		// Only necessary to keep user details consistent
 		dispatch({
 			type: USER_LOGIN_SUCCESS,
 			payload: data,
 		});
-
+		// Used to fill form fields and set loading, could easily be refactored into single state
 		dispatch({
 			type: USER_DETAILS_SUCCESS,
 			payload: data,
