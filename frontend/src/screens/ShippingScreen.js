@@ -18,10 +18,10 @@ const ShippingScreen = ({ history }) => {
 		}
 	}, [logout, history]);
 
-	const [address, setAddress] = useState(shippingAddress.address);
-	const [city, setCity] = useState(shippingAddress.city);
-	const [postCode, setPostCode] = useState(shippingAddress.postCode);
-	const [country, setCountry] = useState(shippingAddress.country);
+	const [address, setAddress] = useState(shippingAddress.address || '');
+	const [city, setCity] = useState(shippingAddress.city || '');
+	const [postCode, setPostCode] = useState(shippingAddress.postCode || '');
+	const [country, setCountry] = useState(shippingAddress.country || '');
 
 	const dispatch = useDispatch();
 

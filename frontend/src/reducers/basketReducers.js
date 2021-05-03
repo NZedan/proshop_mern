@@ -44,11 +44,9 @@ export const basketReducer = (state = { basketItems: [], shippingAddress: {} }, 
 			};
 		case BASKET_RESET:
 			return {
-				basket: {
-					basketItems: [],
-					shippingAddress: {},
-					paymentMethod: null,
-				},
+				basketItems: [],
+				shippingAddress: {},
+				paymentMethod: null,
 			};
 		default:
 			return state;
