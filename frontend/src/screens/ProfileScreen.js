@@ -15,7 +15,7 @@ const ProfileScreen = ({ history }) => {
 	const [message, setMessage] = useState(null);
 
 	const dispatch = useDispatch();
-	// Is only filled if user logged in
+	// Is only filled if user logged in, logout true if user logs out
 	const userLogin = useSelector((state) => state.userLogin);
 	const { userInfo, logout } = userLogin;
 	// Only used here? Could use userLogin instead?
@@ -26,7 +26,7 @@ const ProfileScreen = ({ history }) => {
 	const { success, error } = userUpdateProfile;
 
 	useEffect(() => {
-		// Check if logged in else redirect to home
+		// Check if logged in else redirect to home redirects to home on logout
 		if (!userInfo || logout) {
 			history.push('/');
 		} else {

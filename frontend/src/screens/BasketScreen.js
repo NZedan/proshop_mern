@@ -14,7 +14,7 @@ const BasketScreen = ({ match, location, history }) => {
 	// Make items in state available to component
 	const basket = useSelector((state) => state.basket);
 	const { basketItems } = basket;
-
+	// True if user logs out
 	const userLogin = useSelector((state) => state.userLogin);
 	const { logout } = userLogin;
 
@@ -27,6 +27,7 @@ const BasketScreen = ({ match, location, history }) => {
 
 	// If route accessed from product screen (URL contains productId) add product to basket
 	useEffect(() => {
+		// Redirects to home on logout
 		if (logout) {
 			history.push('/');
 		}

@@ -12,7 +12,7 @@ import {
 	userDetailsReducer,
 	userUpdateProfileReducer,
 } from './reducers/userReducers';
-import { orderCreateReducer, orderDetailsReducer } from './reducers/orderReducers';
+import { orderCreateReducer, orderDetailsReducer, orderPayReducer } from './reducers/orderReducers';
 
 const reducer = combineReducers({
 	productList: productListReducer,
@@ -24,6 +24,7 @@ const reducer = combineReducers({
 	userUpdateProfile: userUpdateProfileReducer,
 	orderCreate: orderCreateReducer,
 	orderDetails: orderDetailsReducer,
+	orderPay: orderPayReducer,
 });
 
 // Possibly create middleware for encrypting and storing/retrieving from local storage

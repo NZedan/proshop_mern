@@ -6,7 +6,6 @@ import {
 	BASKET_SAVE_PAYMENT_METHOD,
 	BASKET_SAVE_SHIPPING_ADDRESS,
 } from '../constants/basketConstants';
-import { USER_LOGOUT_RESET } from '../constants/userConstants';
 
 // getState makes all state available to the action
 export const addToBasket = (id, qty) => async (dispatch, getState) => {
@@ -58,5 +57,4 @@ export const savePaymentMethod = (data) => (dispatch) => {
 
 export const basketReset = () => (dispatch) => {
 	dispatch({ type: BASKET_RESET });
-	dispatch({ type: USER_LOGOUT_RESET });
 };

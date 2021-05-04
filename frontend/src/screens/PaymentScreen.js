@@ -7,6 +7,7 @@ import CheckoutSteps from '../components/CheckoutSteps';
 import { savePaymentMethod } from '../actions/basketActions';
 
 const PaymentScreen = ({ history }) => {
+	// True if user logs out
 	const userLogin = useSelector((state) => state.userLogin);
 	const { logout } = userLogin;
 
@@ -14,6 +15,7 @@ const PaymentScreen = ({ history }) => {
 	const { shippingAddress } = basket;
 
 	useEffect(() => {
+		// Redirects to home on logout
 		if (logout) {
 			history.push('/');
 		}

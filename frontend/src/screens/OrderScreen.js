@@ -9,7 +9,7 @@ import { getOrderDetails } from '../actions/orderActions';
 
 const OrderScreen = ({ history, match }) => {
 	const orderId = match.params.id;
-
+	// True if user logs out
 	const userLogin = useSelector((state) => state.userLogin);
 	const { logout } = userLogin;
 
@@ -19,6 +19,7 @@ const OrderScreen = ({ history, match }) => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
+		// Redirects to home on logout
 		if (logout) {
 			history.push('/');
 		}

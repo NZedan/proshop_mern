@@ -8,6 +8,7 @@ import CheckoutSteps from '../components/CheckoutSteps';
 import { createOrder } from '../actions/orderActions';
 
 const PlaceOrderScreen = ({ history }) => {
+	// True if user logs out
 	const userLogin = useSelector((state) => state.userLogin);
 	const { logout } = userLogin;
 
@@ -19,11 +20,12 @@ const PlaceOrderScreen = ({ history }) => {
 
 	const dispatch = useDispatch();
 
-	// Redirects to order payment screen if createOrder succesful
 	useEffect(() => {
+		// Redirects to home on logout
 		if (logout) {
 			history.push('/');
 		}
+		// Redirects to order payment screen if createOrder succesful
 		if (success) {
 			history.push(`/order/${order._id}`);
 		}

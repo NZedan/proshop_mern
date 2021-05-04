@@ -3,6 +3,8 @@ import React, { Fragment, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { listProducts } from '../actions/productActions';
 import { basketReset } from '../actions/basketActions';
+import { orderDetailsReset } from '../actions/orderActions';
+import { userLogoutReset } from '../actions/userActions';
 // Now handled in reducer
 // import axios from 'axios';
 import { Col, Row } from 'react-bootstrap';
@@ -37,6 +39,8 @@ const HomeScreen = () => {
 		// * eslint-disable-next-line *
 		if (logout) {
 			dispatch(basketReset());
+			dispatch(orderDetailsReset());
+			dispatch(userLogoutReset());
 		}
 		dispatch(listProducts());
 	}, [logout, dispatch]);

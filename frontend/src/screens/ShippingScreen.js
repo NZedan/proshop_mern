@@ -7,12 +7,14 @@ import CheckoutSteps from '../components/CheckoutSteps';
 import { saveShippingAddress } from '../actions/basketActions';
 
 const ShippingScreen = ({ history }) => {
+	// True if user logs out
 	const userLogin = useSelector((state) => state.userLogin);
 	const { logout } = userLogin;
 	const basket = useSelector((state) => state.basket);
 	const { shippingAddress } = basket;
 
 	useEffect(() => {
+		// Redirects to home on logout
 		if (logout) {
 			history.push('/');
 		}

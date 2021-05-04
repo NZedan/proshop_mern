@@ -21,6 +21,7 @@ import Message from '../components/Message';
 const ProductScreen = ({ history, match }) => {
 	// Now handled in reducer
 	// const [product, setProduct] = useState({});
+	// True if user logs out
 	const userLogin = useSelector((state) => state.userLogin);
 	const { logout } = userLogin;
 
@@ -43,6 +44,7 @@ const ProductScreen = ({ history, match }) => {
 		// 	setProduct(data);
 		// };
 		// fetchProduct();
+		// Redirects to home on logout
 		if (logout) {
 			history.push('/');
 		}
