@@ -29,7 +29,6 @@ const PlaceOrderScreen = ({ history }) => {
 		}
 	}, [logout, history, success, order]);
 
-	// Calculate Prices
 	// JS international number formatter - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat
 	const formatter = new Intl.NumberFormat('en-UK', {
 		style: 'currency',
@@ -42,6 +41,7 @@ const PlaceOrderScreen = ({ history }) => {
 	// 	return (Math.round(num * 100) / 100).toFixed(2);
 	// };
 	// basket.itemsPrice = addDecimals(basketItems.reduce((acc, item) => acc + item.price * item.qty, 0));
+	// Calculate Prices
 	basket.itemsPrice = basketItems.reduce((acc, item) => acc + item.price * item.qty, 0);
 	basket.shippingPrice = basket.itemsPrice > 100 ? 'Free' : formatter.format(10);
 	basket.taxPrice = Number((basket.itemsPrice - basket.itemsPrice / 1.2).toFixed(2));
