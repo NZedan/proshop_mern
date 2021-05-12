@@ -6,7 +6,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
-import { login } from '../actions/userActions';
+import { basketReset } from '../actions/basketActions';
+import { orderDetailsReset } from '../actions/orderActions';
+import { login, userLogoutReset } from '../actions/userActions';
 
 const LoginScreen = ({ location, history }) => {
 	const [email, setEmail] = useState('');
@@ -18,14 +20,19 @@ const LoginScreen = ({ location, history }) => {
 	const dispatch = useDispatch();
 
 	const userLogin = useSelector((state) => state.userLogin);
-	const { loading, error, userInfo } = userLogin;
+	const { logout, loading, error, userInfo } = userLogin;
 
 	// Redirects directly to shipping from basket checkout if user already logged in
 	useEffect(() => {
+		if (logout) {
+			dispatch(basketReset());
+			dispatch(orderDetailsReset());
+			dispatch(userLogoutReset());
+		}
 		if (userInfo) {
 			history.push(redirect);
 		}
-	}, [history, userInfo, redirect]);
+	}, [dispatch, logout, history, userInfo, redirect]);
 
 	const submitHandler = (e) => {
 		e.preventDefault();

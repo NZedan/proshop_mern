@@ -54,7 +54,7 @@ export const getOrderById = asyncHandler(async (req, res) => {
 // @desc    Update order to paid
 // @route   GET /api/orders/:id/pay
 // @access  Private
-// @called
+// @called  payOrder() OrderScreen.js -> orderActions.js -> orderRoutes.js
 export const updateOrderToPaid = asyncHandler(async (req, res) => {
 	const order = await Order.findById(req.params.id);
 

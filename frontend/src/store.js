@@ -6,12 +6,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 // Bring in reducers so all state can be made available through combineReducers
 import { productListReducer, productDetailsReducer } from './reducers/productReducers';
 import { basketReducer } from './reducers/basketReducers';
-import {
-	userLoginReducer,
-	userRegisterReducer,
-	userDetailsReducer,
-	userUpdateProfileReducer,
-} from './reducers/userReducers';
+import { userLoginReducer, userRegisterReducer, userDetailsReducer, userUpdateProfileReducer } from './reducers/userReducers';
 import { orderCreateReducer, orderDetailsReducer, orderPayReducer } from './reducers/orderReducers';
 
 const reducer = combineReducers({
@@ -29,9 +24,7 @@ const reducer = combineReducers({
 
 // Possibly create middleware for encrypting and storing/retrieving from local storage
 
-const basketItemsFromStorage = localStorage.getItem('basketItems')
-	? JSON.parse(localStorage.getItem('basketItems'))
-	: [];
+const basketItemsFromStorage = localStorage.getItem('basketItems') ? JSON.parse(localStorage.getItem('basketItems')) : [];
 
 const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null;
 
@@ -39,9 +32,7 @@ const shippingAddressFromStorage = localStorage.getItem('shippingAddress')
 	? JSON.parse(localStorage.getItem('shippingAddress'))
 	: {};
 
-const paymentMethodFromStorage = localStorage.getItem('paymentMethod')
-	? JSON.parse(localStorage.getItem('paymentMethod'))
-	: null;
+const paymentMethodFromStorage = localStorage.getItem('paymentMethod') ? JSON.parse(localStorage.getItem('paymentMethod')) : null;
 
 const initialState = {
 	basket: {
@@ -51,6 +42,7 @@ const initialState = {
 	},
 	userLogin: { userInfo: userInfoFromStorage, logout: false },
 	userUpdateProfile: { success: false },
+	orderDetails: { loading: true, error: null, order: { orderItems: [], shippingAddress: {} }, success: false },
 };
 
 const middleware = [thunk];

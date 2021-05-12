@@ -2,6 +2,7 @@ import {
 	ORDER_CREATE_REQUEST,
 	ORDER_CREATE_SUCCESS,
 	ORDER_CREATE_FAIL,
+	ORDER_CREATE_RESET,
 	ORDER_DETAILS_RESET,
 	ORDER_DETAILS_REQUEST,
 	ORDER_DETAILS_SUCCESS,
@@ -29,13 +30,15 @@ export const orderCreateReducer = (state = {}, { type, payload }) => {
 				loading: false,
 				error: payload,
 			};
+		case ORDER_CREATE_RESET:
+			return {};
 		default:
 			return state;
 	}
 };
 
 export const orderDetailsReducer = (
-	state = { loading: true, orderItems: [], shippingAddress: {} },
+	state = { loading: true, error: null, order: { orderItems: [], shippingAddress: {} }, success: false },
 	{ type, payload }
 ) => {
 	switch (type) {
@@ -55,7 +58,15 @@ export const orderDetailsReducer = (
 				error: payload,
 			};
 		case ORDER_DETAILS_RESET:
-			return {};
+			return {
+				loading: true,
+				error: null,
+				order: {
+					orderItems: [],
+					shippingAddress: {},
+				},
+				success: false,
+			};
 		default:
 			return state;
 	}

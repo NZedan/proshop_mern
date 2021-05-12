@@ -35,6 +35,9 @@ app.use('/api/users', userRoutes);
 // Route for orders
 app.use('/api/orders', orderRoutes);
 
+// For PayPal checkout process - Get PayPal Client ID
+app.get('/api/config/paypal', (req, res) => res.send(process.env.PAYPAL_CLIENT_ID));
+
 // // Used for initial setup before DB, now moved to productRoutes.js and handled by the above line
 // app.get('/api/products', (req, res) => {
 // 	res.json(products);

@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import CheckoutSteps from '../components/CheckoutSteps';
 import { createOrder } from '../actions/orderActions';
+import { USER_DETAILS_RESET } from '../constants/userConstants';
+import { ORDER_CREATE_RESET } from '../constants/orderConstants';
 
 const PlaceOrderScreen = ({ history }) => {
 	// True if user logs out
@@ -27,9 +29,11 @@ const PlaceOrderScreen = ({ history }) => {
 		}
 		// Redirects to order payment screen if createOrder succesful
 		if (success) {
-			history.push(`/order/${order._id}`);
+			history.push(`/orders/${order._id}`);
+			dispatch({ type: USER_DETAILS_RESET });
+			dispatch({ type: ORDER_CREATE_RESET });
 		}
-	}, [logout, history, success, order]);
+	}, [logout, history, success, order, dispatch]);
 
 	// JS international number formatter - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat
 	const formatter = new Intl.NumberFormat('en-UK', {
@@ -104,7 +108,7 @@ const PlaceOrderScreen = ({ history }) => {
 													<Link to={`/product/${item.productId}`}>{item.name}</Link>
 												</Col>
 												<Col md={4}>
-													{item.qty} x £{item.price} = £{item.qty * item.price}
+													{item.qty} x {formatter.format(item.price)} = {formatter.format(item.qty * item.price)}
 												</Col>
 											</Row>
 										</ListGroup.Item>
@@ -155,12 +159,7 @@ const PlaceOrderScreen = ({ history }) => {
 							</ListGroup.Item>
 							<ListGroup.Item>{error && <Message variant='danger'>{error}</Message>}</ListGroup.Item>
 							<ListGroup.Item>
-								<Button
-									type='button'
-									className='btn-block'
-									disabled={basketItems.length === 0}
-									onClick={placeOrderHandler}
-								>
+								<Button type='button' className='btn-block' disabled={basketItems.length === 0} onClick={placeOrderHandler}>
 									Place Order
 								</Button>
 							</ListGroup.Item>
