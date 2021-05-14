@@ -89,10 +89,6 @@ const OrderScreen = ({ history, match }) => {
 
 	return loading ? (
 		<Loader />
-	) : loadingPay ? (
-		<Row className='justify-content-md-center'>
-			<Message variant='secondary'>Processing Payment</Message>
-		</Row>
 	) : error ? (
 		<Message variant='danger'>{error}</Message>
 	) : (
@@ -154,7 +150,7 @@ const OrderScreen = ({ history, match }) => {
 							<p>Payment Method: {order.paymentMethod}</p>
 							{order.isPaid ? (
 								<Message variant='success'>
-									Paid at <Moment format='h:mm:ss a, MMMM do YYYY'>{order.paidAt}</Moment>
+									Paid at <Moment format='h:mm:ss a, MMMM Do YYYY'>{order.paidAt}</Moment>
 								</Message>
 							) : (
 								<Message variant='danger'>Not paid</Message>
