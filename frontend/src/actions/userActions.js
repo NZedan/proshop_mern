@@ -5,6 +5,10 @@ import {
 	USER_DETAILS_REQUEST,
 	USER_DETAILS_RESET,
 	USER_DETAILS_SUCCESS,
+	USER_LIST_FAIL,
+	USER_LIST_REQUEST,
+	USER_LIST_RESET,
+	USER_LIST_SUCCESS,
 	USER_LOGIN_FAIL,
 	USER_LOGIN_REQUEST,
 	USER_LOGIN_SUCCESS,
@@ -51,6 +55,7 @@ export const logout = () => (dispatch) => {
 	dispatch({ type: USER_LOGOUT });
 	dispatch({ type: USER_DETAILS_RESET });
 	dispatch({ type: ORDER_USER_LIST_RESET });
+	dispatch({ type: USER_LIST_RESET });
 };
 
 export const userLogoutReset = () => (dispatch) => {
@@ -164,6 +169,39 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
 	} catch (err) {
 		dispatch({
 			type: USER_UPDATE_PROFILE_FAIL,
+			payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+		});
+	}
+};
+
+export const listUsers = () => async (dispatch, getState) => {
+	try {
+		dispatch({
+			type: USER_LIST_REQUEST,
+		});
+
+		// Get token from state
+		const {
+			userLogin: { userInfo },
+		} = getState();
+
+		// Set token to header
+		const config = {
+			headers: {
+				Authorization: `Bearer ${userInfo.token}`,
+			},
+		};
+
+		// Hits users/id or users/profile endpoints
+		const { data } = await axios.get('/api/users', config);
+
+		dispatch({
+			type: USER_LIST_SUCCESS,
+			payload: data,
+		});
+	} catch (err) {
+		dispatch({
+			type: USER_LIST_FAIL,
 			payload: err.response && err.response.data.message ? err.response.data.message : err.message,
 		});
 	}

@@ -6,7 +6,13 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 // Bring in reducers so all state can be made available through combineReducers
 import { productListReducer, productDetailsReducer } from './reducers/productReducers';
 import { basketReducer } from './reducers/basketReducers';
-import { userLoginReducer, userRegisterReducer, userDetailsReducer, userUpdateProfileReducer } from './reducers/userReducers';
+import {
+	userLoginReducer,
+	userRegisterReducer,
+	userDetailsReducer,
+	userUpdateProfileReducer,
+	userListReducer,
+} from './reducers/userReducers';
 import { orderCreateReducer, orderDetailsReducer, orderPayReducer, orderUserListReducer } from './reducers/orderReducers';
 
 const reducer = combineReducers({
@@ -17,6 +23,7 @@ const reducer = combineReducers({
 	userRegister: userRegisterReducer,
 	userDetails: userDetailsReducer,
 	userUpdateProfile: userUpdateProfileReducer,
+	userList: userListReducer,
 	orderCreate: orderCreateReducer,
 	orderDetails: orderDetailsReducer,
 	orderPay: orderPayReducer,
