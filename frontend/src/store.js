@@ -4,7 +4,12 @@ import thunk from 'redux-thunk';
 // Sets up Redux devtools for Chrome
 import { composeWithDevTools } from 'redux-devtools-extension';
 // Bring in reducers so all state can be made available through combineReducers
-import { productListReducer, productDetailsReducer } from './reducers/productReducers';
+import {
+	productListReducer,
+	productDetailsReducer,
+	productDeleteReducer,
+	productCreateReducer,
+} from './reducers/productReducers';
 import { basketReducer } from './reducers/basketReducers';
 import {
 	userLoginReducer,
@@ -12,18 +17,24 @@ import {
 	userDetailsReducer,
 	userUpdateProfileReducer,
 	userListReducer,
+	userDeleteReducer,
+	userUpdateReducer,
 } from './reducers/userReducers';
 import { orderCreateReducer, orderDetailsReducer, orderPayReducer, orderUserListReducer } from './reducers/orderReducers';
 
 const reducer = combineReducers({
 	productList: productListReducer,
 	productDetails: productDetailsReducer,
+	productDelete: productDeleteReducer,
+	productCreate: productCreateReducer,
 	basket: basketReducer,
 	userLogin: userLoginReducer,
 	userRegister: userRegisterReducer,
 	userDetails: userDetailsReducer,
 	userUpdateProfile: userUpdateProfileReducer,
 	userList: userListReducer,
+	userDelete: userDeleteReducer,
+	userUpdate: userUpdateReducer,
 	orderCreate: orderCreateReducer,
 	orderDetails: orderDetailsReducer,
 	orderPay: orderPayReducer,

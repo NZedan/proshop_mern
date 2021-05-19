@@ -25,6 +25,13 @@ const BasketScreen = ({ match, location, history }) => {
 	// split('=') returns array [?qty, x] so the query is accessed at array position 1
 	const qty = location.search ? Number(location.search.split('=')[1]) : 1;
 
+	// JS international number formatter - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat
+	const formatter = new Intl.NumberFormat('en-UK', {
+		style: 'currency',
+		currency: 'GBP',
+		minimumFractionDigits: 2,
+	});
+
 	// If route accessed from product screen (URL contains productId) add product to basket
 	useEffect(() => {
 		// Redirects to home on logout
@@ -71,7 +78,7 @@ const BasketScreen = ({ match, location, history }) => {
 									<Col md={3}>
 										<Link to={`/product/${item.productId}`}>{item.name}</Link>
 									</Col>
-									<Col md={2}>£{item.price}</Col>
+									<Col md={2}>{formatter.format(item.price)}</Col>
 									<Col lg={3}>
 										<Form.Control
 											className='qty-selector'
@@ -112,8 +119,7 @@ const BasketScreen = ({ match, location, history }) => {
 							<h2>
 								Subtotal ({items}) {items === 0 || items > 1 ? ' items' : ' item'}
 							</h2>
-							{/* toFixed(2) means to 2 decimal places */}£
-							{basketItems.reduce((acc, item) => acc + item.qty * item.price, 0).toFixed(2)}
+							{formatter.format(basketItems.reduce((acc, item) => acc + item.qty * item.price, 0))}
 						</ListGroupItem>
 						<ListGroupItem>
 							<Button type='button' className='btn-block btn-light' onClick={continueShoppingHandler}>

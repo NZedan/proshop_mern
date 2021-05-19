@@ -5,6 +5,13 @@ import PropTypes from 'prop-types';
 import Rating from './Rating';
 
 const Product = ({ product }) => {
+	// JS international number formatter - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat
+	const formatter = new Intl.NumberFormat('en-UK', {
+		style: 'currency',
+		currency: 'GBP',
+		minimumFractionDigits: 2,
+	});
+
 	return (
 		<Card className='my-3 p-3 rounded'>
 			<Link to={`/product/${product._id}`}>
@@ -22,7 +29,7 @@ const Product = ({ product }) => {
 					<Rating value={product.rating} text={`${product.numReviews} reviews`} />
 				</Card.Text>
 
-				<Card.Text as='h3'>£{product.price}</Card.Text>
+				<Card.Text as='h3'>{formatter.format(product.price)}</Card.Text>
 			</Card.Body>
 		</Card>
 	);

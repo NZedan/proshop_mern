@@ -5,16 +5,20 @@ import { Table, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { listUsers } from '../actions/userActions';
+import { listUsers, deleteUser } from '../actions/userActions';
+import { USER_DELETE_RESET } from '../constants/userConstants';
 
 const UserListScreen = ({ history }) => {
 	const dispatch = useDispatch();
 
 	const userLogin = useSelector((state) => state.userLogin);
-	const { logout } = userLogin;
+	const { logout, userInfo } = userLogin;
 
 	const userList = useSelector((state) => state.userList);
 	const { loading, error, users } = userList;
+
+	const userDelete = useSelector((state) => state.userDelete);
+	const { success } = userDelete;
 
 	useEffect(() => {
 		// Check if logged in else redirect to home redirects to home on logout
@@ -23,10 +27,16 @@ const UserListScreen = ({ history }) => {
 		} else {
 			dispatch(listUsers());
 		}
-	}, [history, dispatch, logout]);
+		if (success) {
+			dispatch({ type: USER_DELETE_RESET });
+		}
+	}, [history, dispatch, logout, success]);
 
+	// Best practice would be to set a deleted flag in DB instead of permanently removing the record
 	const deleteHandler = (id) => {
-		console.log('Delete');
+		if (window.confirm('Are you sure?')) {
+			dispatch(deleteUser(id));
+		}
 	};
 
 	return (
@@ -63,12 +73,17 @@ const UserListScreen = ({ history }) => {
 									)}
 								</td>
 								<td style={{ textAlign: 'center' }}>
-									<LinkContainer to={`/users/${user._id}/edit`}>
+									<LinkContainer to={`/admin/users/${user._id}/edit`}>
 										<Button variant='light' className='btn-sm'>
 											<i className='fas fa-edit'></i>
 										</Button>
 									</LinkContainer>
-									<Button variant='danger' className='btn-sm' onClick={() => deleteHandler(user._id)}>
+									<Button
+										variant='danger'
+										className='btn-sm'
+										disabled={userInfo._id === user._id}
+										onClick={() => deleteHandler(user._id)}
+									>
 										<i className='fas fa-trash'></i>
 									</Button>
 								</td>
