@@ -4,13 +4,14 @@ import axios from 'axios';
 import Moment from 'react-moment';
 import { PayPalButton } from 'react-paypal-button-v2';
 import { Link } from 'react-router-dom';
-import { Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
+import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
 // To interact with Redux state
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { getOrderDetails, payOrder } from '../actions/orderActions';
-import { ORDER_PAY_RESET } from '../constants/orderConstants';
+import { deliverOrder, getOrderDetails, payOrder } from '../actions/orderActions';
+import { ORDER_DELIVER_RESET, ORDER_PAY_RESET } from '../constants/orderConstants';
+import { basketReset } from '../actions/basketActions';
 
 const OrderScreen = ({ history, match }) => {
 	const orderId = match.params.id;
@@ -22,7 +23,7 @@ const OrderScreen = ({ history, match }) => {
 
 	// True if user logs out
 	const userLogin = useSelector((state) => state.userLogin);
-	const { logout } = userLogin;
+	const { logout, userInfo } = userLogin;
 
 	const orderDetails = useSelector((state) => state.orderDetails);
 	const { order, loading, error } = orderDetails;
@@ -30,6 +31,9 @@ const OrderScreen = ({ history, match }) => {
 	// Syntax to rename destructured state to avoid duplicates
 	const orderPay = useSelector((state) => state.orderPay);
 	const { loading: loadingPay, success: successPay } = orderPay;
+
+	const orderDeliver = useSelector((state) => state.orderDeliver);
+	const { loading: loadingDeliver, success: successDeliver } = orderDeliver;
 
 	// JS international number formatter - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat
 	const formatter = new Intl.NumberFormat('en-UK', {
@@ -67,9 +71,17 @@ const OrderScreen = ({ history, match }) => {
 	}, [logout, history]);
 
 	useEffect(() => {
+		// Clears basket after successful payment
+		if (successPay) {
+			dispatch(basketReset());
+		}
+	}, [dispatch, successPay]);
+
+	useEffect(() => {
 		// Gets order details if no order, order id's don't match (if coming from a different order page) or after a successful payment
-		if (!order || order._id !== orderId || successPay) {
+		if (!order || order._id !== orderId || successPay || successDeliver) {
 			dispatch({ type: ORDER_PAY_RESET });
+			dispatch({ type: ORDER_DELIVER_RESET });
 			dispatch(getOrderDetails(orderId));
 		} else if (!order.isPaid) {
 			// If the order is not paid and the PayPal script is not in the document
@@ -80,11 +92,17 @@ const OrderScreen = ({ history, match }) => {
 				setSdkReady(true);
 			}
 		}
-	}, [dispatch, order, orderId, successPay]);
+	}, [dispatch, order, orderId, successPay, successDeliver]);
+
+	// NEED TO HANDLE COUNT IN STOCK!!!
 
 	const successPaymentHandler = (paymentResult) => {
 		console.log(paymentResult);
 		dispatch(payOrder(orderId, paymentResult));
+	};
+
+	const deliverHandler = () => {
+		dispatch(deliverOrder(order));
 	};
 
 	return loading ? (
@@ -140,7 +158,9 @@ const OrderScreen = ({ history, match }) => {
 							<p>{order.shippingAddress.postCode}</p>
 							<p>{order.shippingAddress.country}</p>
 							{order.isDelivered ? (
-								<Message variant='success'>Delivered on {order.deliveredOn}</Message>
+								<Message variant='success'>
+									Delivered at <Moment format='h:mm:ss a, MMMM Do YYYY'>{order.deliveredAt}</Moment>
+								</Message>
 							) : (
 								<Message variant='danger'>Not Delivered</Message>
 							)}
@@ -192,6 +212,14 @@ const OrderScreen = ({ history, match }) => {
 								<ListGroup.Item>
 									{loadingPay && <Loader />}
 									{sdkReady ? <PayPalButton amount={order.totalPrice} onSuccess={successPaymentHandler} /> : <Loader />}
+								</ListGroup.Item>
+							)}
+							{loadingDeliver && <Loader />}
+							{userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+								<ListGroup.Item>
+									<Button type='button' className='btn btn-block' onClick={deliverHandler}>
+										Mark As Delivered
+									</Button>
 								</ListGroup.Item>
 							)}
 						</ListGroup>

@@ -146,7 +146,7 @@ export const deleteUser = asyncHandler(async (req, res) => {
 // @desc    Get a user by ID
 // @route   GET /api/users/:id
 // @access  Private/Admin
-// @called
+// @called  getUserDetails() UserEditScreen -> updateUser (userActions) -> userRoutes
 export const getUserById = asyncHandler(async (req, res) => {
 	const user = await User.findById(req.params.id).select('-password');
 	if (user) {
@@ -160,7 +160,7 @@ export const getUserById = asyncHandler(async (req, res) => {
 // @desc    Update user
 // @route   PUT /api/users/:id
 // @access  Private/Admin
-// @called
+// @called  updateUser() UserEditScreen -> userActions -> userRoutes
 export const updateUser = asyncHandler(async (req, res) => {
 	const user = await User.findById(req.params.id).select('-password');
 

@@ -12,6 +12,9 @@ import {
 	PRODUCT_CREATE_REQUEST,
 	PRODUCT_CREATE_SUCCESS,
 	PRODUCT_CREATE_FAIL,
+	PRODUCT_UPDATE_REQUEST,
+	PRODUCT_UPDATE_SUCCESS,
+	PRODUCT_UPDATE_FAIL,
 } from '../constants/productConstants';
 
 export const listProducts = () => async (dispatch) => {
@@ -109,36 +112,68 @@ export const deleteProduct = (id) => async (dispatch, getState) => {
 // 	}
 // };
 
-// Use to create fresh product
-// export const createProduct = (product) => async (dispatch, getState) => {
-// 	try {
-// 		dispatch({
-// 			type: PRODUCT_CREATE_REQUEST,
-// 		});
+export const createProduct = (product) => async (dispatch, getState) => {
+	try {
+		dispatch({
+			type: PRODUCT_CREATE_REQUEST,
+		});
 
-// 		// Get token from state
-// 		const {
-// 			userLogin: { userInfo },
-// 		} = getState();
+		// Get token from state
+		const {
+			userLogin: { userInfo },
+		} = getState();
 
-// 		// Set token to header
-// 		const config = {
-// 			headers: {
-// 				'Content-Type': 'application/json',
-// 				Authorization: `Bearer ${userInfo.token}`,
-// 			},
-// 		};
+		// Set token to header
+		const config = {
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${userInfo.token}`,
+			},
+		};
 
-// 		const { data } = await axios.post('/api/products', product, config);
+		const { data } = await axios.post('/api/products', product, config);
 
-// 		dispatch({
-// 			type: PRODUCT_CREATE_SUCCESS,
-// 			payload: data,
-// 		});
-// 	} catch (err) {
-// 		dispatch({
-// 			type: PRODUCT_CREATE_FAIL,
-// 			payload: err.response && err.response.data.message ? err.response.data.message : err.message,
-// 		});
-// 	}
-// };
+		dispatch({
+			type: PRODUCT_CREATE_SUCCESS,
+			payload: data,
+		});
+	} catch (err) {
+		dispatch({
+			type: PRODUCT_CREATE_FAIL,
+			payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+		});
+	}
+};
+
+export const updateProduct = (product) => async (dispatch, getState) => {
+	try {
+		dispatch({
+			type: PRODUCT_UPDATE_REQUEST,
+		});
+
+		// Get token from state
+		const {
+			userLogin: { userInfo },
+		} = getState();
+
+		// Set token to header
+		const config = {
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${userInfo.token}`,
+			},
+		};
+
+		const { data } = await axios.put(`/api/products/${product._id}`, product, config);
+
+		dispatch({
+			type: PRODUCT_UPDATE_SUCCESS,
+			payload: data,
+		});
+	} catch (err) {
+		dispatch({
+			type: PRODUCT_UPDATE_FAIL,
+			payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+		});
+	}
+};

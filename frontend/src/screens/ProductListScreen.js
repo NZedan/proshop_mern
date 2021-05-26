@@ -8,11 +8,11 @@ import Loader from '../components/Loader';
 import { deleteProduct, listProducts } from '../actions/productActions';
 import { PRODUCT_DELETE_RESET } from '../constants/productConstants';
 
-const ProductListScreen = ({ history, match }) => {
+const ProductListScreen = ({ history }) => {
 	const dispatch = useDispatch();
 
 	const userLogin = useSelector((state) => state.userLogin);
-	const { logout, userInfo } = userLogin;
+	const { logout } = userLogin;
 
 	const productList = useSelector((state) => state.productList);
 	const { loading, error, products } = productList;

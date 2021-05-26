@@ -57,4 +57,5 @@ export const savePaymentMethod = (data) => (dispatch) => {
 
 export const basketReset = () => (dispatch) => {
 	dispatch({ type: BASKET_RESET });
+	localStorage.removeItem('basketItems');
 };

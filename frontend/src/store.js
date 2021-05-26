@@ -9,6 +9,7 @@ import {
 	productDetailsReducer,
 	productDeleteReducer,
 	productCreateReducer,
+	productUpdateReducer,
 } from './reducers/productReducers';
 import { basketReducer } from './reducers/basketReducers';
 import {
@@ -20,13 +21,21 @@ import {
 	userDeleteReducer,
 	userUpdateReducer,
 } from './reducers/userReducers';
-import { orderCreateReducer, orderDetailsReducer, orderPayReducer, orderUserListReducer } from './reducers/orderReducers';
+import {
+	orderCreateReducer,
+	orderDetailsReducer,
+	orderPayReducer,
+	orderDeliverReducer,
+	orderUserListReducer,
+	orderListReducer,
+} from './reducers/orderReducers';
 
 const reducer = combineReducers({
 	productList: productListReducer,
 	productDetails: productDetailsReducer,
 	productDelete: productDeleteReducer,
 	productCreate: productCreateReducer,
+	productUpdate: productUpdateReducer,
 	basket: basketReducer,
 	userLogin: userLoginReducer,
 	userRegister: userRegisterReducer,
@@ -38,7 +47,9 @@ const reducer = combineReducers({
 	orderCreate: orderCreateReducer,
 	orderDetails: orderDetailsReducer,
 	orderPay: orderPayReducer,
+	orderDeliver: orderDeliverReducer,
 	orderUserList: orderUserListReducer,
+	orderList: orderListReducer,
 });
 
 // Possibly create middleware for encrypting and storing/retrieving from local storage

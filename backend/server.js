@@ -1,3 +1,5 @@
+// Path - node module for working with file paths
+import path from 'path';
 // Using ES module syntax by adding type: module to package.json
 import express from 'express';
 import dotenv from 'dotenv';
@@ -12,6 +14,7 @@ import connectDB from './config/db.js';
 import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
+import uploadRoutes from './routes/uploadRoutes.js';
 
 dotenv.config();
 
@@ -34,6 +37,14 @@ app.use('/api/users', userRoutes);
 
 // Route for orders
 app.use('/api/orders', orderRoutes);
+
+// For file uploads (product images)
+app.use('/api/upload', uploadRoutes);
+
+// Makes uploads dir 'static' - accessible to the browser
+// __dirname only available under standard js modules, this syntax makes it behave as expected in ES6
+const __dirname = path.resolve();
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
 // For PayPal checkout process - Get PayPal Client ID
 app.get('/api/config/paypal', (req, res) => res.send(process.env.PAYPAL_CLIENT_ID));
