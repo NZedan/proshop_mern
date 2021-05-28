@@ -5,6 +5,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 // Colours logs to the console
 import colors from 'colors/safe.js';
+import morgan from 'morgan';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 // Node requires the file extension when importing files
 import connectDB from './config/db.js';
@@ -21,6 +22,11 @@ dotenv.config();
 connectDB();
 
 const app = express();
+
+// Morgan shows http requests in console with status codes and time etc. This runs only in development mode
+if (process.env.NODE_ENV === 'development') {
+	app.use(morgan('dev'));
+}
 
 // Use bodyparser to access form data in request
 app.use(express.json());

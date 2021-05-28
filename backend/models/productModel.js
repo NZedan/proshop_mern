@@ -5,6 +5,11 @@ const reviewSchema = mongoose.Schema(
 		name: { type: String, required: true },
 		rating: { type: Number, required: true },
 		comment: { type: String, required: true },
+		user: {
+			type: mongoose.Schema.Types.ObjectId,
+			required: true,
+			ref: 'User',
+		},
 	},
 	// Mongoose options - will create these fields automatically
 	{
@@ -41,7 +46,7 @@ const productSchema = mongoose.Schema(
 			type: String,
 			required: true,
 		},
-		review: [reviewSchema],
+		reviews: [reviewSchema],
 		rating: {
 			type: Number,
 			required: true,

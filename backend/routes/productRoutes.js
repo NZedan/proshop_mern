@@ -6,10 +6,18 @@ import express from 'express';
 // import asyncHandler from 'express-async-handler';
 // import Product from '../models/productModel.js';
 const router = express.Router();
-import { getProducts, getProductById, deleteProduct, createProduct, updateProduct } from '../controllers/productController.js';
+import {
+	getProducts,
+	getProductById,
+	deleteProduct,
+	createProduct,
+	updateProduct,
+	createProductReview,
+} from '../controllers/productController.js';
 import { protect, admin } from '../middleware/authMiddleware.js';
 
 router.route('/').get(getProducts).post(protect, admin, createProduct);
+router.route('/:id/reviews').post(protect, createProductReview);
 router.route('/:id').get(getProductById).delete(protect, admin, deleteProduct).put(protect, admin, updateProduct);
 
 // // Refactored to the above two lines as functionality now handled in productController.js
