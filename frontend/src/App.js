@@ -26,13 +26,14 @@ const App = () => {
 			<Header />
 			<main className='py-3'>
 				<Container>
+					<Route exact path='/' component={HomeScreen} />
+					<Route path='/search/:keyword' component={HomeScreen} />
 					<Route path='/login' component={LoginScreen} />
 					<Route path='/register' component={RegisterScreen} />
 					<Route path='/profile' component={ProfileScreen} />
 					<Route path='/product/:id' component={ProductScreen} />
 					{/* the question mark denotes the placeholder as optional as /basket route can be accessed without an id */}
 					<Route path='/basket/:id?' component={BasketScreen} />
-					<Route exact path='/' component={HomeScreen} />
 					<Route exact path='/shipping' component={ShippingScreen} />
 					<Route exact path='/payment' component={PaymentScreen} />
 					<Route exact path='/placeorder' component={PlaceOrderScreen} />

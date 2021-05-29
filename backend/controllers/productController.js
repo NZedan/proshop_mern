@@ -10,7 +10,37 @@ import Product from '../models/productModel.js';
 // @access  Public
 // @called  listProducts() productActions.js
 export const getProducts = asyncHandler(async (req, res) => {
-	const products = await Product.find({});
+	// Access query string for search query
+	// Use the mongoose OR operator to apply the search to multiple fields
+	const keyword = req.query.keyword
+		? {
+				$or: [
+					{
+						name: {
+							// regex - Regular expressions are patterns used to match character combinations in strings
+							$regex: req.query.keyword,
+							// Means case insensitive
+							$options: 'i',
+						},
+					},
+					{
+						description: {
+							$regex: req.query.keyword,
+							$options: 'i',
+						},
+					},
+					{
+						brand: {
+							$regex: req.query.keyword,
+							$options: 'i',
+						},
+					},
+				],
+		  }
+		: {};
+
+	// Spread operator to apply the keyword search, if any, to the find request
+	const products = await Product.find({ ...keyword });
 	// throw new Error('Test Error');
 	res.json(products);
 });
@@ -145,7 +175,7 @@ export const updateProduct = asyncHandler(async (req, res) => {
 // @desc    Create new review
 // @route   POST /api/products/:id/reviews
 // @access  Private
-// @called
+// @called  createProductReview() ProductScreen -> productActions -> productRoutes
 export const createProductReview = asyncHandler(async (req, res) => {
 	const { rating, comment } = req.body;
 

@@ -12,7 +12,10 @@ import Product from '../components/Product';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 
-const HomeScreen = () => {
+const HomeScreen = ({ match }) => {
+	// Used for search, search query added to URL
+	const keyword = match.params.keyword;
+
 	// Now handled in reducer
 	// const [products, setProducts] = useState([]);
 
@@ -42,12 +45,14 @@ const HomeScreen = () => {
 			dispatch(orderDetailsReset());
 			dispatch(userLogoutReset());
 		}
-		dispatch(listProducts());
-	}, [logout, dispatch]);
+		// keyword is the search query
+		dispatch(listProducts(keyword));
+	}, [logout, dispatch, keyword]);
 
 	return (
 		<Fragment>
 			<h1>Latest Products</h1>
+			{products.length === 0 && !loading && <h2>No results found</h2>}
 			{loading ? (
 				<Loader />
 			) : error ? (

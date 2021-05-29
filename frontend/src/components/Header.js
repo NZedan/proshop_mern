@@ -1,9 +1,13 @@
 import React from 'react';
+// Route can be used to pass in props.history to an embedded component through a render prop and then as a prop
+// Not necessary when using withRouter from react-router-dom
+// import { Route } from 'react-router-dom';
 // useDispatch gets from Redux state, useSelector calls actions in Redux state
 import { useDispatch, useSelector } from 'react-redux';
 // This is like link but for Bootstrap elements, wrap the linking element
 import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
+import SearchBox from './SearchBox';
 import { logout } from '../actions/userActions';
 
 const Header = () => {
@@ -25,6 +29,9 @@ const Header = () => {
 					</LinkContainer>
 					<Navbar.Toggle aria-controls='basic-navbar-nav' />
 					<Navbar.Collapse id='basic-navbar-nav'>
+						{/* Syntax to allow access to props.history in an embedded component when not using withRouter */}
+						{/* <Route render={({ history }) => <SearchBox history={history} />} /> */}
+						<SearchBox />
 						<Nav className='ml-auto'>
 							<LinkContainer to='/basket'>
 								<Nav.Link>
