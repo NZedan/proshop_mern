@@ -30,6 +30,7 @@ import {
 	orderUserListReducer,
 	orderListReducer,
 } from './reducers/orderReducers';
+import { itemsPerPageReducer } from './reducers/screenReducers';
 
 const reducer = combineReducers({
 	productList: productListReducer,
@@ -52,6 +53,7 @@ const reducer = combineReducers({
 	orderDeliver: orderDeliverReducer,
 	orderUserList: orderUserListReducer,
 	orderList: orderListReducer,
+	itemsPerPage: itemsPerPageReducer,
 });
 
 // Possibly create middleware for encrypting and storing/retrieving from local storage

@@ -34,7 +34,10 @@ export const productListReducer = (state = { products: [] }, { type, payload }) 
 		case PRODUCT_LIST_SUCCESS:
 			return {
 				loading: false,
-				products: payload,
+				// Since adding pagination, now receiving an object in response thus payload items specified
+				products: payload.products,
+				pages: payload.pages,
+				page: payload.page,
 			};
 		case PRODUCT_LIST_FAIL:
 			return {

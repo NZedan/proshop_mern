@@ -10,10 +10,11 @@ import Product from '../models/productModel.js';
 // @access  Public
 // @called  listProducts() productActions.js
 export const getProducts = asyncHandler(async (req, res) => {
-	// Access query string for search query
-	// Use the mongoose OR operator to apply the search to multiple fields
+	// Access query string for search query and page number
+
 	const keyword = req.query.keyword
-		? {
+		? // Use the mongoose OR operator to apply the search to multiple fields
+		  {
 				$or: [
 					{
 						name: {
@@ -39,10 +40,23 @@ export const getProducts = asyncHandler(async (req, res) => {
 		  }
 		: {};
 
-	// Spread operator to apply the keyword search, if any, to the find request
-	const products = await Product.find({ ...keyword });
+	// Spread operator to apply the keyword search, if any, to the find and count requests
+	const count = await Product.countDocuments({ ...keyword });
+
+	// Sets items per page
+	const pageSize = Number(req.query.itemsPerPage);
+	// Math.ceil() always rounds up to the next largest integer
+	const pages = Math.ceil(count / pageSize) || 1;
+	// Page number passed in from frontend, if none then user is on page 1
+	const page = req.query.pageNumber > pages ? pages : pageSize > count ? 1 : Number(req.query.pageNumber) || 1;
+
+	// Get products for correct page
+	const products = await Product.find({ ...keyword })
+		.limit(pageSize)
+		.skip(count > pageSize ? pageSize * (page - 1) : 0);
+
+	res.json({ products, page, pages });
 	// throw new Error('Test Error');
-	res.json(products);
 });
 
 // @desc    Fetch single product

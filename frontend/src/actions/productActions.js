@@ -23,13 +23,14 @@ import {
 
 // Keyword is the search query
 export const listProducts =
-	(keyword = '') =>
+	(keyword = '', pageNumber = '', itemsPerPage) =>
 	async (dispatch) => {
 		try {
 			dispatch({ type: PRODUCT_LIST_REQUEST });
 
-			// Pass in an optional search query with a query string (?=)
-			const { data } = await axios.get(`/api/products?keyword=${keyword}`);
+			// Pass in optional search queries with a query string (?=a&b)
+			// Data gets products, pages and page (from productController)
+			const { data } = await axios.get(`/api/products?keyword=${keyword}&pageNumber=${pageNumber}&itemsPerPage=${itemsPerPage}`);
 
 			dispatch({
 				type: PRODUCT_LIST_SUCCESS,

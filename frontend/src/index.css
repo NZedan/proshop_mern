@@ -33,3 +33,15 @@ h3 {
 	padding: 0.75rem;
 	margin: 0.5rem 0;
 }
+
+.items-per-page {
+	display: inline;
+	width: 60px;
+	padding: 0.75rem;
+	margin: 0.5rem 0;
+}
+
+.inline {
+	display: inline;
+	margin-right: 1rem;
+}
