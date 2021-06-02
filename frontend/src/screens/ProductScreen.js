@@ -8,6 +8,7 @@ import { listProductDetails, createProductReview } from '../actions/productActio
 // import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Row, Col, Image, ListGroup, Card, Button, ListGroupItem, Form } from 'react-bootstrap';
+import Meta from '../components/Meta';
 import Rating from '../components/Rating';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
@@ -98,6 +99,7 @@ const ProductScreen = ({ history, match }) => {
 				<Message variant='danger'>{error}</Message>
 			) : (
 				<Fragment>
+					<Meta title={product.name} />
 					<Row>
 						<Col md={6}>
 							{/* Fluid is a responsive property */}

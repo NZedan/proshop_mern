@@ -1,4 +1,5 @@
 import React, { Fragment, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Col, Row, Form } from 'react-bootstrap';
 // dispatch to call an action and selector to select parts of state, eg. productList from store
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,6 +11,8 @@ import { setItemsPerPage } from '../actions/screenActions';
 import { SET_MULTIPLE_PAGES, SET_SINGLE_PAGE } from '../constants/screenConstants';
 // Now handled in reducer
 // import axios from 'axios';
+import Meta from '../components/Meta';
+import ProductCarousel from '../components/ProductCarousel';
 import Product from '../components/Product';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
@@ -74,7 +77,17 @@ const HomeScreen = ({ history, match }) => {
 
 	return (
 		<Fragment>
-			<h1>Latest Products</h1>
+			<Meta />
+			{!keyword ? (
+				<Fragment>
+					<h1>Latest Products</h1>
+					<ProductCarousel />
+				</Fragment>
+			) : (
+				<Link to='/' className='btn btn-light'>
+					Go Back
+				</Link>
+			)}
 			<Form.Label className='inline'>Items per page</Form.Label>
 			<Form.Control className='items-per-page' as='select' value={itemsPerPage} onChange={onChangeHandler}>
 				<option value={10}>10</option>
