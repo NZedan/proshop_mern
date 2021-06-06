@@ -1,9 +1,7 @@
 import axios from 'axios';
 import {
-	PRODUCT_LIST_REQUEST,
 	PRODUCT_LIST_SUCCESS,
 	PRODUCT_LIST_FAIL,
-	PRODUCT_DETAILS_REQUEST,
 	PRODUCT_DETAILS_SUCCESS,
 	PRODUCT_DETAILS_FAIL,
 	PRODUCT_DELETE_REQUEST,
@@ -19,7 +17,6 @@ import {
 	PRODUCT_CREATE_REVIEW_SUCCESS,
 	PRODUCT_CREATE_REVIEW_FAIL,
 	PRODUCT_CREATE_REVIEW_RESET,
-	PRODUCT_TOP_REQUEST,
 	PRODUCT_TOP_SUCCESS,
 	PRODUCT_TOP_FAIL,
 } from '../constants/productConstants';
@@ -29,8 +26,6 @@ export const listProducts =
 	(keyword = '', pageNumber = '', itemsPerPage) =>
 	async (dispatch) => {
 		try {
-			dispatch({ type: PRODUCT_LIST_REQUEST });
-
 			// Pass in optional search queries with a query string (?=a&b)
 			// Data gets products, pages and page (from productController)
 			const { data } = await axios.get(`/api/products?keyword=${keyword}&pageNumber=${pageNumber}&itemsPerPage=${itemsPerPage}`);
@@ -49,7 +44,6 @@ export const listProducts =
 
 export const listProductDetails = (id) => async (dispatch) => {
 	try {
-		dispatch({ type: PRODUCT_DETAILS_REQUEST });
 		const { data } = await axios.get(`/api/products/${id}`);
 		dispatch({
 			type: PRODUCT_DETAILS_SUCCESS,
@@ -227,8 +221,6 @@ export const createProductReview = (productId, review) => async (dispatch, getSt
 
 export const listTopProducts = () => async (dispatch) => {
 	try {
-		dispatch({ type: PRODUCT_TOP_REQUEST });
-
 		const { data } = await axios.get('/api/products/top');
 
 		dispatch({

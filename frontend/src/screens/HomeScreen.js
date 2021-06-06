@@ -95,7 +95,7 @@ const HomeScreen = ({ history, match }) => {
 				<option value={20}>20</option>
 			</Form.Control>
 			{products.length === 0 && !loading && <h2>No results found</h2>}
-			{loading ? (
+			{products.length === 0 ? (
 				<Loader />
 			) : error ? (
 				<Message variant='danger'>{error}</Message>

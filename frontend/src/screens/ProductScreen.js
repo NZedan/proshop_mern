@@ -37,7 +37,7 @@ const ProductScreen = ({ history, match }) => {
 	// Selector takes in arrow function and then selects from state, in this case productDetails and sets to variable
 	const productDetails = useSelector((state) => state.productDetails);
 	// Destructured to get individual elements that may be passed from productListReducer
-	const { loading, error, product } = productDetails;
+	const { error, product } = productDetails;
 
 	const productCreateReview = useSelector((state) => state.productCreateReview);
 	// Syntax to rename item to avoid duplicates
@@ -93,7 +93,7 @@ const ProductScreen = ({ history, match }) => {
 			<Link to='/' className='btn btn-light my-3'>
 				Go Back
 			</Link>
-			{loading ? (
+			{!product._id || product._id !== id ? (
 				<Loader />
 			) : error ? (
 				<Message variant='danger'>{error}</Message>

@@ -20,7 +20,7 @@ const ProductListScreen = ({ history, match }) => {
 	const { logout } = userLogin;
 
 	const productList = useSelector((state) => state.productList);
-	const { loading, error, products, pages, page } = productList;
+	const { error, products, pages, page } = productList;
 
 	const productDelete = useSelector((state) => state.productDelete);
 	const { loading: loadingDelete, error: errorDelete, success } = productDelete;
@@ -91,7 +91,7 @@ const ProductListScreen = ({ history, match }) => {
 			</Row>
 			{loadingDelete && <Loader />}
 			{errorDelete && <Message variant='danger'>{errorDelete}</Message>}
-			{loading ? (
+			{products.length === 0 ? (
 				<Loader />
 			) : error ? (
 				<Message variant='danger'>{error}</Message>
