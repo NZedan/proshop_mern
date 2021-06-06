@@ -31,9 +31,10 @@ if (process.env.NODE_ENV === 'development') {
 // Use bodyparser to access form data in request
 app.use(express.json());
 
-app.get('/', (req, res) => {
-	res.send('API is running...');
-});
+// This API test route is now in the else statement of the deployment if block
+// app.get('/', (req, res) => {
+// 	res.send('API is running...');
+// });
 
 // Anything that goes to this route is linked to productRoutes
 app.use('/api/products', productRoutes);
@@ -54,6 +55,23 @@ app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
 // For PayPal checkout process - Get PayPal Client ID
 app.get('/api/config/paypal', (req, res) => res.send(process.env.PAYPAL_CLIENT_ID));
+
+// Settings for deployment
+// The production build will be in a directory called build in the frontend directory
+// This sets the build folder as a static directory to allow access to load the index.html
+if (process.env.NODE_ENV === 'production') {
+	app.use(express.static(path.join(__dirname, '/frontend/build')));
+	// Gets anything (except /api routes) -
+	// Routing in this app is handled by react-router in the frontend instead of on the backend server
+	// this GET handler catches any unknown routes missed by react-router and directs them to index.html
+	// This is necessary to prevent errors eg. when a page is refreshed
+	// More info - https://ui.dev/react-router-cannot-get-url-refresh/
+	app.get('*', (req, res) => res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html')));
+} else {
+	app.get('/', (req, res) => {
+		res.send('API is running...');
+	});
+}
 
 // // Used for initial setup before DB, now moved to productRoutes.js and handled by the above line
 // app.get('/api/products', (req, res) => {
