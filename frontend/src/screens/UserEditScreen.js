@@ -18,11 +18,8 @@ const UserEditScreen = ({ match, history }) => {
 
 	const dispatch = useDispatch();
 
-	const userLogin = useSelector((state) => state.userLogin);
-	const { logout, userInfo } = userLogin;
-
-	const userDetails = useSelector((state) => state.userDetails);
-	const { loading, error, user } = userDetails;
+	const user = useSelector((state) => state.user);
+	const { logout, userInfo, loading, error } = user;
 
 	const userUpdate = useSelector((state) => state.userUpdate);
 	const { loading: loadingUpdate, error: errorUpdate, success: successUpdate } = userUpdate;
@@ -36,15 +33,15 @@ const UserEditScreen = ({ match, history }) => {
 			history.push('/admin/userlist');
 		} else {
 			// Sets form fields with inititial values
-			if (!user.name || user._id !== userId) {
+			if (!userInfo.name || userInfo._id !== userId) {
 				dispatch(getUserDetails(userId));
 			} else {
-				setName(user.name);
-				setEmail(user.email);
-				setIsAdmin(user.isAdmin);
+				setName(userInfo.name);
+				setEmail(userInfo.email);
+				setIsAdmin(userInfo.isAdmin);
 			}
 		}
-	}, [history, logout, dispatch, user, userId, successUpdate]);
+	}, [history, logout, dispatch, userInfo, userId, successUpdate]);
 
 	const submitHandler = (e) => {
 		e.preventDefault();

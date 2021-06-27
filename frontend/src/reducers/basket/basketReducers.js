@@ -4,7 +4,7 @@ import {
 	BASKET_SAVE_PAYMENT_METHOD,
 	BASKET_SAVE_SHIPPING_ADDRESS,
 	BASKET_RESET,
-} from '../constants/basketConstants';
+} from '../../constants/basketConstants';
 
 export const basketReducer = (state = { basketItems: [], shippingAddress: {} }, { type, payload }) => {
 	switch (type) {

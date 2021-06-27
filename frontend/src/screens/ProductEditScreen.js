@@ -25,8 +25,8 @@ const ProductEditScreen = ({ match, history }) => {
 
 	const dispatch = useDispatch();
 
-	const userLogin = useSelector((state) => state.userLogin);
-	const { logout, userInfo } = userLogin;
+	const user = useSelector((state) => state.user);
+	const { logout, userInfo } = user;
 
 	const productDetails = useSelector((state) => state.productDetails);
 	const { loading, error, product } = productDetails;

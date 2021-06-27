@@ -12,8 +12,8 @@ import { getOrders } from '../actions/orderActions';
 const OrderListScreen = ({ history }) => {
 	const dispatch = useDispatch();
 
-	const userLogin = useSelector((state) => state.userLogin);
-	const { logout } = userLogin;
+	const user = useSelector((state) => state.user);
+	const { logout } = user;
 
 	const orderList = useSelector((state) => state.orderList);
 	const { loading, error, orders } = orderList;

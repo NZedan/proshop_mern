@@ -20,8 +20,8 @@ const RegisterScreen = ({ location, history }) => {
 
 	const dispatch = useDispatch();
 
-	const userRegister = useSelector((state) => state.userRegister);
-	const { loading, error, userInfo } = userRegister;
+	const user = useSelector((state) => state.user);
+	const { loading, error, userInfo } = user;
 
 	// Redirects directly to shipping from basket checkout if user already logged in
 	useEffect(() => {

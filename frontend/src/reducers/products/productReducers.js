@@ -21,7 +21,7 @@ import {
 	PRODUCT_CREATE_REVIEW_RESET,
 	PRODUCT_TOP_SUCCESS,
 	PRODUCT_TOP_FAIL,
-} from '../constants/productConstants';
+} from '../../constants/productConstants';
 
 // state = initial state, destructured action into type and payload
 export const productListReducer = (state = { products: [] }, { type, payload }) => {

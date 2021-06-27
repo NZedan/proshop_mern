@@ -66,7 +66,7 @@ export const deleteProduct = (id) => async (dispatch, getState) => {
 
 		// Get token from state
 		const {
-			userLogin: { userInfo },
+			user: { userInfo },
 		} = getState();
 
 		// Set token to header
@@ -129,7 +129,7 @@ export const createProduct = (product) => async (dispatch, getState) => {
 
 		// Get token from state
 		const {
-			userLogin: { userInfo },
+			user: { userInfo },
 		} = getState();
 
 		// Set token to header
@@ -162,7 +162,7 @@ export const updateProduct = (product) => async (dispatch, getState) => {
 
 		// Get token from state
 		const {
-			userLogin: { userInfo },
+			user: { userInfo },
 		} = getState();
 
 		// Set token to header
@@ -195,7 +195,7 @@ export const createProductReview = (productId, review) => async (dispatch, getSt
 
 		// Get token from state
 		const {
-			userLogin: { userInfo },
+			user: { userInfo },
 		} = getState();
 
 		// Set token to header

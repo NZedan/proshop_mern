@@ -26,8 +26,8 @@ const ProductScreen = ({ history, match }) => {
 	// Now handled in reducer
 	// const [product, setProduct] = useState({});
 	// True if user logs out
-	const userLogin = useSelector((state) => state.userLogin);
-	const { logout, userInfo } = userLogin;
+	const user = useSelector((state) => state.user);
+	const { logout, userInfo } = user;
 
 	const [qty, setQty] = useState(1);
 	const [rating, setRating] = useState(0);

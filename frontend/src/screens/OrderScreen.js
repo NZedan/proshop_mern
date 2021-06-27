@@ -22,8 +22,8 @@ const OrderScreen = ({ history, match }) => {
 	const dispatch = useDispatch();
 
 	// True if user logs out
-	const userLogin = useSelector((state) => state.userLogin);
-	const { logout, userInfo } = userLogin;
+	const user = useSelector((state) => state.user);
+	const { logout, userInfo } = user;
 
 	const orderDetails = useSelector((state) => state.orderDetails);
 	const { order, loading, error } = orderDetails;

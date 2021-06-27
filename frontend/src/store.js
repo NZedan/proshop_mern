@@ -12,17 +12,9 @@ import {
 	productUpdateReducer,
 	productCreateReviewReducer,
 	productTopRatedReducer,
-} from './reducers/productReducers';
-import { basketReducer } from './reducers/basketReducers';
-import {
-	userLoginReducer,
-	userRegisterReducer,
-	userDetailsReducer,
-	userUpdateProfileReducer,
-	userListReducer,
-	userDeleteReducer,
-	userUpdateReducer,
-} from './reducers/userReducers';
+} from './reducers/products/productReducers';
+import { basketReducer } from './reducers/basket/basketReducers';
+import { userReducer, userListReducer, userDeleteReducer, userUpdateReducer } from './reducers/users/userReducers';
 import {
 	orderCreateReducer,
 	orderDetailsReducer,
@@ -30,8 +22,8 @@ import {
 	orderDeliverReducer,
 	orderUserListReducer,
 	orderListReducer,
-} from './reducers/orderReducers';
-import { itemsPerPageReducer } from './reducers/screenReducers';
+} from './reducers/orders/orderReducers';
+import { itemsPerPageReducer } from './reducers/screens/screenReducers';
 
 const reducer = combineReducers({
 	productList: productListReducer,
@@ -42,10 +34,7 @@ const reducer = combineReducers({
 	productCreateReview: productCreateReviewReducer,
 	productTopRated: productTopRatedReducer,
 	basket: basketReducer,
-	userLogin: userLoginReducer,
-	userRegister: userRegisterReducer,
-	userDetails: userDetailsReducer,
-	userUpdateProfile: userUpdateProfileReducer,
+	user: userReducer,
 	userList: userListReducer,
 	userDelete: userDeleteReducer,
 	userUpdate: userUpdateReducer,
@@ -76,8 +65,8 @@ const initialState = {
 		shippingAddress: shippingAddressFromStorage,
 		paymentMethod: paymentMethodFromStorage,
 	},
-	userLogin: { userInfo: userInfoFromStorage, logout: false },
-	userUpdateProfile: { success: false },
+	user: { userInfo: userInfoFromStorage, logout: false },
+	// userUpdateProfile: { success: false },
 	orderDetails: { loading: true, error: null, order: { orderItems: [], shippingAddress: {} }, success: false },
 };
 

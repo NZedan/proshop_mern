@@ -11,8 +11,8 @@ import { ORDER_CREATE_RESET } from '../constants/orderConstants';
 
 const PlaceOrderScreen = ({ history }) => {
 	// True if user logs out
-	const userLogin = useSelector((state) => state.userLogin);
-	const { logout } = userLogin;
+	const user = useSelector((state) => state.user);
+	const { logout } = user;
 
 	const orderCreate = useSelector((state) => state.orderCreate);
 	const { order, success, error } = orderCreate;

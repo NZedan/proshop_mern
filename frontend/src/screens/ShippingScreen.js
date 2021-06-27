@@ -8,8 +8,8 @@ import { saveShippingAddress } from '../actions/basketActions';
 
 const ShippingScreen = ({ history }) => {
 	// True if user logs out
-	const userLogin = useSelector((state) => state.userLogin);
-	const { logout } = userLogin;
+	const user = useSelector((state) => state.user);
+	const { logout } = user;
 	const basket = useSelector((state) => state.basket);
 	const { shippingAddress } = basket;
 

@@ -29,7 +29,7 @@ export const createOrder = (order) => async (dispatch, getState) => {
 
 		// Get token from state
 		const {
-			userLogin: { userInfo },
+			user: { userInfo },
 		} = getState();
 
 		// Set token to header
@@ -62,7 +62,7 @@ export const getOrderDetails = (id) => async (dispatch, getState) => {
 
 		// Get token from state
 		const {
-			userLogin: { userInfo },
+			user: { userInfo },
 		} = getState();
 
 		// Set token to header
@@ -94,7 +94,7 @@ export const payOrder = (orderId, paymentResult) => async (dispatch, getState) =
 
 		// Get token from state
 		const {
-			userLogin: { userInfo },
+			user: { userInfo },
 		} = getState();
 
 		// Set token to header
@@ -127,7 +127,7 @@ export const deliverOrder = (order) => async (dispatch, getState) => {
 
 		// Get token from state
 		const {
-			userLogin: { userInfo },
+			user: { userInfo },
 		} = getState();
 
 		// Set token to header
@@ -163,7 +163,7 @@ export const listUserOrders = () => async (dispatch, getState) => {
 
 		// Get token from state
 		const {
-			userLogin: { userInfo },
+			user: { userInfo },
 		} = getState();
 
 		// Set token to header
@@ -195,7 +195,7 @@ export const getOrders = () => async (dispatch, getState) => {
 
 		// Get token from state
 		const {
-			userLogin: { userInfo },
+			user: { userInfo },
 		} = getState();
 
 		// Set token to header

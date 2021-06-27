@@ -34,8 +34,8 @@ const HomeScreen = ({ history, match }) => {
 	// Destructured to get individual elements that may be passed from productListReducer
 	const { loading, error, products, pages, page } = productList;
 
-	const userLogin = useSelector((state) => state.userLogin);
-	const { logout } = userLogin;
+	const user = useSelector((state) => state.user);
+	const { logout } = user;
 
 	const { itemsPerPage, singlePage } = useSelector((state) => state.itemsPerPage);
 

@@ -20,11 +20,9 @@ const ProfileScreen = ({ history }) => {
 
 	const dispatch = useDispatch();
 	// Is only filled if user logged in, logout true if user logs out
-	const userLogin = useSelector((state) => state.userLogin);
-	const { userInfo, logout } = userLogin;
-	// Only used here? Could use userLogin instead?
-	const userDetails = useSelector((state) => state.userDetails);
-	const { loading, user } = userDetails;
+	const user = useSelector((state) => state.user);
+	const { userInfo, logout, loading } = user;
+
 	// Doesn't require seperate state?
 	const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
 	const { success, error } = userUpdateProfile;
@@ -45,7 +43,7 @@ const ProfileScreen = ({ history }) => {
 			history.push('/');
 		} else {
 			// If logged in check for user, if no user get user
-			if (!user || !user.name) {
+			if (!userInfo || !userInfo.name) {
 				// Clears any previous user data from state
 				dispatch({ type: USER_UPDATE_PROFILE_RESET });
 				// Gets the current user details
@@ -53,13 +51,13 @@ const ProfileScreen = ({ history }) => {
 				dispatch(listUserOrders());
 			} else {
 				// If logged in with user details, fill form fields (if password updated clears fields afterwards)
-				setName(user.name);
-				setEmail(user.email);
+				setName(userInfo.name);
+				setEmail(userInfo.email);
 				setPassword('');
 				setConfirmPassword('');
 			}
 		}
-	}, [logout, history, dispatch, userInfo, user, success]);
+	}, [logout, history, dispatch, userInfo, success]);
 
 	const submitHandler = (e) => {
 		e.preventDefault();

@@ -111,7 +111,7 @@ export const getUserDetails = (idOrProfile) => async (dispatch, getState) => {
 
 		// Get token from state
 		const {
-			userLogin: { userInfo },
+			user: { userInfo },
 		} = getState();
 
 		// Set token to header
@@ -145,7 +145,7 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
 
 		// Get token from state
 		const {
-			userLogin: { userInfo },
+			user: { userInfo },
 		} = getState();
 
 		// Set token to header
@@ -190,7 +190,7 @@ export const listUsers = () => async (dispatch, getState) => {
 
 		// Get token from state
 		const {
-			userLogin: { userInfo },
+			user: { userInfo },
 		} = getState();
 
 		// Set token to header
@@ -222,7 +222,7 @@ export const deleteUser = (id) => async (dispatch, getState) => {
 
 		// Get token from state
 		const {
-			userLogin: { userInfo },
+			user: { userInfo },
 		} = getState();
 
 		// Set token to header
@@ -251,7 +251,7 @@ export const updateUser = (user) => async (dispatch, getState) => {
 
 		// Get token from state
 		const {
-			userLogin: { userInfo },
+			user: { userInfo },
 		} = getState();
 
 		// Set token to header
