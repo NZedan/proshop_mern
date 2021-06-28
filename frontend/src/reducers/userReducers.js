@@ -1,4 +1,4 @@
-import * as UC from '../../constants/userConstants';
+import * as UC from '../constants/userConstants';
 
 const intitialUserState = {
 	userInfo: null,
@@ -10,6 +10,12 @@ const intitialUserState = {
 const initialUserListState = {
 	users: [],
 	loading: false,
+	error: null,
+};
+
+const initialUserEditState = {
+	loading: false,
+	success: null,
 	error: null,
 };
 
@@ -85,7 +91,7 @@ export const userListReducer = (state = initialUserListState, { type, payload })
 	}
 };
 
-export const userDeleteReducer = (state = {}, { type, payload }) => {
+export const userDeleteReducer = (state = initialUserEditState, { type, payload }) => {
 	switch (type) {
 		case UC.USER_DELETE_REQUEST:
 			return {
@@ -107,14 +113,14 @@ export const userDeleteReducer = (state = {}, { type, payload }) => {
 		case UC.USER_DELETE_RESET:
 			return {
 				...state,
-				success: false,
+				initialUserEditState,
 			};
 		default:
 			return state;
 	}
 };
 
-export const userUpdateReducer = (state = {}, { type, payload }) => {
+export const userUpdateReducer = (state = initialUserEditState, { type, payload }) => {
 	switch (type) {
 		case UC.USER_UPDATE_REQUEST:
 			return {
@@ -136,7 +142,7 @@ export const userUpdateReducer = (state = {}, { type, payload }) => {
 		case UC.USER_UPDATE_RESET:
 			return {
 				...state,
-				success: false,
+				initialUserEditState,
 			};
 		default:
 			return state;

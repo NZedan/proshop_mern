@@ -21,11 +21,7 @@ const ProfileScreen = ({ history }) => {
 	const dispatch = useDispatch();
 	// Is only filled if user logged in, logout true if user logs out
 	const user = useSelector((state) => state.user);
-	const { userInfo, logout, loading } = user;
-
-	// Doesn't require seperate state?
-	const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
-	const { success, error } = userUpdateProfile;
+	const { userInfo, logout, loading, success, error } = user;
 
 	const orderUserList = useSelector((state) => state.orderUserList);
 	const { loading: loadingOrders, error: errorOrders, orders } = orderUserList;
@@ -57,7 +53,7 @@ const ProfileScreen = ({ history }) => {
 				setConfirmPassword('');
 			}
 		}
-	}, [logout, history, dispatch, userInfo, success]);
+	}, [logout, history, dispatch, userInfo]);
 
 	const submitHandler = (e) => {
 		e.preventDefault();
@@ -90,7 +86,7 @@ const ProfileScreen = ({ history }) => {
 							</tr>
 						</thead>
 						<tbody>
-							{orders.map((order) => (
+							{orders ? (orders.map((order) => (
 								<tr key={order._id}>
 									<td>{order._id}</td>
 									<td>
@@ -119,7 +115,7 @@ const ProfileScreen = ({ history }) => {
 										</LinkContainer>
 									</td>
 								</tr>
-							))}
+							))) : []}
 						</tbody>
 					</Table>
 				)}

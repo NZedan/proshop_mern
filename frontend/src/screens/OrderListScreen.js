@@ -16,7 +16,7 @@ const OrderListScreen = ({ history }) => {
 	const { logout } = user;
 
 	const orderList = useSelector((state) => state.orderList);
-	const { loading, error, orders } = orderList;
+	const { error, orders } = orderList;
 
 	// JS international number formatter - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat
 	const formatter = new Intl.NumberFormat('en-UK', {
@@ -37,7 +37,7 @@ const OrderListScreen = ({ history }) => {
 	return (
 		<Fragment>
 			<h1>Orders</h1>
-			{loading ? (
+			{!orders ? (
 				<Loader />
 			) : error ? (
 				<Message variant='danger'>{error}</Message>

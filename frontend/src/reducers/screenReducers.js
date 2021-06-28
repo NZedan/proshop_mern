@@ -1,4 +1,4 @@
-import { SET_ITEMS_PER_PAGE, SET_SINGLE_PAGE, SET_MULTIPLE_PAGES } from '../../constants/screenConstants';
+import { SET_ITEMS_PER_PAGE, SET_SINGLE_PAGE, SET_MULTIPLE_PAGES } from '../constants/screenConstants';
 
 export const itemsPerPageReducer = (state = { itemsPerPage: 10 }, { type, payload }) => {
 	switch (type) {

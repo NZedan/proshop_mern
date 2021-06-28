@@ -12,18 +12,16 @@ import {
 	productUpdateReducer,
 	productCreateReviewReducer,
 	productTopRatedReducer,
-} from './reducers/products/productReducers';
-import { basketReducer } from './reducers/basket/basketReducers';
-import { userReducer, userListReducer, userDeleteReducer, userUpdateReducer } from './reducers/users/userReducers';
+} from './reducers/productReducers';
+import { basketReducer } from './reducers/basketReducers';
+import { userReducer, userListReducer, userDeleteReducer, userUpdateReducer } from './reducers/userReducers';
 import {
 	orderCreateReducer,
 	orderDetailsReducer,
-	orderPayReducer,
-	orderDeliverReducer,
 	orderUserListReducer,
 	orderListReducer,
-} from './reducers/orders/orderReducers';
-import { itemsPerPageReducer } from './reducers/screens/screenReducers';
+} from './reducers/orderReducers';
+import { itemsPerPageReducer } from './reducers/screenReducers';
 
 const reducer = combineReducers({
 	productList: productListReducer,
@@ -40,8 +38,6 @@ const reducer = combineReducers({
 	userUpdate: userUpdateReducer,
 	orderCreate: orderCreateReducer,
 	orderDetails: orderDetailsReducer,
-	orderPay: orderPayReducer,
-	orderDeliver: orderDeliverReducer,
 	orderUserList: orderUserListReducer,
 	orderList: orderListReducer,
 	itemsPerPage: itemsPerPageReducer,

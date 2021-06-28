@@ -26,14 +26,7 @@ const OrderScreen = ({ history, match }) => {
 	const { logout, userInfo } = user;
 
 	const orderDetails = useSelector((state) => state.orderDetails);
-	const { order, loading, error } = orderDetails;
-
-	// Syntax to rename destructured state to avoid duplicates
-	const orderPay = useSelector((state) => state.orderPay);
-	const { loading: loadingPay, success: successPay } = orderPay;
-
-	const orderDeliver = useSelector((state) => state.orderDeliver);
-	const { loading: loadingDeliver, success: successDeliver } = orderDeliver;
+	const { order, success, error } = orderDetails;
 
 	// JS international number formatter - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat
 	const formatter = new Intl.NumberFormat('en-UK', {
@@ -43,7 +36,7 @@ const OrderScreen = ({ history, match }) => {
 	});
 
 	// Calculate Prices
-	if (!loading) {
+	if (order) {
 		order.itemsPrice = order.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0);
 	}
 
@@ -72,14 +65,14 @@ const OrderScreen = ({ history, match }) => {
 
 	useEffect(() => {
 		// Clears basket after successful payment
-		if (successPay) {
+		if (success) {
 			dispatch(basketReset());
 		}
-	}, [dispatch, successPay]);
+	}, [dispatch, success]);
 
 	useEffect(() => {
 		// Gets order details if no order, order id's don't match (if coming from a different order page) or after a successful payment
-		if (!order || order._id !== orderId || successPay || successDeliver) {
+		if (!order || order._id !== orderId || success) {
 			dispatch({ type: ORDER_PAY_RESET });
 			dispatch({ type: ORDER_DELIVER_RESET });
 			dispatch(getOrderDetails(orderId));
@@ -92,7 +85,7 @@ const OrderScreen = ({ history, match }) => {
 				setSdkReady(true);
 			}
 		}
-	}, [dispatch, order, orderId, successPay, successDeliver]);
+	}, [dispatch, order, orderId, success]);
 
 	// NEED TO HANDLE COUNT IN STOCK!!!
 
@@ -105,7 +98,7 @@ const OrderScreen = ({ history, match }) => {
 		dispatch(deliverOrder(order));
 	};
 
-	return loading ? (
+	return !order ? (
 		<Loader />
 	) : error ? (
 		<Message variant='danger'>{error}</Message>
@@ -210,11 +203,9 @@ const OrderScreen = ({ history, match }) => {
 							</ListGroup.Item>
 							{!order.isPaid && (
 								<ListGroup.Item>
-									{loadingPay && <Loader />}
 									{sdkReady ? <PayPalButton amount={order.totalPrice} onSuccess={successPaymentHandler} /> : <Loader />}
 								</ListGroup.Item>
 							)}
-							{loadingDeliver && <Loader />}
 							{userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered && (
 								<ListGroup.Item>
 									<Button type='button' className='btn btn-block' onClick={deliverHandler}>
