@@ -56,7 +56,7 @@ const initialState = {
 		shippingAddress: shippingAddressFromStorage,
 		paymentMethod: paymentMethodFromStorage,
 	},
-	user: { userInfo: userInfoFromStorage, error: null, loading: false, updated: null, userStatus: 'guest' },
+	user: { userInfo: userInfoFromStorage, error: null, loading: false, updated: null },
 	// userUpdateProfile: { success: false },
 	// orderDetails: { loading: true, error: null, order: { orderItems: [], shippingAddress: {} }, success: false },
 };

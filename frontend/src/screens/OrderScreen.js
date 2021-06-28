@@ -104,7 +104,10 @@ const OrderScreen = ({ history, match }) => {
 		<Message variant='danger'>{error}</Message>
 	) : (
 		<Fragment>
-			<h2>Order {order._id}</h2>
+			<Link to='/profile' className='btn btn-light my-3'>
+				Go Back
+			</Link>
+			<h2 className='order-screen-title'>Order {order._id}</h2>
 			<Row className='justify-content-md-center'>
 				<Col lg={8}>
 					<ListGroup variant='flush'>

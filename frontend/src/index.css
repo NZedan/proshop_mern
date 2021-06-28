@@ -12,6 +12,10 @@ h2 {
 	padding: 0.5rem 0;
 }
 
+.order-screen-title {
+	display: inline;
+}
+
 h3 {
 	padding: 1rem 0;
 }
