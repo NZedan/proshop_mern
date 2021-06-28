@@ -16,7 +16,7 @@ const BasketScreen = ({ match, location, history }) => {
 	const { basketItems } = basket;
 	// True if user logs out
 	const user = useSelector((state) => state.user);
-	const { logout } = user;
+	const { userStatus } = user;
 
 	const dispatch = useDispatch();
 
@@ -35,13 +35,13 @@ const BasketScreen = ({ match, location, history }) => {
 	// If route accessed from product screen (URL contains productId) add product to basket
 	useEffect(() => {
 		// Redirects to home on logout
-		if (logout) {
+		if (userStatus === 'logout') {
 			history.push('/');
 		}
 		if (productId) {
 			dispatch(addToBasket(productId, qty));
 		}
-	}, [logout, history, dispatch, productId, qty]);
+	}, [userStatus, history, dispatch, productId, qty]);
 
 	// Items in basket
 	const items = basketItems.reduce((acc, item) => acc + item.qty, 0);

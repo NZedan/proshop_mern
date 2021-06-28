@@ -26,7 +26,7 @@ const ProductEditScreen = ({ match, history }) => {
 	const dispatch = useDispatch();
 
 	const user = useSelector((state) => state.user);
-	const { logout, userInfo } = user;
+	const { userStatus, userInfo } = user;
 
 	const productDetails = useSelector((state) => state.productDetails);
 	const { loading, error, product } = productDetails;
@@ -42,7 +42,7 @@ const ProductEditScreen = ({ match, history }) => {
 	// });
 
 	useEffect(() => {
-		if (logout) {
+		if (userStatus === 'logout') {
 			history.push('/');
 		}
 		if (successUpdate) {
@@ -62,7 +62,7 @@ const ProductEditScreen = ({ match, history }) => {
 				setDescription(product.description);
 			}
 		}
-	}, [history, logout, dispatch, productId, product._id, successUpdate, product]);
+	}, [history, userStatus, dispatch, productId, product._id, successUpdate, product]);
 
 	// The files event of a form file field is an array as it can take multiple files
 	const uploadFileHandler = async (e) => {

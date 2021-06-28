@@ -4,7 +4,6 @@ import { Form, Button, Row, Col } from 'react-bootstrap';
 // To interact with Redux state
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
-import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
 import { register } from '../actions/userActions';
 
@@ -21,7 +20,7 @@ const RegisterScreen = ({ location, history }) => {
 	const dispatch = useDispatch();
 
 	const user = useSelector((state) => state.user);
-	const { loading, error, userInfo } = user;
+	const { error, userInfo } = user;
 
 	// Redirects directly to shipping from basket checkout if user already logged in
 	useEffect(() => {
@@ -45,7 +44,6 @@ const RegisterScreen = ({ location, history }) => {
 			<h1>Sign Up</h1>
 			{message && <Message variant='danger'>{message}</Message>}
 			{error && <Message variant='danger'>{error}</Message>}
-			{loading && <Loader />}
 
 			<Form onSubmit={submitHandler}>
 				<Form.Group controlId='name'>

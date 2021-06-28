@@ -1,12 +1,5 @@
 import * as UC from '../constants/userConstants';
 
-const intitialUserState = {
-	userInfo: null,
-	error: null,
-	loading: false,
-	updated: null,
-};
-
 const initialUserListState = {
 	users: [],
 	loading: false,
@@ -20,7 +13,10 @@ const initialUserEditState = {
 };
 
 // state = initial state, destructured action into type and payload
-export const userReducer = (state = intitialUserState, { type, payload }) => {
+export const userReducer = (
+	state = { userInfo: {}, error: null, loading: false, updated: null, userStatus: 'guest' },
+	{ type, payload }
+) => {
 	switch (type) {
 		case UC.USER_LOGIN_REQUEST:
 		case UC.USER_REGISTER_REQUEST:
@@ -37,7 +33,8 @@ export const userReducer = (state = intitialUserState, { type, payload }) => {
 				...state,
 				loading: false,
 				userInfo: payload,
-				logout: false,
+				userStatus: 'loggedIn',
+				error: null,
 			};
 		case UC.USER_LOGIN_FAIL:
 		case UC.USER_REGISTER_FAIL:
@@ -48,15 +45,19 @@ export const userReducer = (state = intitialUserState, { type, payload }) => {
 				loading: false,
 				error: payload,
 			};
-		case UC.USER_LOGOUT:
-			return {
-				...intitialUserState,
-				logout: true,
-			};
+		case UC.USER_DETAILS_RESET:
 		case UC.USER_LOGOUT_RESET:
 			return {
+				userInfo: {},
+				error: null,
+				loading: false,
+				updated: null,
+				userStatus: 'guest',
+			};
+		case UC.USER_LOGOUT:
+			return {
 				...state,
-				logout: false,
+				userStatus: 'logout',
 			};
 		default:
 			return state;
@@ -68,18 +69,15 @@ export const userListReducer = (state = initialUserListState, { type, payload })
 		case UC.USER_LIST_REQUEST:
 			return {
 				...state,
-				loading: true,
 			};
 		case UC.USER_LIST_SUCCESS:
 			return {
 				...state,
-				loading: false,
 				users: payload,
 			};
 		case UC.USER_LIST_FAIL:
 			return {
 				...state,
-				loading: false,
 				error: payload,
 			};
 		case UC.USER_LIST_RESET:
@@ -96,18 +94,15 @@ export const userDeleteReducer = (state = initialUserEditState, { type, payload 
 		case UC.USER_DELETE_REQUEST:
 			return {
 				...state,
-				loading: true,
 			};
 		case UC.USER_DELETE_SUCCESS:
 			return {
 				...state,
-				loading: false,
 				success: true,
 			};
 		case UC.USER_DELETE_FAIL:
 			return {
 				...state,
-				loading: false,
 				error: payload,
 			};
 		case UC.USER_DELETE_RESET:

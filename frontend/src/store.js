@@ -15,12 +15,7 @@ import {
 } from './reducers/productReducers';
 import { basketReducer } from './reducers/basketReducers';
 import { userReducer, userListReducer, userDeleteReducer, userUpdateReducer } from './reducers/userReducers';
-import {
-	orderCreateReducer,
-	orderDetailsReducer,
-	orderUserListReducer,
-	orderListReducer,
-} from './reducers/orderReducers';
+import { orderCreateReducer, orderDetailsReducer, orderUserListReducer, orderListReducer } from './reducers/orderReducers';
 import { itemsPerPageReducer } from './reducers/screenReducers';
 
 const reducer = combineReducers({
@@ -47,7 +42,7 @@ const reducer = combineReducers({
 
 const basketItemsFromStorage = localStorage.getItem('basketItems') ? JSON.parse(localStorage.getItem('basketItems')) : [];
 
-const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null;
+const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : {};
 
 const shippingAddressFromStorage = localStorage.getItem('shippingAddress')
 	? JSON.parse(localStorage.getItem('shippingAddress'))
@@ -61,9 +56,9 @@ const initialState = {
 		shippingAddress: shippingAddressFromStorage,
 		paymentMethod: paymentMethodFromStorage,
 	},
-	user: { userInfo: userInfoFromStorage, logout: false },
+	user: { userInfo: userInfoFromStorage, error: null, loading: false, updated: null, userStatus: 'guest' },
 	// userUpdateProfile: { success: false },
-	orderDetails: { loading: true, error: null, order: { orderItems: [], shippingAddress: {} }, success: false },
+	// orderDetails: { loading: true, error: null, order: { orderItems: [], shippingAddress: {} }, success: false },
 };
 
 const middleware = [thunk];

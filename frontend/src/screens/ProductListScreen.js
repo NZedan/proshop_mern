@@ -17,7 +17,7 @@ const ProductListScreen = ({ history, match }) => {
 	const dispatch = useDispatch();
 
 	const user = useSelector((state) => state.user);
-	const { logout } = user;
+	const { userStatus } = user;
 
 	const productList = useSelector((state) => state.productList);
 	const { error, products, pages, page } = productList;
@@ -36,7 +36,7 @@ const ProductListScreen = ({ history, match }) => {
 
 	useEffect(() => {
 		// Check if logged in else redirect to home redirects to home on logout
-		if (logout) {
+		if (userStatus === 'logout') {
 			history.push('/');
 		} else {
 			// First is keyword which isn't used for the admin screen
@@ -45,7 +45,7 @@ const ProductListScreen = ({ history, match }) => {
 		if (success) {
 			dispatch({ type: PRODUCT_DELETE_RESET });
 		}
-	}, [history, dispatch, logout, success, pageNumber, itemsPerPage]);
+	}, [history, dispatch, userStatus, success, pageNumber, itemsPerPage]);
 
 	useEffect(() => {
 		if (pages === 1) {

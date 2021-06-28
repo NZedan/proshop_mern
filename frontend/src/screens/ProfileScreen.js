@@ -21,10 +21,10 @@ const ProfileScreen = ({ history }) => {
 	const dispatch = useDispatch();
 	// Is only filled if user logged in, logout true if user logs out
 	const user = useSelector((state) => state.user);
-	const { userInfo, logout, loading, success, error } = user;
+	const { userInfo, userStatus, loading, success, error } = user;
 
 	const orderUserList = useSelector((state) => state.orderUserList);
-	const { loading: loadingOrders, error: errorOrders, orders } = orderUserList;
+	const { status, error: errorOrders, orders } = orderUserList;
 
 	// JS international number formatter - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat
 	const formatter = new Intl.NumberFormat('en-UK', {
@@ -35,16 +35,15 @@ const ProfileScreen = ({ history }) => {
 
 	useEffect(() => {
 		// Check if logged in else redirect to home redirects to home on logout
-		if (!userInfo || logout) {
+		if (!userInfo || userStatus === 'logout') {
 			history.push('/');
 		} else {
 			// If logged in check for user, if no user get user
-			if (!userInfo || !userInfo.name) {
+			if (!userInfo.name || success) {
 				// Clears any previous user data from state
 				dispatch({ type: USER_UPDATE_PROFILE_RESET });
 				// Gets the current user details
 				dispatch(getUserDetails('profile'));
-				dispatch(listUserOrders());
 			} else {
 				// If logged in with user details, fill form fields (if password updated clears fields afterwards)
 				setName(userInfo.name);
@@ -53,7 +52,13 @@ const ProfileScreen = ({ history }) => {
 				setConfirmPassword('');
 			}
 		}
-	}, [logout, history, dispatch, userInfo]);
+	}, [userStatus, history, dispatch, userInfo, success]);
+
+	useEffect(() => {
+		if (status === 'idle') {
+			dispatch(listUserOrders());
+		}
+	}, [status, dispatch]);
 
 	const submitHandler = (e) => {
 		e.preventDefault();
@@ -69,11 +74,11 @@ const ProfileScreen = ({ history }) => {
 		<Row>
 			<Col xl={8}>
 				<h2>My Orders</h2>
-				{loadingOrders ? (
+				{status === 'pending' ? (
 					<Loader />
 				) : errorOrders ? (
 					<Message variant='danger'>{errorOrders}</Message>
-				) : (
+				) : status === 'resolved' && orders.length > 0 ? (
 					<Table striped bordered hover responsive className='table-sm'>
 						<thead>
 							<tr>
@@ -86,7 +91,7 @@ const ProfileScreen = ({ history }) => {
 							</tr>
 						</thead>
 						<tbody>
-							{orders ? (orders.map((order) => (
+							{orders.map((order) => (
 								<tr key={order._id}>
 									<td>{order._id}</td>
 									<td>
@@ -115,9 +120,11 @@ const ProfileScreen = ({ history }) => {
 										</LinkContainer>
 									</td>
 								</tr>
-							))) : []}
+							))}
 						</tbody>
 					</Table>
+				) : (
+					<Message>You have no previous orders</Message>
 				)}
 			</Col>
 			<Col lg={4}>

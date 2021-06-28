@@ -13,7 +13,7 @@ const OrderListScreen = ({ history }) => {
 	const dispatch = useDispatch();
 
 	const user = useSelector((state) => state.user);
-	const { logout } = user;
+	const { userStatus } = user;
 
 	const orderList = useSelector((state) => state.orderList);
 	const { error, orders } = orderList;
@@ -27,12 +27,12 @@ const OrderListScreen = ({ history }) => {
 
 	useEffect(() => {
 		// Check if logged in else redirect to home redirects to home on logout
-		if (logout) {
+		if (userStatus === 'logout') {
 			history.push('/');
 		} else {
 			dispatch(getOrders());
 		}
-	}, [history, dispatch, logout]);
+	}, [history, dispatch, userStatus]);
 
 	return (
 		<Fragment>

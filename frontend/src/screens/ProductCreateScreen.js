@@ -24,7 +24,7 @@ const ProductCreateScreen = ({ history }) => {
 	const dispatch = useDispatch();
 
 	const user = useSelector((state) => state.user);
-	const { logout, userInfo } = user;
+	const { userStatus, userInfo } = user;
 
 	const productCreate = useSelector((state) => state.productCreate);
 	const { loading, error, success } = productCreate;
@@ -37,14 +37,14 @@ const ProductCreateScreen = ({ history }) => {
 	// });
 
 	useEffect(() => {
-		if (logout) {
+		if (userStatus === 'logout') {
 			history.push('/');
 		}
 		if (success) {
 			dispatch({ type: PRODUCT_CREATE_RESET });
 			history.push('/admin/productlist');
 		}
-	}, [history, logout, dispatch, success]);
+	}, [history, userStatus, dispatch, success]);
 
 	// The files event of a form file field is an array as it can take multiple files
 	const uploadFileHandler = async (e) => {

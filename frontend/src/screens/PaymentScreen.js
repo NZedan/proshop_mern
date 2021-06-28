@@ -9,20 +9,20 @@ import { savePaymentMethod } from '../actions/basketActions';
 const PaymentScreen = ({ history }) => {
 	// True if user logs out
 	const user = useSelector((state) => state.user);
-	const { logout } = user;
+	const { userStatus } = user;
 
 	const basket = useSelector((state) => state.basket);
 	const { shippingAddress } = basket;
 
 	useEffect(() => {
 		// Redirects to home on logout
-		if (logout) {
+		if (userStatus === 'logout') {
 			history.push('/');
 		}
 		if (!shippingAddress) {
 			history.push('/shipping');
 		}
-	}, [logout, history, shippingAddress]);
+	}, [userStatus, history, shippingAddress]);
 
 	const [paymentMethod, setPaymentMethod] = useState(null);
 

@@ -35,7 +35,7 @@ const HomeScreen = ({ history, match }) => {
 	const { loading, error, products, pages, page } = productList;
 
 	const user = useSelector((state) => state.user);
-	const { logout } = user;
+	const { userStatus } = user;
 
 	const { itemsPerPage, singlePage } = useSelector((state) => state.itemsPerPage);
 
@@ -51,14 +51,14 @@ const HomeScreen = ({ history, match }) => {
 		// };
 		// fetchProducts();
 		// * eslint-disable-next-line *
-		if (logout) {
+		if (userStatus === 'logout') {
 			dispatch(basketReset());
 			dispatch(orderDetailsReset());
 			dispatch(userLogoutReset());
 		}
 		// keyword is the search query
 		dispatch(listProducts(keyword, pageNumber, itemsPerPage));
-	}, [logout, dispatch, keyword, pageNumber, itemsPerPage]);
+	}, [userStatus, dispatch, keyword, pageNumber, itemsPerPage]);
 
 	useEffect(() => {
 		if (pages === 1) {

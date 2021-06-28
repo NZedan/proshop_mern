@@ -34,7 +34,6 @@ export const login = (email, password) => async (dispatch) => {
 export const logout = () => (dispatch) => {
 	localStorage.clear();
 	dispatch({ type: UC.USER_LOGOUT });
-	dispatch({ type: UC.USER_DETAILS_RESET });
 	dispatch({ type: ORDER_USER_LIST_RESET });
 	dispatch({ type: UC.USER_LIST_RESET });
 	dispatch({ type: PRODUCT_CREATE_REVIEW_RESET });

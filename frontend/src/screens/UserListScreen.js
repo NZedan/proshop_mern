@@ -12,17 +12,17 @@ const UserListScreen = ({ history }) => {
 	const dispatch = useDispatch();
 
 	const user = useSelector((state) => state.user);
-	const { logout, userInfo } = user;
+	const { userStatus, userInfo } = user;
 
 	const userList = useSelector((state) => state.userList);
-	const { loading, error, users } = userList;
+	const { error, users } = userList;
 
 	const userDelete = useSelector((state) => state.userDelete);
 	const { success } = userDelete;
 
 	useEffect(() => {
 		// Check if logged in else redirect to home redirects to home on logout
-		if (logout) {
+		if (userStatus === 'logout') {
 			history.push('/');
 		} else {
 			dispatch(listUsers());
@@ -30,7 +30,7 @@ const UserListScreen = ({ history }) => {
 		if (success) {
 			dispatch({ type: USER_DELETE_RESET });
 		}
-	}, [history, dispatch, logout, success]);
+	}, [history, dispatch, userStatus, success]);
 
 	// Best practice would be to set a deleted flag in DB instead of permanently removing the record
 	const deleteHandler = (id) => {
@@ -42,7 +42,7 @@ const UserListScreen = ({ history }) => {
 	return (
 		<Fragment>
 			<h1>Users</h1>
-			{loading ? (
+			{!users ? (
 				<Loader />
 			) : error ? (
 				<Message variant='danger'>{error}</Message>

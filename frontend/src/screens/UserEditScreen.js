@@ -19,13 +19,13 @@ const UserEditScreen = ({ match, history }) => {
 	const dispatch = useDispatch();
 
 	const user = useSelector((state) => state.user);
-	const { logout, userInfo, loading, error } = user;
+	const { userStatus, userInfo, error } = user;
 
 	const userUpdate = useSelector((state) => state.userUpdate);
 	const { loading: loadingUpdate, error: errorUpdate, success: successUpdate } = userUpdate;
 
 	useEffect(() => {
-		if (logout) {
+		if (userStatus === 'logout') {
 			history.push('/');
 		}
 		if (successUpdate) {
@@ -41,7 +41,7 @@ const UserEditScreen = ({ match, history }) => {
 				setIsAdmin(userInfo.isAdmin);
 			}
 		}
-	}, [history, logout, dispatch, userInfo, userId, successUpdate]);
+	}, [history, userStatus, dispatch, userInfo, userId, successUpdate]);
 
 	const submitHandler = (e) => {
 		e.preventDefault();
@@ -57,7 +57,7 @@ const UserEditScreen = ({ match, history }) => {
 				<h1>Edit User</h1>
 				{loadingUpdate && <Loader />}
 				{errorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
-				{loading ? (
+				{!userInfo ? (
 					<Loader />
 				) : error ? (
 					<Message variant='danger'>{error}</Message>

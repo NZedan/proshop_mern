@@ -9,16 +9,16 @@ import { saveShippingAddress } from '../actions/basketActions';
 const ShippingScreen = ({ history }) => {
 	// True if user logs out
 	const user = useSelector((state) => state.user);
-	const { logout } = user;
+	const { userStatus } = user;
 	const basket = useSelector((state) => state.basket);
 	const { shippingAddress } = basket;
 
 	useEffect(() => {
 		// Redirects to home on logout
-		if (logout) {
+		if (userStatus === 'logout') {
 			history.push('/');
 		}
-	}, [logout, history]);
+	}, [userStatus, history]);
 
 	// Provides a default state to keep the element 'controlled'
 	const [address, setAddress] = useState(shippingAddress.address || '');

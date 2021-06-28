@@ -23,7 +23,7 @@ const OrderScreen = ({ history, match }) => {
 
 	// True if user logs out
 	const user = useSelector((state) => state.user);
-	const { logout, userInfo } = user;
+	const { userStatus, userInfo } = user;
 
 	const orderDetails = useSelector((state) => state.orderDetails);
 	const { order, success, error } = orderDetails;
@@ -58,10 +58,10 @@ const OrderScreen = ({ history, match }) => {
 
 	useEffect(() => {
 		// Redirects to home on logout
-		if (logout) {
+		if (userStatus === 'logout' || !userInfo) {
 			history.push('/');
 		}
-	}, [logout, history]);
+	}, [userStatus, userInfo, history]);
 
 	useEffect(() => {
 		// Clears basket after successful payment

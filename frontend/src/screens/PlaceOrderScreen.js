@@ -12,7 +12,7 @@ import { ORDER_CREATE_RESET } from '../constants/orderConstants';
 const PlaceOrderScreen = ({ history }) => {
 	// True if user logs out
 	const user = useSelector((state) => state.user);
-	const { logout } = user;
+	const { userStatus } = user;
 
 	const orderCreate = useSelector((state) => state.orderCreate);
 	const { order, success, error } = orderCreate;
@@ -24,7 +24,7 @@ const PlaceOrderScreen = ({ history }) => {
 
 	useEffect(() => {
 		// Redirects to home on logout
-		if (logout) {
+		if (userStatus === 'logout') {
 			history.push('/');
 		}
 		// Redirects to order payment screen if createOrder succesful
@@ -33,7 +33,7 @@ const PlaceOrderScreen = ({ history }) => {
 			dispatch({ type: USER_DETAILS_RESET });
 			dispatch({ type: ORDER_CREATE_RESET });
 		}
-	}, [logout, history, success, order, dispatch]);
+	}, [userStatus, history, success, order, dispatch]);
 
 	// JS international number formatter - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat
 	const formatter = new Intl.NumberFormat('en-UK', {

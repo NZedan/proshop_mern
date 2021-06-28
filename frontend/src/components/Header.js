@@ -14,7 +14,7 @@ const Header = () => {
 	const dispatch = useDispatch();
 
 	const user = useSelector((state) => state.user);
-	const { userInfo } = user;
+	const { userInfo, userStatus } = user;
 
 	const logoutHandler = () => {
 		dispatch(logout());
@@ -38,7 +38,13 @@ const Header = () => {
 									<i className='fas fa-shopping-cart'></i> Basket
 								</Nav.Link>
 							</LinkContainer>
-							{userInfo && userInfo.isAdmin ? (
+							{userStatus === 'guest' ? (
+								<LinkContainer to='/login'>
+									<Nav.Link>
+										<i className='fas fa-user'></i> Sign In
+									</Nav.Link>
+								</LinkContainer>
+							) : userInfo && userInfo.isAdmin ? (
 								<NavDropdown title={userInfo.name} id='username'>
 									<LinkContainer to='/admin/userlist'>
 										<NavDropdown.Item>Users</NavDropdown.Item>
@@ -55,19 +61,13 @@ const Header = () => {
 									</LinkContainer>
 									<NavDropdown.Item onClick={logoutHandler}>Logout</NavDropdown.Item>
 								</NavDropdown>
-							) : userInfo && !userInfo.isAdmin ? (
+							) : (
 								<NavDropdown title={userInfo.name} id='username'>
 									<LinkContainer to='/profile'>
 										<NavDropdown.Item>Profile</NavDropdown.Item>
 									</LinkContainer>
 									<NavDropdown.Item onClick={logoutHandler}>Logout</NavDropdown.Item>
 								</NavDropdown>
-							) : (
-								<LinkContainer to='/login'>
-									<Nav.Link>
-										<i className='fas fa-user'></i> Sign In
-									</Nav.Link>
-								</LinkContainer>
 							)}
 						</Nav>
 					</Navbar.Collapse>

@@ -19,19 +19,19 @@ const LoginScreen = ({ location, history }) => {
 	const dispatch = useDispatch();
 
 	const user = useSelector((state) => state.user);
-	const { logout, error, userInfo } = user;
+	const { userStatus, error, userInfo } = user;
 
 	// Redirects directly to shipping from basket checkout if user already logged in
 	useEffect(() => {
-		if (logout) {
+		if (userStatus === 'logout') {
 			dispatch(basketReset());
 			dispatch(orderDetailsReset());
 			dispatch(userLogoutReset());
 		}
-		if (userInfo) {
+		if (userStatus === 'loggedIn') {
 			history.push(redirect);
 		}
-	}, [dispatch, logout, history, userInfo, redirect]);
+	}, [dispatch, userStatus, history, userInfo, redirect]);
 
 	const submitHandler = (e) => {
 		e.preventDefault();

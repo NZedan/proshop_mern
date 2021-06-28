@@ -27,7 +27,7 @@ const ProductScreen = ({ history, match }) => {
 	// const [product, setProduct] = useState({});
 	// True if user logs out
 	const user = useSelector((state) => state.user);
-	const { logout, userInfo } = user;
+	const { userStatus, userInfo } = user;
 
 	const [qty, setQty] = useState(1);
 	const [rating, setRating] = useState(0);
@@ -55,11 +55,11 @@ const ProductScreen = ({ history, match }) => {
 		// };
 		// fetchProduct();
 		// Redirects to home on logout
-		if (logout) {
+		if (userStatus === 'logout') {
 			history.push('/');
 		}
 		dispatch(listProductDetails(id));
-	}, [logout, history, dispatch, id]);
+	}, [userStatus, history, dispatch, id]);
 
 	useEffect(() => {
 		if (successProductReview) {
