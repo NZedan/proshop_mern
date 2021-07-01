@@ -38,7 +38,7 @@ const Header = () => {
 									<i className='fas fa-shopping-cart'></i> Basket
 								</Nav.Link>
 							</LinkContainer>
-							{userStatus === 'guest' ? (
+							{!userStatus || userStatus === 'guest' ? (
 								<LinkContainer to='/login'>
 									<Nav.Link>
 										<i className='fas fa-user'></i> Sign In

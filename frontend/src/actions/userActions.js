@@ -1,12 +1,37 @@
 import axios from 'axios';
 import { ORDER_USER_LIST_RESET } from '../constants/orderConstants';
 import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants';
-import * as UC from '../constants/userConstants';
+import {
+	USER_DELETE_FAIL,
+	USER_DELETE_REQUEST,
+	USER_DELETE_SUCCESS,
+	USER_DETAILS_FAIL,
+	USER_DETAILS_REQUEST,
+	USER_DETAILS_SUCCESS,
+	USER_LIST_FAIL,
+	USER_LIST_REQUEST,
+	USER_LIST_RESET,
+	USER_LIST_SUCCESS,
+	USER_LOGIN_FAIL,
+	USER_LOGIN_REQUEST,
+	USER_LOGIN_SUCCESS,
+	USER_LOGOUT,
+	USER_LOGOUT_RESET,
+	USER_REGISTER_FAIL,
+	USER_REGISTER_REQUEST,
+	USER_REGISTER_SUCCESS,
+	USER_UPDATE_FAIL,
+	USER_UPDATE_PROFILE_FAIL,
+	USER_UPDATE_PROFILE_REQUEST,
+	USER_UPDATE_PROFILE_SUCCESS,
+	USER_UPDATE_REQUEST,
+	USER_UPDATE_SUCCESS,
+} from '../constants/userConstants';
 
 export const login = (email, password) => async (dispatch) => {
 	try {
 		dispatch({
-			type: UC.USER_LOGIN_REQUEST,
+			type: USER_LOGIN_REQUEST,
 		});
 
 		const config = {
@@ -18,14 +43,15 @@ export const login = (email, password) => async (dispatch) => {
 		const { data } = await axios.post('/api/users/login', { email, password }, config);
 
 		dispatch({
-			type: UC.USER_LOGIN_SUCCESS,
+			type: USER_LOGIN_SUCCESS,
 			payload: data,
 		});
 
 		localStorage.setItem('userInfo', JSON.stringify(data));
+		localStorage.setItem('userStatus', 'loggedIn');
 	} catch (err) {
 		dispatch({
-			type: UC.USER_LOGIN_FAIL,
+			type: USER_LOGIN_FAIL,
 			payload: err.response && err.response.data.message ? err.response.data.message : err.message,
 		});
 	}
@@ -33,20 +59,20 @@ export const login = (email, password) => async (dispatch) => {
 
 export const logout = () => (dispatch) => {
 	localStorage.clear();
-	dispatch({ type: UC.USER_LOGOUT });
+	dispatch({ type: USER_LOGOUT });
 	dispatch({ type: ORDER_USER_LIST_RESET });
-	dispatch({ type: UC.USER_LIST_RESET });
+	dispatch({ type: USER_LIST_RESET });
 	dispatch({ type: PRODUCT_CREATE_REVIEW_RESET });
 };
 
 export const userLogoutReset = () => (dispatch) => {
-	dispatch({ type: UC.USER_LOGOUT_RESET });
+	dispatch({ type: USER_LOGOUT_RESET });
 };
 
 export const register = (name, email, password) => async (dispatch) => {
 	try {
 		dispatch({
-			type: UC.USER_REGISTER_REQUEST,
+			type: USER_REGISTER_REQUEST,
 		});
 
 		const config = {
@@ -58,19 +84,19 @@ export const register = (name, email, password) => async (dispatch) => {
 		const { data } = await axios.post('/api/users', { name, email, password }, config);
 
 		dispatch({
-			type: UC.USER_REGISTER_SUCCESS,
+			type: USER_REGISTER_SUCCESS,
 			payload: data,
 		});
 
 		dispatch({
-			type: UC.USER_LOGIN_SUCCESS,
+			type: USER_LOGIN_SUCCESS,
 			payload: data,
 		});
 
 		localStorage.setItem('userInfo', JSON.stringify(data));
 	} catch (err) {
 		dispatch({
-			type: UC.USER_REGISTER_FAIL,
+			type: USER_REGISTER_FAIL,
 			payload: err.response && err.response.data.message ? err.response.data.message : err.message,
 		});
 	}
@@ -79,7 +105,7 @@ export const register = (name, email, password) => async (dispatch) => {
 export const getUserDetails = (idOrProfile) => async (dispatch, getState) => {
 	try {
 		dispatch({
-			type: UC.USER_DETAILS_REQUEST,
+			type: USER_DETAILS_REQUEST,
 		});
 
 		// Get token from state
@@ -99,12 +125,12 @@ export const getUserDetails = (idOrProfile) => async (dispatch, getState) => {
 		const { data } = await axios.get(`/api/users/${idOrProfile}`, config);
 
 		dispatch({
-			type: UC.USER_DETAILS_SUCCESS,
+			type: USER_DETAILS_SUCCESS,
 			payload: data,
 		});
 	} catch (err) {
 		dispatch({
-			type: UC.USER_DETAILS_FAIL,
+			type: USER_DETAILS_FAIL,
 			payload: err.response && err.response.data.message ? err.response.data.message : err.message,
 		});
 	}
@@ -113,7 +139,7 @@ export const getUserDetails = (idOrProfile) => async (dispatch, getState) => {
 export const updateUserProfile = (user) => async (dispatch, getState) => {
 	try {
 		dispatch({
-			type: UC.USER_UPDATE_PROFILE_REQUEST,
+			type: USER_UPDATE_PROFILE_REQUEST,
 		});
 
 		// Get token from state
@@ -132,24 +158,24 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
 		const { data } = await axios.put('/api/users/profile', user, config);
 		// Sets success and outputs errors for updateProfile messages
 		dispatch({
-			type: UC.USER_UPDATE_PROFILE_SUCCESS,
+			type: USER_UPDATE_PROFILE_SUCCESS,
 			payload: data,
 		});
 		// Only necessary to keep user details consistent
 		dispatch({
-			type: UC.USER_LOGIN_SUCCESS,
+			type: USER_LOGIN_SUCCESS,
 			payload: data,
 		});
 		// Used to fill form fields and set loading, could easily be refactored into single state
 		dispatch({
-			type: UC.USER_DETAILS_SUCCESS,
+			type: USER_DETAILS_SUCCESS,
 			payload: data,
 		});
 
 		localStorage.setItem('userInfo', JSON.stringify(data));
 	} catch (err) {
 		dispatch({
-			type: UC.USER_UPDATE_PROFILE_FAIL,
+			type: USER_UPDATE_PROFILE_FAIL,
 			payload: err.response && err.response.data.message ? err.response.data.message : err.message,
 		});
 	}
@@ -158,7 +184,7 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
 export const listUsers = () => async (dispatch, getState) => {
 	try {
 		dispatch({
-			type: UC.USER_LIST_REQUEST,
+			type: USER_LIST_REQUEST,
 		});
 
 		// Get token from state
@@ -176,12 +202,12 @@ export const listUsers = () => async (dispatch, getState) => {
 		const { data } = await axios.get('/api/users', config);
 
 		dispatch({
-			type: UC.USER_LIST_SUCCESS,
+			type: USER_LIST_SUCCESS,
 			payload: data,
 		});
 	} catch (err) {
 		dispatch({
-			type: UC.USER_LIST_FAIL,
+			type: USER_LIST_FAIL,
 			payload: err.response && err.response.data.message ? err.response.data.message : err.message,
 		});
 	}
@@ -190,7 +216,7 @@ export const listUsers = () => async (dispatch, getState) => {
 export const deleteUser = (id) => async (dispatch, getState) => {
 	try {
 		dispatch({
-			type: UC.USER_DELETE_REQUEST,
+			type: USER_DELETE_REQUEST,
 		});
 
 		// Get token from state
@@ -207,10 +233,10 @@ export const deleteUser = (id) => async (dispatch, getState) => {
 
 		await axios.delete(`/api/users/${id}`, config);
 
-		dispatch({ type: UC.USER_DELETE_SUCCESS });
+		dispatch({ type: USER_DELETE_SUCCESS });
 	} catch (err) {
 		dispatch({
-			type: UC.USER_DELETE_FAIL,
+			type: USER_DELETE_FAIL,
 			payload: err.response && err.response.data.message ? err.response.data.message : err.message,
 		});
 	}
@@ -219,7 +245,7 @@ export const deleteUser = (id) => async (dispatch, getState) => {
 export const updateUser = (user) => async (dispatch, getState) => {
 	try {
 		dispatch({
-			type: UC.USER_UPDATE_REQUEST,
+			type: USER_UPDATE_REQUEST,
 		});
 
 		// Get token from state
@@ -237,11 +263,11 @@ export const updateUser = (user) => async (dispatch, getState) => {
 
 		const { data } = await axios.put(`/api/users/${user._id}`, user, config);
 
-		dispatch({ type: UC.USER_UPDATE_SUCCESS });
-		dispatch({ type: UC.USER_DETAILS_SUCCESS, payload: data });
+		dispatch({ type: USER_UPDATE_SUCCESS });
+		dispatch({ type: USER_DETAILS_SUCCESS, payload: data });
 	} catch (err) {
 		dispatch({
-			type: UC.USER_UPDATE_FAIL,
+			type: USER_UPDATE_FAIL,
 			payload: err.response && err.response.data.message ? err.response.data.message : err.message,
 		});
 	}

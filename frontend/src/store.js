@@ -44,6 +44,8 @@ const basketItemsFromStorage = localStorage.getItem('basketItems') ? JSON.parse(
 
 const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : {};
 
+const userStatusFromStorage = localStorage.getItem('userStatus') && localStorage.getItem('userStatus');
+
 const shippingAddressFromStorage = localStorage.getItem('shippingAddress')
 	? JSON.parse(localStorage.getItem('shippingAddress'))
 	: {};
@@ -56,7 +58,7 @@ const initialState = {
 		shippingAddress: shippingAddressFromStorage,
 		paymentMethod: paymentMethodFromStorage,
 	},
-	user: { userInfo: userInfoFromStorage, error: null, loading: false, updated: null },
+	user: { userInfo: userInfoFromStorage, error: null, loading: false, updated: null, userStatus: userStatusFromStorage },
 	// userUpdateProfile: { success: false },
 	// orderDetails: { loading: true, error: null, order: { orderItems: [], shippingAddress: {} }, success: false },
 };

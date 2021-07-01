@@ -6,13 +6,7 @@ import {
 	BASKET_RESET,
 } from '../constants/basketConstants';
 
-const initialState = {
-  basketItems: [],
-	shippingAddress: {},
-	paymentMethod: null,
-}
-
-export const basketReducer = (state = initialState, { type, payload }) => {
+export const basketReducer = (state = { basketItems: [], shippingAddress: {}, paymentMethod: null }, { type, payload }) => {
 	switch (type) {
 		case BASKET_ADD_ITEM:
 			const addedItem = payload;
@@ -50,7 +44,9 @@ export const basketReducer = (state = initialState, { type, payload }) => {
 			};
 		case BASKET_RESET:
 			return {
-				initialState
+				basketItems: [],
+				shippingAddress: {},
+				paymentMethod: null,
 			};
 		default:
 			return state;

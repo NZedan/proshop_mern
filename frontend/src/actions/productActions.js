@@ -1,5 +1,25 @@
 import axios from 'axios';
-import * as PC from '../constants/productConstants';
+import {
+	PRODUCT_CREATE_FAIL,
+	PRODUCT_CREATE_REQUEST,
+	PRODUCT_CREATE_REVIEW_FAIL,
+	PRODUCT_CREATE_REVIEW_REQUEST,
+	PRODUCT_CREATE_REVIEW_RESET,
+	PRODUCT_CREATE_REVIEW_SUCCESS,
+	PRODUCT_CREATE_SUCCESS,
+	PRODUCT_DELETE_FAIL,
+	PRODUCT_DELETE_REQUEST,
+	PRODUCT_DELETE_SUCCESS,
+	PRODUCT_DETAILS_FAIL,
+	PRODUCT_DETAILS_SUCCESS,
+	PRODUCT_LIST_FAIL,
+	PRODUCT_LIST_SUCCESS,
+	PRODUCT_TOP_FAIL,
+	PRODUCT_TOP_SUCCESS,
+	PRODUCT_UPDATE_FAIL,
+	PRODUCT_UPDATE_REQUEST,
+	PRODUCT_UPDATE_SUCCESS,
+} from '../constants/productConstants';
 
 // Keyword is the search query
 export const listProducts =
@@ -11,12 +31,12 @@ export const listProducts =
 			const { data } = await axios.get(`/api/products?keyword=${keyword}&pageNumber=${pageNumber}&itemsPerPage=${itemsPerPage}`);
 
 			dispatch({
-				type: PC.PRODUCT_LIST_SUCCESS,
+				type: PRODUCT_LIST_SUCCESS,
 				payload: data,
 			});
 		} catch (err) {
 			dispatch({
-				type: PC.PRODUCT_LIST_FAIL,
+				type: PRODUCT_LIST_FAIL,
 				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
 			});
 		}
@@ -26,13 +46,13 @@ export const listProductDetails = (id) => async (dispatch) => {
 	try {
 		const { data } = await axios.get(`/api/products/${id}`);
 		dispatch({
-			type: PC.PRODUCT_DETAILS_SUCCESS,
+			type: PRODUCT_DETAILS_SUCCESS,
 			payload: data,
 		});
-		dispatch({ type: PC.PRODUCT_CREATE_REVIEW_RESET });
+		dispatch({ type: PRODUCT_CREATE_REVIEW_RESET });
 	} catch (err) {
 		dispatch({
-			type: PC.PRODUCT_DETAILS_FAIL,
+			type: PRODUCT_DETAILS_FAIL,
 			payload: err.response && err.response.data.message ? err.response.data.message : err.message,
 		});
 	}
@@ -41,7 +61,7 @@ export const listProductDetails = (id) => async (dispatch) => {
 export const deleteProduct = (id) => async (dispatch, getState) => {
 	try {
 		dispatch({
-			type: PC.PRODUCT_DELETE_REQUEST,
+			type: PRODUCT_DELETE_REQUEST,
 		});
 
 		// Get token from state
@@ -58,10 +78,10 @@ export const deleteProduct = (id) => async (dispatch, getState) => {
 
 		await axios.delete(`/api/products/${id}`, config);
 
-		dispatch({ type: PC.PRODUCT_DELETE_SUCCESS });
+		dispatch({ type: PRODUCT_DELETE_SUCCESS });
 	} catch (err) {
 		dispatch({
-			type: PC.PRODUCT_DELETE_FAIL,
+			type: PRODUCT_DELETE_FAIL,
 			payload: err.response && err.response.data.message ? err.response.data.message : err.message,
 		});
 	}
@@ -104,7 +124,7 @@ export const deleteProduct = (id) => async (dispatch, getState) => {
 export const createProduct = (product) => async (dispatch, getState) => {
 	try {
 		dispatch({
-			type: PC.PRODUCT_CREATE_REQUEST,
+			type: PRODUCT_CREATE_REQUEST,
 		});
 
 		// Get token from state
@@ -123,12 +143,12 @@ export const createProduct = (product) => async (dispatch, getState) => {
 		const { data } = await axios.post('/api/products', product, config);
 
 		dispatch({
-			type: PC.PRODUCT_CREATE_SUCCESS,
+			type: PRODUCT_CREATE_SUCCESS,
 			payload: data,
 		});
 	} catch (err) {
 		dispatch({
-			type: PC.PRODUCT_CREATE_FAIL,
+			type: PRODUCT_CREATE_FAIL,
 			payload: err.response && err.response.data.message ? err.response.data.message : err.message,
 		});
 	}
@@ -137,7 +157,7 @@ export const createProduct = (product) => async (dispatch, getState) => {
 export const updateProduct = (product) => async (dispatch, getState) => {
 	try {
 		dispatch({
-			type: PC.PRODUCT_UPDATE_REQUEST,
+			type: PRODUCT_UPDATE_REQUEST,
 		});
 
 		// Get token from state
@@ -156,12 +176,12 @@ export const updateProduct = (product) => async (dispatch, getState) => {
 		const { data } = await axios.put(`/api/products/${product._id}`, product, config);
 
 		dispatch({
-			type: PC.PRODUCT_UPDATE_SUCCESS,
+			type: PRODUCT_UPDATE_SUCCESS,
 			payload: data,
 		});
 	} catch (err) {
 		dispatch({
-			type: PC.PRODUCT_UPDATE_FAIL,
+			type: PRODUCT_UPDATE_FAIL,
 			payload: err.response && err.response.data.message ? err.response.data.message : err.message,
 		});
 	}
@@ -170,7 +190,7 @@ export const updateProduct = (product) => async (dispatch, getState) => {
 export const createProductReview = (productId, review) => async (dispatch, getState) => {
 	try {
 		dispatch({
-			type: PC.PRODUCT_CREATE_REVIEW_REQUEST,
+			type: PRODUCT_CREATE_REVIEW_REQUEST,
 		});
 
 		// Get token from state
@@ -189,11 +209,11 @@ export const createProductReview = (productId, review) => async (dispatch, getSt
 		await axios.post(`/api/products/${productId}/reviews`, review, config);
 
 		dispatch({
-			type: PC.PRODUCT_CREATE_REVIEW_SUCCESS,
+			type: PRODUCT_CREATE_REVIEW_SUCCESS,
 		});
 	} catch (err) {
 		dispatch({
-			type: PC.PRODUCT_CREATE_REVIEW_FAIL,
+			type: PRODUCT_CREATE_REVIEW_FAIL,
 			payload: err.response && err.response.data.message ? err.response.data.message : err.message,
 		});
 	}
@@ -204,12 +224,12 @@ export const listTopProducts = () => async (dispatch) => {
 		const { data } = await axios.get('/api/products/top');
 
 		dispatch({
-			type: PC.PRODUCT_TOP_SUCCESS,
+			type: PRODUCT_TOP_SUCCESS,
 			payload: data,
 		});
 	} catch (err) {
 		dispatch({
-			type: PC.PRODUCT_TOP_FAIL,
+			type: PRODUCT_TOP_FAIL,
 			payload: err.response && err.response.data.message ? err.response.data.message : err.message,
 		});
 	}

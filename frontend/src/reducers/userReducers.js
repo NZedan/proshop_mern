@@ -1,16 +1,31 @@
-import * as UC from '../constants/userConstants';
-
-const initialUserListState = {
-	users: [],
-	loading: false,
-	error: null,
-};
-
-const initialUserEditState = {
-	loading: false,
-	success: null,
-	error: null,
-};
+import {
+	USER_DELETE_FAIL,
+	USER_DELETE_REQUEST,
+	USER_DELETE_RESET,
+	USER_DELETE_SUCCESS,
+	USER_DETAILS_FAIL,
+	USER_DETAILS_REQUEST,
+	USER_DETAILS_RESET,
+	USER_DETAILS_SUCCESS,
+	USER_LIST_FAIL,
+	USER_LIST_REQUEST,
+	USER_LIST_RESET,
+	USER_LIST_SUCCESS,
+	USER_LOGIN_FAIL,
+	USER_LOGIN_REQUEST,
+	USER_LOGIN_SUCCESS,
+	USER_LOGOUT,
+	USER_LOGOUT_RESET,
+	USER_REGISTER_FAIL,
+	USER_REGISTER_REQUEST,
+	USER_REGISTER_SUCCESS,
+	USER_UPDATE_FAIL,
+	USER_UPDATE_PROFILE_FAIL,
+	USER_UPDATE_PROFILE_REQUEST,
+	USER_UPDATE_REQUEST,
+	USER_UPDATE_RESET,
+	USER_UPDATE_SUCCESS,
+} from '../constants/userConstants';
 
 // state = initial state, destructured action into type and payload
 export const userReducer = (
@@ -18,17 +33,17 @@ export const userReducer = (
 	{ type, payload }
 ) => {
 	switch (type) {
-		case UC.USER_LOGIN_REQUEST:
-		case UC.USER_REGISTER_REQUEST:
-		case UC.USER_DETAILS_REQUEST:
-		case UC.USER_UPDATE_PROFILE_REQUEST:
+		case USER_LOGIN_REQUEST:
+		case USER_REGISTER_REQUEST:
+		case USER_DETAILS_REQUEST:
+		case USER_UPDATE_PROFILE_REQUEST:
 			return {
 				...state,
 				loading: true,
 			};
-		case UC.USER_LOGIN_SUCCESS:
-		case UC.USER_REGISTER_SUCCESS:
-		case UC.USER_DETAILS_SUCCESS:
+		case USER_LOGIN_SUCCESS:
+		case USER_REGISTER_SUCCESS:
+		case USER_DETAILS_SUCCESS:
 			return {
 				...state,
 				loading: false,
@@ -36,17 +51,17 @@ export const userReducer = (
 				userStatus: 'loggedIn',
 				error: null,
 			};
-		case UC.USER_LOGIN_FAIL:
-		case UC.USER_REGISTER_FAIL:
-		case UC.USER_UPDATE_PROFILE_FAIL:
-		case UC.USER_DETAILS_FAIL:
+		case USER_LOGIN_FAIL:
+		case USER_REGISTER_FAIL:
+		case USER_UPDATE_PROFILE_FAIL:
+		case USER_DETAILS_FAIL:
 			return {
 				...state,
 				loading: false,
 				error: payload,
 			};
-		case UC.USER_DETAILS_RESET:
-		case UC.USER_LOGOUT_RESET:
+		case USER_DETAILS_RESET:
+		case USER_LOGOUT_RESET:
 			return {
 				userInfo: {},
 				error: null,
@@ -54,7 +69,7 @@ export const userReducer = (
 				updated: null,
 				userStatus: 'guest',
 			};
-		case UC.USER_LOGOUT:
+		case USER_LOGOUT:
 			return {
 				...state,
 				userStatus: 'logout',
@@ -64,80 +79,86 @@ export const userReducer = (
 	}
 };
 
-export const userListReducer = (state = initialUserListState, { type, payload }) => {
+export const userListReducer = (state = { users: [], loading: false, error: null }, { type, payload }) => {
 	switch (type) {
-		case UC.USER_LIST_REQUEST:
+		case USER_LIST_REQUEST:
 			return {
 				...state,
 			};
-		case UC.USER_LIST_SUCCESS:
+		case USER_LIST_SUCCESS:
 			return {
 				...state,
 				users: payload,
 			};
-		case UC.USER_LIST_FAIL:
+		case USER_LIST_FAIL:
 			return {
 				...state,
 				error: payload,
 			};
-		case UC.USER_LIST_RESET:
+		case USER_LIST_RESET:
 			return {
-				initialUserListState,
+				users: [],
+				loading: false,
+				error: null,
 			};
 		default:
 			return state;
 	}
 };
 
-export const userDeleteReducer = (state = initialUserEditState, { type, payload }) => {
+export const userDeleteReducer = (state = { loading: false, success: null, error: null }, { type, payload }) => {
 	switch (type) {
-		case UC.USER_DELETE_REQUEST:
+		case USER_DELETE_REQUEST:
 			return {
 				...state,
 			};
-		case UC.USER_DELETE_SUCCESS:
+		case USER_DELETE_SUCCESS:
 			return {
 				...state,
 				success: true,
 			};
-		case UC.USER_DELETE_FAIL:
+		case USER_DELETE_FAIL:
 			return {
 				...state,
 				error: payload,
 			};
-		case UC.USER_DELETE_RESET:
+		case USER_DELETE_RESET:
 			return {
 				...state,
-				initialUserEditState,
+				loading: false,
+				success: null,
+				error: null,
 			};
 		default:
 			return state;
 	}
 };
 
-export const userUpdateReducer = (state = initialUserEditState, { type, payload }) => {
+export const userUpdateReducer = (state = { loading: false, success: null, error: null }, { type, payload }) => {
 	switch (type) {
-		case UC.USER_UPDATE_REQUEST:
+		case USER_UPDATE_REQUEST:
 			return {
 				...state,
 				loading: true,
 			};
-		case UC.USER_UPDATE_SUCCESS:
+		case USER_UPDATE_SUCCESS:
 			return {
 				...state,
 				loading: false,
 				success: true,
 			};
-		case UC.USER_UPDATE_FAIL:
+		case USER_UPDATE_FAIL:
 			return {
 				...state,
 				loading: false,
 				error: payload,
 			};
-		case UC.USER_UPDATE_RESET:
+		case USER_UPDATE_RESET:
 			return {
 				...state,
-				initialUserEditState,
+				loading: false,
+				success: null,
+				error: null,
 			};
 		default:
 			return state;
