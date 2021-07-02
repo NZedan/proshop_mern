@@ -98,14 +98,9 @@ export const orderDetailsReducer = (
 		case ORDER_PAY_RESET:
 		case ORDER_DELIVER_RESET:
 			return {
+				...state,
 				status: 'idle',
 				success: null,
-				order: {
-					orderItems: [],
-					shippingAddress: {},
-					user: {},
-				},
-				orders: [],
 				error: null,
 			};
 		default:

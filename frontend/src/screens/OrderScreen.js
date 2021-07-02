@@ -72,7 +72,7 @@ const OrderScreen = ({ history, match }) => {
 	useEffect(() => {
 		// Gets order details if no order, order id's don't match (if coming from a different order page) or after a successful payment
 		if (!order || order._id !== orderId || success) {
-			if (status === 'idle') {
+			if (status === 'idle' || status === 'resolved') {
 				dispatch({ type: ORDER_PAY_RESET });
 				dispatch({ type: ORDER_DELIVER_RESET });
 				dispatch(getOrderDetails(orderId));
@@ -105,9 +105,11 @@ const OrderScreen = ({ history, match }) => {
 		<Message variant='danger'>{error}</Message>
 	) : (
 		<Fragment>
-			<Link to='/profile' className='btn btn-light my-3'>
-				Go Back
-			</Link>
+			{!userInfo.isAdmin && (
+				<Link to='/profile' className='btn btn-light my-3'>
+					Go Back
+				</Link>
+			)}
 			<h2 className='order-screen-title'>Order {order._id}</h2>
 			<Row className='justify-content-md-center'>
 				<Col lg={8}>
