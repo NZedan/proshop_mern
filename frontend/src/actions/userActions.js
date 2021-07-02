@@ -8,6 +8,8 @@ import {
 	USER_DETAILS_FAIL,
 	USER_DETAILS_REQUEST,
 	USER_DETAILS_SUCCESS,
+	USER_EDIT_DETAILS,
+	USER_EDIT_RESET,
 	USER_LIST_FAIL,
 	USER_LIST_REQUEST,
 	USER_LIST_RESET,
@@ -62,6 +64,7 @@ export const logout = () => (dispatch) => {
 	dispatch({ type: USER_LOGOUT });
 	dispatch({ type: ORDER_USER_LIST_RESET });
 	dispatch({ type: USER_LIST_RESET });
+	dispatch({ type: USER_EDIT_RESET });
 	dispatch({ type: PRODUCT_CREATE_REVIEW_RESET });
 };
 
@@ -124,10 +127,17 @@ export const getUserDetails = (idOrProfile) => async (dispatch, getState) => {
 		// Hits users/id or users/profile endpoints
 		const { data } = await axios.get(`/api/users/${idOrProfile}`, config);
 
-		dispatch({
-			type: USER_DETAILS_SUCCESS,
-			payload: data,
-		});
+		if (idOrProfile === 'profile') {
+			dispatch({
+				type: USER_DETAILS_SUCCESS,
+				payload: data,
+			});
+		} else {
+			dispatch({
+				type: USER_EDIT_DETAILS,
+				payload: data,
+			});
+		}
 	} catch (err) {
 		dispatch({
 			type: USER_DETAILS_FAIL,
@@ -264,7 +274,7 @@ export const updateUser = (user) => async (dispatch, getState) => {
 		const { data } = await axios.put(`/api/users/${user._id}`, user, config);
 
 		dispatch({ type: USER_UPDATE_SUCCESS });
-		dispatch({ type: USER_DETAILS_SUCCESS, payload: data });
+		dispatch({ type: USER_EDIT_DETAILS, payload: data });
 	} catch (err) {
 		dispatch({
 			type: USER_UPDATE_FAIL,

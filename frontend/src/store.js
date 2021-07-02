@@ -14,7 +14,7 @@ import {
 	productTopRatedReducer,
 } from './reducers/productReducers';
 import { basketReducer } from './reducers/basketReducers';
-import { userReducer, userListReducer, userDeleteReducer, userUpdateReducer } from './reducers/userReducers';
+import { userReducer, userListReducer, userDeleteReducer, userUpdateReducer, userEditReducer } from './reducers/userReducers';
 import { orderCreateReducer, orderDetailsReducer, orderUserListReducer, orderListReducer } from './reducers/orderReducers';
 import { itemsPerPageReducer } from './reducers/screenReducers';
 
@@ -29,6 +29,7 @@ const reducer = combineReducers({
 	basket: basketReducer,
 	user: userReducer,
 	userList: userListReducer,
+	userEdit: userEditReducer,
 	userDelete: userDeleteReducer,
 	userUpdate: userUpdateReducer,
 	orderCreate: orderCreateReducer,

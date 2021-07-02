@@ -21,12 +21,11 @@ const OrderScreen = ({ history, match }) => {
 
 	const dispatch = useDispatch();
 
-	// True if user logs out
 	const user = useSelector((state) => state.user);
 	const { userStatus, userInfo } = user;
 
 	const orderDetails = useSelector((state) => state.orderDetails);
-	const { order, success, error } = orderDetails;
+	const { order, success, error, status } = orderDetails;
 
 	// JS international number formatter - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat
 	const formatter = new Intl.NumberFormat('en-UK', {
@@ -73,9 +72,11 @@ const OrderScreen = ({ history, match }) => {
 	useEffect(() => {
 		// Gets order details if no order, order id's don't match (if coming from a different order page) or after a successful payment
 		if (!order || order._id !== orderId || success) {
-			dispatch({ type: ORDER_PAY_RESET });
-			dispatch({ type: ORDER_DELIVER_RESET });
-			dispatch(getOrderDetails(orderId));
+			if (status === 'idle') {
+				dispatch({ type: ORDER_PAY_RESET });
+				dispatch({ type: ORDER_DELIVER_RESET });
+				dispatch(getOrderDetails(orderId));
+			}
 		} else if (!order.isPaid) {
 			// If the order is not paid and the PayPal script is not in the document
 			// The Window interface represents a window containing a DOM document - https://developer.mozilla.org/en-US/docs/Web/API/Window
@@ -85,7 +86,7 @@ const OrderScreen = ({ history, match }) => {
 				setSdkReady(true);
 			}
 		}
-	}, [dispatch, order, orderId, success]);
+	}, [dispatch, order, orderId, success, status]);
 
 	// NEED TO HANDLE COUNT IN STOCK!!!
 

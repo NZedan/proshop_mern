@@ -7,6 +7,8 @@ import {
 	USER_DETAILS_REQUEST,
 	USER_DETAILS_RESET,
 	USER_DETAILS_SUCCESS,
+	USER_EDIT_DETAILS,
+	USER_EDIT_RESET,
 	USER_LIST_FAIL,
 	USER_LIST_REQUEST,
 	USER_LIST_RESET,
@@ -73,6 +75,23 @@ export const userReducer = (
 			return {
 				...state,
 				userStatus: 'logout',
+			};
+		default:
+			return state;
+	}
+};
+
+export const userEditReducer = (state = { editUserInfo: {} }, { type, payload }) => {
+	switch (type) {
+		case USER_EDIT_DETAILS:
+			return {
+				...state,
+				editUserInfo: payload,
+			};
+		case USER_EDIT_RESET:
+			return {
+				...state,
+				editUserInfo: {},
 			};
 		default:
 			return state;

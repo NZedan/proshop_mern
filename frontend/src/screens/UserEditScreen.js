@@ -21,6 +21,9 @@ const UserEditScreen = ({ match, history }) => {
 	const user = useSelector((state) => state.user);
 	const { userStatus, userInfo, error } = user;
 
+	const userEdit = useSelector((state) => state.userEdit);
+	const { editUserInfo } = userEdit;
+
 	const userUpdate = useSelector((state) => state.userUpdate);
 	const { loading: loadingUpdate, error: errorUpdate, success: successUpdate } = userUpdate;
 
@@ -33,15 +36,15 @@ const UserEditScreen = ({ match, history }) => {
 			history.push('/admin/userlist');
 		} else {
 			// Sets form fields with inititial values
-			if (!userInfo.name || userInfo._id !== userId) {
+			if (!editUserInfo.name || editUserInfo._id !== userId) {
 				dispatch(getUserDetails(userId));
 			} else {
-				setName(userInfo.name);
-				setEmail(userInfo.email);
-				setIsAdmin(userInfo.isAdmin);
+				setName(editUserInfo.name);
+				setEmail(editUserInfo.email);
+				setIsAdmin(editUserInfo.isAdmin);
 			}
 		}
-	}, [history, userStatus, dispatch, userInfo, userId, successUpdate]);
+	}, [history, userStatus, dispatch, editUserInfo, userId, successUpdate]);
 
 	const submitHandler = (e) => {
 		e.preventDefault();
@@ -57,7 +60,7 @@ const UserEditScreen = ({ match, history }) => {
 				<h1>Edit User</h1>
 				{loadingUpdate && <Loader />}
 				{errorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
-				{!userInfo ? (
+				{!editUserInfo.name || editUserInfo._id !== userId ? (
 					<Loader />
 				) : error ? (
 					<Message variant='danger'>{error}</Message>

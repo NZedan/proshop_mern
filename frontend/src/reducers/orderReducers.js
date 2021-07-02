@@ -71,17 +71,20 @@ export const orderDetailsReducer = (
 		case ORDER_DELIVER_REQUEST:
 			return {
 				...state,
+				status: 'pending',
 			};
 		case ORDER_DETAILS_SUCCESS:
 			return {
 				...state,
 				order: payload,
+				status: 'resolved',
 			};
 		case ORDER_PAY_SUCCESS:
 		case ORDER_DELIVER_SUCCESS:
 			return {
 				...state,
 				success: true,
+				status: 'resolved',
 			};
 		case ORDER_DETAILS_FAIL:
 		case ORDER_PAY_FAIL:
@@ -89,6 +92,7 @@ export const orderDetailsReducer = (
 			return {
 				...state,
 				error: payload,
+				status: 'rejected',
 			};
 		case ORDER_DETAILS_RESET:
 		case ORDER_PAY_RESET:
