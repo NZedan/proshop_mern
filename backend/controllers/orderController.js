@@ -43,7 +43,8 @@ export const getOrderById = asyncHandler(async (req, res) => {
 	// Populate references fields from other documents, in this case getting name and email from the user document
 	const order = await Order.findById(req.params.id).populate('user', 'name email');
 
-	if (order) {
+	// Check if user is admin or order belongs to user
+	if (order && (req.user.isAdmin || req.user._id.equals(order.user._id))) {
 		res.json(order);
 	} else {
 		res.status(404);
