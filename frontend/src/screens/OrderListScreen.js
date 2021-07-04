@@ -53,7 +53,6 @@ const OrderListScreen = ({ history }) => {
 							<th>PAID</th>
 							<th>DELIVERED</th>
 							<th>DETAILS</th>
-							<th></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -84,13 +83,6 @@ const OrderListScreen = ({ history }) => {
 									<LinkContainer to={`/orders/${order._id}`}>
 										<Button className='btn-sm' variant='link'>
 											Details
-										</Button>
-									</LinkContainer>
-								</td>
-								<td style={{ textAlign: 'center' }}>
-									<LinkContainer to={`/orders/${order._id}`}>
-										<Button variant='light' className='btn-sm'>
-											<i className='fas fa-edit'></i>
 										</Button>
 									</LinkContainer>
 								</td>

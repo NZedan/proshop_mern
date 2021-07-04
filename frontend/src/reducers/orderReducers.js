@@ -94,13 +94,24 @@ export const orderDetailsReducer = (
 				error: payload,
 				status: 'rejected',
 			};
-		case ORDER_DETAILS_RESET:
 		case ORDER_PAY_RESET:
 		case ORDER_DELIVER_RESET:
 			return {
 				...state,
 				status: 'idle',
 				success: null,
+				error: null,
+			};
+		case ORDER_DETAILS_RESET:
+			return {
+				status: 'idle',
+				success: null,
+				order: {
+					orderItems: [],
+					shippingAddress: {},
+					user: {},
+				},
+				orders: [],
 				error: null,
 			};
 		default:
