@@ -6,8 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import CheckoutSteps from '../components/CheckoutSteps';
 import { createOrder } from '../actions/orderActions';
-// import { USER_DETAILS_RESET } from '../constants/userConstants';
 import { ORDER_CREATE_RESET } from '../constants/orderConstants';
+import { BASKET_RESET } from '../constants/basketConstants';
 
 const PlaceOrderScreen = ({ history }) => {
 	// True if user logs out
@@ -30,8 +30,8 @@ const PlaceOrderScreen = ({ history }) => {
 		// Redirects to order payment screen if createOrder succesful
 		if (success) {
 			history.push(`/orders/${order._id}`);
-			// dispatch({ type: USER_DETAILS_RESET });
 			dispatch({ type: ORDER_CREATE_RESET });
+			dispatch({ type: BASKET_RESET });
 		}
 	}, [userStatus, history, success, order, dispatch]);
 
@@ -54,24 +54,11 @@ const PlaceOrderScreen = ({ history }) => {
 	basket.totalPrice = Number(basket.itemsPrice) > 100 ? Number(basket.itemsPrice) : Number(basket.itemsPrice) + 10;
 
 	const placeOrderHandler = () => {
-		// SECURITY ISSUE
-		// Should send only productId's and qty's and calculate prices in backend to avoid user sending false info
-		// eg. totalPrice: 0.01
-		let shipping;
-		if (basket.shippingPrice === 'Free') {
-			shipping = Number((0).toFixed(2));
-		} else {
-			shipping = Number(10);
-		}
-
 		dispatch(
 			createOrder({
 				orderItems: basketItems,
 				shippingAddress,
 				paymentMethod: basket.paymentMethod,
-				shippingPrice: shipping,
-				taxPrice: basket.taxPrice,
-				totalPrice: basket.totalPrice,
 			})
 		);
 	};
