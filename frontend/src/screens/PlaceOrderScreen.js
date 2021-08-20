@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import CheckoutSteps from '../components/CheckoutSteps';
 import { createOrder } from '../actions/orderActions';
-import { USER_DETAILS_RESET } from '../constants/userConstants';
+// import { USER_DETAILS_RESET } from '../constants/userConstants';
 import { ORDER_CREATE_RESET } from '../constants/orderConstants';
 
 const PlaceOrderScreen = ({ history }) => {
@@ -30,7 +30,7 @@ const PlaceOrderScreen = ({ history }) => {
 		// Redirects to order payment screen if createOrder succesful
 		if (success) {
 			history.push(`/orders/${order._id}`);
-			dispatch({ type: USER_DETAILS_RESET });
+			// dispatch({ type: USER_DETAILS_RESET });
 			dispatch({ type: ORDER_CREATE_RESET });
 		}
 	}, [userStatus, history, success, order, dispatch]);

@@ -2,6 +2,7 @@
 // Simply wrap the async function
 import asyncHandler from 'express-async-handler';
 import Order from '../models/orderModel.js';
+import Product from '../models/productModel.js';
 
 // Route handled in server.js
 // express-async-handler simplifies the try/catch syntax for express routes
@@ -10,28 +11,82 @@ import Order from '../models/orderModel.js';
 // @access  Private
 // @called  createOrder() PlaceOrderScreen.js
 export const addOrderItems = asyncHandler(async (req, res) => {
-	// Should send only productId's and qty's and calculate prices in backend to avoid user sending false info
-	// MUST FIX THIS ISSUE
+	// Gets prices from DB and calulates shipping, tax and total avoiding tampering in front end
+	const { orderItems, shippingAddress, paymentMethod } = req.body;
 
-	const { orderItems, shippingAddress, paymentMethod, taxPrice, shippingPrice, totalPrice } = req.body;
-
+	// Check prices
 	if (orderItems && orderItems.length === 0) {
 		res.status(400);
 		throw new Error('No order items');
 	} else {
-		const order = new Order({
-			orderItems,
-			user: req.user._id,
-			shippingAddress,
-			paymentMethod,
-			taxPrice,
-			shippingPrice,
-			totalPrice,
-		});
+		let priceOfItems;
+		let shippingPriceChecked;
+		let taxPriceChecked;
+		let totalChecked;
+		const checkedPrices = {
+			shipping: shippingPriceChecked,
+			tax: taxPriceChecked,
+			total: totalChecked,
+		};
 
-		const createdOrder = await order.save();
-		// 201 - something created
-		res.status(201).json(createdOrder);
+		const getItemsPrice = (orders) => {
+			return new Promise((resolve, reject) => {
+				const productPrices = [];
+				orders.forEach(async (orderItem) => {
+					const item = await Product.findById(orderItem.productId);
+					priceOfItems = Number((item.price * orderItem.qty).toFixed(2));
+					productPrices.push(priceOfItems);
+					if (productPrices.length === orders.length) {
+						resolve(productPrices);
+					}
+				});
+			});
+		};
+
+		const checkPrices = (prices) => {
+			return new Promise((resolve, reject) => {
+				const subtotal = prices.reduce((acc, item) => acc + item, 0);
+				checkedPrices.shipping = subtotal > 100 ? 0 : formatter.format(10);
+				checkedPrices.tax = Number((subtotal - subtotal / 1.2).toFixed(2));
+				checkedPrices.total = Number(subtotal) > 100 ? Number(subtotal) : Number(subtotal) + 10;
+				resolve(checkedPrices);
+			});
+		};
+
+		const createOrder = (checkedDetails) => {
+			return new Promise((resolve, reject) => {
+				const order = new Order({
+					orderItems,
+					user: req.user._id,
+					shippingAddress,
+					paymentMethod,
+					shippingPrice: checkedDetails.shipping,
+					taxPrice: checkedDetails.tax,
+					totalPrice: checkedDetails.total,
+				});
+				resolve(order);
+			});
+		};
+
+		const saveOrder = async (newOrder) => {
+			const createdOrder = await newOrder.save();
+			// 201 - something created
+			res.status(201).json(createdOrder);
+		};
+
+		getItemsPrice(orderItems)
+			.then((data) => {
+				return checkPrices(data);
+			})
+			.then((data) => {
+				return createOrder(data);
+			})
+			.then((data) => {
+				saveOrder(data);
+			})
+			.catch((error) => {
+				throw new Error('Create order failed', error);
+			});
 	}
 });
 
