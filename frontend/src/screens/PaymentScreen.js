@@ -12,17 +12,17 @@ const PaymentScreen = ({ history }) => {
 	const { userStatus } = user;
 
 	const basket = useSelector((state) => state.basket);
-	const { shippingAddress } = basket;
+	const { deliveryAddress } = basket;
 
 	useEffect(() => {
 		// Redirects to home on logout
 		if (userStatus === 'logout') {
 			history.push('/');
 		}
-		if (!shippingAddress) {
-			history.push('/shipping');
+		if (!deliveryAddress) {
+			history.push('/delivery');
 		}
-	}, [userStatus, history, shippingAddress]);
+	}, [userStatus, history, deliveryAddress]);
 
 	const [paymentMethod, setPaymentMethod] = useState(null);
 

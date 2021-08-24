@@ -18,7 +18,7 @@ const PlaceOrderScreen = ({ history }) => {
 	const { order, success, error } = orderCreate;
 
 	const basket = useSelector((state) => state.basket);
-	const { basketItems, shippingAddress } = basket;
+	const { basketItems, deliveryAddress } = basket;
 
 	const dispatch = useDispatch();
 
@@ -49,7 +49,7 @@ const PlaceOrderScreen = ({ history }) => {
 	// basket.itemsPrice = addDecimals(basketItems.reduce((acc, item) => acc + item.price * item.qty, 0));
 	// Calculate Prices
 	basket.itemsPrice = basketItems.reduce((acc, item) => acc + item.price * item.qty, 0);
-	basket.shippingPrice = basket.itemsPrice > 100 ? 'Free' : formatter.format(10);
+	basket.deliveryPrice = basket.itemsPrice > 100 ? 'Free' : formatter.format(10);
 	basket.taxPrice = Number((basket.itemsPrice - basket.itemsPrice / 1.2).toFixed(2));
 	basket.totalPrice = Number(basket.itemsPrice) > 100 ? Number(basket.itemsPrice) : Number(basket.itemsPrice) + 10;
 
@@ -57,7 +57,7 @@ const PlaceOrderScreen = ({ history }) => {
 		dispatch(
 			createOrder({
 				orderItems: basketItems,
-				shippingAddress,
+				deliveryAddress,
 				paymentMethod: basket.paymentMethod,
 			})
 		);
@@ -70,14 +70,14 @@ const PlaceOrderScreen = ({ history }) => {
 				<Col lg={8}>
 					<ListGroup variant='flush'>
 						<ListGroup.Item>
-							<h2>Shipping</h2>
+							<h2>Delivery</h2>
 							<p>
 								<strong>Address:</strong>
 							</p>
-							<p>{shippingAddress.address}</p>
-							<p>{shippingAddress.city}</p>
-							<p>{shippingAddress.postCode}</p>
-							<p>{shippingAddress.country}</p>
+							<p>{deliveryAddress.address}</p>
+							<p>{deliveryAddress.city}</p>
+							<p>{deliveryAddress.postCode}</p>
+							<p>{deliveryAddress.country}</p>
 						</ListGroup.Item>
 						<ListGroup.Item>
 							<h2>Items In Basket</h2>
@@ -119,10 +119,10 @@ const PlaceOrderScreen = ({ history }) => {
 							</ListGroup.Item>
 							<ListGroup.Item>
 								<Row>
-									<Col>Shipping</Col>
+									<Col>Delivery</Col>
 									<Col>
-										{/* {basket.shippingPrice === addDecimals(10) ? '£' : ''} */}
-										{basket.shippingPrice}
+										{/* {basket.deliveryPrice === addDecimals(10) ? '£' : ''} */}
+										{basket.deliveryPrice}
 									</Col>
 								</Row>
 							</ListGroup.Item>

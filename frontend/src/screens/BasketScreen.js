@@ -56,7 +56,7 @@ const BasketScreen = ({ match, location, history }) => {
 
 	const checkoutHandler = () => {
 		// Redirects to login, if logged in useEffect in LoginScreen sees userInfo and redirects to shipping
-		history.push('/login?redirect=shipping');
+		history.push('/login?redirect=delivery');
 	};
 
 	return (

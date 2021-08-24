@@ -141,7 +141,7 @@ const OrderScreen = ({ history, match }) => {
 					</ListGroup>
 					<ListGroup variant='flush'>
 						<ListGroup.Item>
-							<h2>Shipping Details</h2>
+							<h2>Delivery Details</h2>
 							<p>
 								<strong>Name: </strong> {order.user.name}
 							</p>
@@ -152,10 +152,10 @@ const OrderScreen = ({ history, match }) => {
 							<p>
 								<strong>Address:</strong>
 							</p>
-							<p>{order.shippingAddress.address}</p>
-							<p>{order.shippingAddress.city}</p>
-							<p>{order.shippingAddress.postCode}</p>
-							<p>{order.shippingAddress.country}</p>
+							<p>{order.deliveryAddress.address}</p>
+							<p>{order.deliveryAddress.city}</p>
+							<p>{order.deliveryAddress.postCode}</p>
+							<p>{order.deliveryAddress.country}</p>
 							{order.isDelivered ? (
 								<Message variant='success'>
 									Delivered at <Moment format='h:mm:ss a, MMMM Do YYYY'>{order.deliveredAt}</Moment>
@@ -191,8 +191,8 @@ const OrderScreen = ({ history, match }) => {
 							</ListGroup.Item>
 							<ListGroup.Item>
 								<Row>
-									<Col>Shipping</Col>
-									<Col>{formatter.format(order.shippingPrice)}</Col>
+									<Col>Delivery</Col>
+									<Col>{formatter.format(order.deliveryPrice)}</Col>
 								</Row>
 							</ListGroup.Item>
 							<ListGroup.Item>
