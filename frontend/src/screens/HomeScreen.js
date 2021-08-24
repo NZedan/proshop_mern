@@ -75,6 +75,8 @@ const HomeScreen = ({ history, match }) => {
 		dispatch(setItemsPerPage(e.target.value));
 	};
 
+	// MAKE BASKET A DROPDOWN MENU
+
 	return (
 		<Fragment>
 			<Meta />

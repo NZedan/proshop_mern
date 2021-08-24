@@ -88,6 +88,8 @@ const ProductScreen = ({ history, match }) => {
 		dispatch(createProductReview(id, { rating, comment }));
 	};
 
+	// MAKE ADD TO BASKET A POPUP INSTEAD OF REDIRECT
+
 	return (
 		<Fragment>
 			<Link to='/' className='btn btn-light my-3'>

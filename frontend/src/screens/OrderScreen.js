@@ -209,7 +209,6 @@ const OrderScreen = ({ history, match }) => {
 							</ListGroup.Item>
 							{!order.isPaid && (
 								<ListGroup.Item>
-									{/* Get amount from order saved in DB */}
 									{sdkReady ? <PayPalButton amount={order.totalPrice} onSuccess={successPaymentHandler} /> : <Loader />}
 								</ListGroup.Item>
 							)}

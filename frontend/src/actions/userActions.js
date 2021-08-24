@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { ORDER_USER_LIST_RESET } from '../constants/orderConstants';
 import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants';
+import { RESET_ITEMS_PER_PAGE } from '../constants/screenConstants';
 import {
 	USER_DELETE_FAIL,
 	USER_DELETE_REQUEST,
@@ -66,6 +67,7 @@ export const logout = () => (dispatch) => {
 	dispatch({ type: USER_LIST_RESET });
 	dispatch({ type: USER_EDIT_RESET });
 	dispatch({ type: PRODUCT_CREATE_REVIEW_RESET });
+	dispatch({ type: RESET_ITEMS_PER_PAGE });
 };
 
 export const userLogoutReset = () => (dispatch) => {

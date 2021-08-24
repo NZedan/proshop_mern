@@ -4,14 +4,14 @@ import { Form, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import FormContainer from '../components/FormContainer';
 import CheckoutSteps from '../components/CheckoutSteps';
-import { saveShippingAddress } from '../actions/basketActions';
+import { saveDeliveryAddress } from '../actions/basketActions';
 
-const ShippingScreen = ({ history }) => {
+const DeliveryScreen = ({ history }) => {
 	// True if user logs out
 	const user = useSelector((state) => state.user);
 	const { userStatus } = user;
 	const basket = useSelector((state) => state.basket);
-	const { shippingAddress } = basket;
+	const { deliveryAddress } = basket;
 
 	useEffect(() => {
 		// Redirects to home on logout
@@ -21,16 +21,16 @@ const ShippingScreen = ({ history }) => {
 	}, [userStatus, history]);
 
 	// Provides a default state to keep the element 'controlled'
-	const [address, setAddress] = useState(shippingAddress.address || '');
-	const [city, setCity] = useState(shippingAddress.city || '');
-	const [postCode, setPostCode] = useState(shippingAddress.postCode || '');
-	const [country, setCountry] = useState(shippingAddress.country || '');
+	const [address, setAddress] = useState(deliveryAddress.address || '');
+	const [city, setCity] = useState(deliveryAddress.city || '');
+	const [postCode, setPostCode] = useState(deliveryAddress.postCode || '');
+	const [country, setCountry] = useState(deliveryAddress.country || '');
 
 	const dispatch = useDispatch();
 
 	const submitHandler = (e) => {
 		e.preventDefault();
-		dispatch(saveShippingAddress({ address, city, postCode, country }));
+		dispatch(saveDeliveryAddress({ address, city, postCode, country }));
 		history.push('/payment');
 	};
 
@@ -40,7 +40,7 @@ const ShippingScreen = ({ history }) => {
 		<Fragment>
 			<CheckoutSteps step1 step2 />
 			<FormContainer>
-				<h1>Shipping</h1>
+				<h4>Please Enter Delivery Address</h4>
 				<Form onSubmit={submitHandler}>
 					<Form.Group controlId='address'>
 						<Form.Label>Address</Form.Label>
@@ -95,4 +95,4 @@ const ShippingScreen = ({ history }) => {
 	);
 };
 
-export default ShippingScreen;
+export default DeliveryScreen;

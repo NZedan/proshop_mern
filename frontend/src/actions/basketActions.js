@@ -4,7 +4,7 @@ import {
 	BASKET_REMOVE_ITEM,
 	BASKET_RESET,
 	BASKET_SAVE_PAYMENT_METHOD,
-	BASKET_SAVE_SHIPPING_ADDRESS,
+	BASKET_SAVE_DELIVERY_ADDRESS,
 } from '../constants/basketConstants';
 
 // getState makes all state available to the action
@@ -37,13 +37,13 @@ export const removeFromBasket = (id) => (dispatch, getState) => {
 	localStorage.setItem('basketItems', JSON.stringify(getState().basket.basketItems));
 };
 
-export const saveShippingAddress = (data) => (dispatch) => {
+export const saveDeliveryAddress = (data) => (dispatch) => {
 	dispatch({
-		type: BASKET_SAVE_SHIPPING_ADDRESS,
+		type: BASKET_SAVE_DELIVERY_ADDRESS,
 		payload: data,
 	});
 	// For production this data should be encrypted
-	localStorage.setItem('shippingAddress', JSON.stringify(data));
+	localStorage.setItem('deliveryAddress', JSON.stringify(data));
 };
 
 export const savePaymentMethod = (data) => (dispatch) => {

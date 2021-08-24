@@ -13,22 +13,21 @@ import Product from '../models/productModel.js';
 export const addOrderItems = asyncHandler(async (req, res) => {
 	// Gets prices from DB and calulates shipping, tax and total avoiding tampering in front end
 	const { orderItems, shippingAddress, paymentMethod } = req.body;
+	let priceOfItems;
+	let shippingPriceChecked;
+	let taxPriceChecked;
+	let totalChecked;
+	const checkedPrices = {
+		shipping: shippingPriceChecked,
+		tax: taxPriceChecked,
+		total: totalChecked,
+	};
 
 	// Check prices
 	if (orderItems && orderItems.length === 0) {
 		res.status(400);
 		throw new Error('No order items');
 	} else {
-		let priceOfItems;
-		let shippingPriceChecked;
-		let taxPriceChecked;
-		let totalChecked;
-		const checkedPrices = {
-			shipping: shippingPriceChecked,
-			tax: taxPriceChecked,
-			total: totalChecked,
-		};
-
 		const getItemsPrice = (orders) => {
 			return new Promise((resolve, reject) => {
 				const productPrices = [];

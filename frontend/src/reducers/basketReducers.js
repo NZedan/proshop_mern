@@ -2,11 +2,11 @@ import {
 	BASKET_ADD_ITEM,
 	BASKET_REMOVE_ITEM,
 	BASKET_SAVE_PAYMENT_METHOD,
-	BASKET_SAVE_SHIPPING_ADDRESS,
+	BASKET_SAVE_DELIVERY_ADDRESS,
 	BASKET_RESET,
 } from '../constants/basketConstants';
 
-export const basketReducer = (state = { basketItems: [], shippingAddress: {}, paymentMethod: null }, { type, payload }) => {
+export const basketReducer = (state = { basketItems: [], deliveryAddress: {}, paymentMethod: null }, { type, payload }) => {
 	switch (type) {
 		case BASKET_ADD_ITEM:
 			const addedItem = payload;
@@ -32,10 +32,10 @@ export const basketReducer = (state = { basketItems: [], shippingAddress: {}, pa
 				basketItems: state.basketItems.filter((item) => item.productId !== payload),
 			};
 		// Refactor to have its own mongo model and maybe its own state
-		case BASKET_SAVE_SHIPPING_ADDRESS:
+		case BASKET_SAVE_DELIVERY_ADDRESS:
 			return {
 				...state,
-				shippingAddress: payload,
+				deliveryAddress: payload,
 			};
 		case BASKET_SAVE_PAYMENT_METHOD:
 			return {
@@ -45,7 +45,7 @@ export const basketReducer = (state = { basketItems: [], shippingAddress: {}, pa
 		case BASKET_RESET:
 			return {
 				basketItems: [],
-				shippingAddress: {},
+				deliveryAddress: {},
 				paymentMethod: null,
 			};
 		default:
