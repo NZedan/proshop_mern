@@ -20,10 +20,11 @@ const BasketScreen = ({ match, location, history }) => {
 
 	const dispatch = useDispatch();
 
+	// No longer required, addToBasket dispatched in productScreen
 	// Search query (?qty=x) (added in productScreen addToBasketHandler)
 	// Accessed with location.search returns ?qty=x
 	// split('=') returns array [?qty, x] so the query is accessed at array position 1
-	const qty = location.search ? Number(location.search.split('=')[1]) : 1;
+	// const qty = location.search ? Number(location.search.split('=')[1]) : 1;
 
 	// JS international number formatter - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat
 	const formatter = new Intl.NumberFormat('en-UK', {
@@ -38,10 +39,11 @@ const BasketScreen = ({ match, location, history }) => {
 		if (userStatus === 'logout') {
 			history.push('/');
 		}
-		if (productId) {
-			dispatch(addToBasket(productId, qty));
-		}
-	}, [userStatus, history, dispatch, productId, qty]);
+		// Now handled in productScreen
+		// if (productId) {
+		// 	dispatch(addToBasket(productId, qty));
+		// }
+	}, [userStatus, history, dispatch, productId]);
 
 	// Items in basket
 	const items = basketItems.reduce((acc, item) => acc + item.qty, 0);

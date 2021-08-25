@@ -13,6 +13,7 @@ import Rating from '../components/Rating';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants';
+import { addToBasket } from '../actions/basketActions';
 
 // Initial setup pre-backend development
 // import products from '../products';
@@ -77,10 +78,18 @@ const ProductScreen = ({ history, match }) => {
 		}
 	}, [successProductReview, errorProductReview, dispatch, id]);
 
+	// const addToBasketHandler = () => {
+	// 	// history is a mutable object associated with routes
+	// 	// This redirects to this route with the qty state as a query
+	// 	history.push(`/basket/${id}?qty=${qty}`);
+	// };
+
+	// Refactored to dispatch addToBasket on click to avoid qty reset when page refreshed after changing in basket screen
 	const addToBasketHandler = () => {
+		dispatch(addToBasket(id, qty));
 		// history is a mutable object associated with routes
-		// This redirects to this route with the qty state as a query
-		history.push(`/basket/${id}?qty=${qty}`);
+		// This redirects to this route
+		history.push(`/basket/${id}`);
 	};
 
 	const submitHandler = (e) => {
