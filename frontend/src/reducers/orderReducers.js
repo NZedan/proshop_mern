@@ -25,7 +25,7 @@ import {
 } from '../constants/orderConstants';
 
 export const orderCreateReducer = (
-	state = { status: 'idle', success: null, order: { orderItems: [], shippingAddress: {}, user: {} }, orders: [], error: null },
+	state = { status: 'idle', success: null, order: { orderItems: [], deliveryAddress: {}, user: {} }, orders: [], error: null },
 	{ type, payload }
 ) => {
 	switch (type) {
@@ -62,7 +62,7 @@ export const orderCreateReducer = (
 };
 
 export const orderDetailsReducer = (
-	state = { status: 'idle', success: null, order: { orderItems: [], shippingAddress: {}, user: {} }, orders: [], error: null },
+	state = { status: 'idle', success: null, order: { orderItems: [], deliveryAddress: {}, user: {} }, orders: [], error: null },
 	{ type, payload }
 ) => {
 	switch (type) {
@@ -108,7 +108,7 @@ export const orderDetailsReducer = (
 				success: null,
 				order: {
 					orderItems: [],
-					shippingAddress: {},
+					deliveryAddress: {},
 					user: {},
 				},
 				orders: [],
@@ -150,7 +150,7 @@ export const orderUserListReducer = (state = { status: 'idle', orders: [], error
 };
 
 export const orderListReducer = (
-	state = { status: 'idle', success: null, order: { orderItems: [], shippingAddress: {}, user: {} }, orders: [], error: null },
+	state = { status: 'idle', success: null, order: { orderItems: [], deliveryAddress: {}, user: {} }, orders: [], error: null },
 	{ type, payload }
 ) => {
 	switch (type) {

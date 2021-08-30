@@ -11,31 +11,47 @@ import Product from '../models/productModel.js';
 // @access  Private
 // @called  createOrder() PlaceOrderScreen.js
 export const addOrderItems = asyncHandler(async (req, res) => {
-	// Gets prices from DB and calulates shipping, tax and total avoiding tampering in front end
-	const { orderItems, shippingAddress, paymentMethod } = req.body;
+	// Gets prices and stock quantities from DB and calulates shipping, tax and total avoiding tampering in front end
+	const { orderItems, deliveryAddress, paymentMethod } = req.body;
 	let priceOfItems;
-	let shippingPriceChecked;
+
+	let deliveryPriceChecked;
 	let taxPriceChecked;
 	let totalChecked;
 	const checkedPrices = {
-		shipping: shippingPriceChecked,
+		delivery: deliveryPriceChecked,
 		tax: taxPriceChecked,
 		total: totalChecked,
 	};
 
-	// Check prices
 	if (orderItems && orderItems.length === 0) {
 		res.status(400);
 		throw new Error('No order items');
 	} else {
-		const getItemsPrice = (orders) => {
+		// Check prices & update quantity in stock
+		const getItemsFromDB = (order) => {
 			return new Promise((resolve, reject) => {
 				const productPrices = [];
-				orders.forEach(async (orderItem) => {
-					const item = await Product.findById(orderItem.productId);
-					priceOfItems = Number((item.price * orderItem.qty).toFixed(2));
+				order.forEach(async (orderItem) => {
+					const product = await Product.findById(orderItem.productId);
+
+					priceOfItems = Number((product.price * orderItem.qty).toFixed(2));
 					productPrices.push(priceOfItems);
-					if (productPrices.length === orders.length) {
+
+					if (product.countInStock >= orderItem.qty) {
+						product.countInStock -= orderItem.qty;
+						await product.save();
+					} else if (product.countInStock < orderItem.qty) {
+						orderItem.qty = product.countInStock;
+						orderItem.message = 'One or more items unavailable, order updated';
+						product.countInStock = 0;
+						await product.save();
+					} else if (!product.countInStock) {
+						orderItem.qty = 0;
+						orderItem.message = 'Item out of stock, order updated';
+					}
+
+					if (productPrices.length === order.length) {
 						resolve(productPrices);
 					}
 				});
@@ -45,9 +61,10 @@ export const addOrderItems = asyncHandler(async (req, res) => {
 		const checkPrices = (prices) => {
 			return new Promise((resolve, reject) => {
 				const subtotal = prices.reduce((acc, item) => acc + item, 0);
-				checkedPrices.shipping = subtotal > 100 ? 0 : formatter.format(10);
+				checkedPrices.delivery = subtotal > 100 ? Number(0) : Number(10);
 				checkedPrices.tax = Number((subtotal - subtotal / 1.2).toFixed(2));
-				checkedPrices.total = Number(subtotal) > 100 ? Number(subtotal) : Number(subtotal) + 10;
+				checkedPrices.total = Number(subtotal) > 100 ? Number(subtotal) : Number(subtotal + 10);
+
 				resolve(checkedPrices);
 			});
 		};
@@ -57,12 +74,13 @@ export const addOrderItems = asyncHandler(async (req, res) => {
 				const order = new Order({
 					orderItems,
 					user: req.user._id,
-					shippingAddress,
+					deliveryAddress,
 					paymentMethod,
-					shippingPrice: checkedDetails.shipping,
+					deliveryPrice: checkedDetails.delivery,
 					taxPrice: checkedDetails.tax,
 					totalPrice: checkedDetails.total,
 				});
+
 				resolve(order);
 			});
 		};
@@ -73,17 +91,18 @@ export const addOrderItems = asyncHandler(async (req, res) => {
 			res.status(201).json(createdOrder);
 		};
 
-		getItemsPrice(orderItems)
-			.then((data) => {
-				return checkPrices(data);
+		getItemsFromDB(orderItems)
+			.then((data1) => {
+				return checkPrices(data1);
 			})
-			.then((data) => {
-				return createOrder(data);
+			.then((data2) => {
+				return createOrder(data2);
 			})
-			.then((data) => {
-				saveOrder(data);
+			.then((data3) => {
+				saveOrder(data3);
 			})
 			.catch((error) => {
+				console.error(error);
 				throw new Error('Create order failed', error);
 			});
 	}

@@ -6,7 +6,7 @@ import Message from '../components/Message';
 import { addToBasket, removeFromBasket } from '../actions/basketActions';
 
 // match, location and history are from react-router and give access to the route attributes like URL
-const BasketScreen = ({ match, location, history }) => {
+const BasketScreen = ({ match, history }) => {
 	// If the basket screen is reached with an id and quantity in the URL then
 	// the add to basket action will be fired, otherwise just the basket will be shown
 	const productId = match.params.id;

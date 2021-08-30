@@ -192,7 +192,7 @@ const OrderScreen = ({ history, match }) => {
 							<ListGroup.Item>
 								<Row>
 									<Col>Delivery</Col>
-									<Col>{formatter.format(order.deliveryPrice)}</Col>
+									<Col>{!order.deliveryPrice ? 'Free' : formatter.format(order.deliveryPrice)}</Col>
 								</Row>
 							</ListGroup.Item>
 							<ListGroup.Item>
