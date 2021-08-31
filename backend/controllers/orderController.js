@@ -11,7 +11,7 @@ import Product from '../models/productModel.js';
 // @access  Private
 // @called  createOrder() PlaceOrderScreen.js
 export const addOrderItems = asyncHandler(async (req, res) => {
-	// Gets prices and stock quantities from DB and calulates shipping, tax and total avoiding tampering in front end
+	// Gets prices and stock quantities from DB and calculates shipping, tax and total avoiding tampering in front end
 	const { orderItems, deliveryAddress, paymentMethod } = req.body;
 	let priceOfItems;
 
@@ -43,12 +43,12 @@ export const addOrderItems = asyncHandler(async (req, res) => {
 						await product.save();
 					} else if (product.countInStock < orderItem.qty) {
 						orderItem.qty = product.countInStock;
-						orderItem.message = 'One or more items unavailable, order updated';
+						orderItem.message = 'One or more items unavailable, your order has been updated';
 						product.countInStock = 0;
 						await product.save();
 					} else if (!product.countInStock) {
 						orderItem.qty = 0;
-						orderItem.message = 'Item out of stock, order updated';
+						orderItem.message = 'Item out of stock, your order has been updated';
 					}
 
 					if (productPrices.length === order.length) {
@@ -69,16 +69,16 @@ export const addOrderItems = asyncHandler(async (req, res) => {
 			});
 		};
 
-		const createOrder = (checkedDetails) => {
+		const createOrder = (checkedPrices) => {
 			return new Promise((resolve, reject) => {
 				const order = new Order({
 					orderItems,
 					user: req.user._id,
 					deliveryAddress,
 					paymentMethod,
-					deliveryPrice: checkedDetails.delivery,
-					taxPrice: checkedDetails.tax,
-					totalPrice: checkedDetails.total,
+					deliveryPrice: checkedPrices.delivery,
+					taxPrice: checkedPrices.tax,
+					totalPrice: checkedPrices.total,
 				});
 
 				resolve(order);
@@ -91,6 +91,7 @@ export const addOrderItems = asyncHandler(async (req, res) => {
 			res.status(201).json(createdOrder);
 		};
 
+		// Run asynchronous checks to the database
 		getItemsFromDB(orderItems)
 			.then((data1) => {
 				return checkPrices(data1);
@@ -118,7 +119,25 @@ export const getOrderById = asyncHandler(async (req, res) => {
 
 	// Check if user is admin or order belongs to user
 	if (order && (req.user.isAdmin || req.user._id.equals(order.user._id))) {
-		res.json(order);
+		// Check time elapsed since order created
+		const orderCreatedAt = new Date(order.createdAt);
+		const timeElapsedHrs = (Date.now() - orderCreatedAt.getTime()) / (1000 * 60 * 60) + 1;
+
+		if (timeElapsedHrs > 2 && !order.isPaid && !order.message) {
+			order.message = 'Order timed out and has been deleted';
+			order.isDeleted = true;
+			const updatedOrder = await order.save();
+			// Reset products quantity in stock
+			order.orderItems.forEach(async (orderItem) => {
+				const product = await Product.findById(orderItem.productId);
+				product.countInStock += orderItem.qty;
+				await product.save();
+				console.log('Product updated');
+			});
+			res.json(updatedOrder);
+		} else {
+			res.json(order);
+		}
 	} else {
 		res.status(404);
 		throw new Error('Order not found');

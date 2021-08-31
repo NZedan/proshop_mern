@@ -15,6 +15,7 @@ const orderSchema = mongoose.Schema(
 				qty: { type: Number, required: true },
 				image: { type: String, required: true },
 				price: { type: Number, required: true },
+				message: { type: String },
 				productId: {
 					type: mongoose.Schema.Types.ObjectId,
 					required: true,
@@ -68,6 +69,13 @@ const orderSchema = mongoose.Schema(
 		},
 		deliveredAt: {
 			type: Date,
+		},
+		isDeleted: {
+			type: Boolean,
+			default: false,
+		},
+		message: {
+			type: String,
 		},
 	},
 	// Mongoose options - will create these fields automatically
