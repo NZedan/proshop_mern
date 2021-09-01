@@ -121,9 +121,9 @@ export const getOrderById = asyncHandler(async (req, res) => {
 	if (order && (req.user.isAdmin || req.user._id.equals(order.user._id))) {
 		// Check time elapsed since order created
 		const orderCreatedAt = new Date(order.createdAt);
-		const timeElapsedHrs = (Date.now() - orderCreatedAt.getTime()) / (1000 * 60 * 60) + 1;
+		const timeElapsedHrs = (Date.now() - orderCreatedAt.getTime()) / (1000 * 60 * 60);
 
-		if (timeElapsedHrs > 2 && !order.isPaid && !order.message) {
+		if (timeElapsedHrs > 0.99 && !order.isPaid && !order.message) {
 			order.message = 'Order timed out and has been deleted';
 			order.isDeleted = true;
 			const updatedOrder = await order.save();

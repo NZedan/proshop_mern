@@ -6,10 +6,10 @@ import Message from '../components/Message';
 import { addToBasket, removeFromBasket } from '../actions/basketActions';
 
 // match, location and history are from react-router and give access to the route attributes like URL
-const BasketScreen = ({ match, history }) => {
-	// If the basket screen is reached with an id and quantity in the URL then
-	// the add to basket action will be fired, otherwise just the basket will be shown
-	const productId = match.params.id;
+const BasketScreen = ({ history }) => {
+	// Now handled in product screen
+	// If the basket screen is reached with an id and quantity in the URL then the add to basket action will be fired
+	// const productId = match.params.id;
 
 	// Make items in state available to component
 	const basket = useSelector((state) => state.basket);
@@ -43,7 +43,7 @@ const BasketScreen = ({ match, history }) => {
 		// if (productId) {
 		// 	dispatch(addToBasket(productId, qty));
 		// }
-	}, [userStatus, history, dispatch, productId]);
+	}, [userStatus, history, dispatch]);
 
 	// Items in basket
 	const items = basketItems.reduce((acc, item) => acc + item.qty, 0);

@@ -91,36 +91,39 @@ const ProfileScreen = ({ history }) => {
 							</tr>
 						</thead>
 						<tbody>
-							{orders.map((order) => (
-								<tr key={order._id}>
-									<td>{order._id}</td>
-									<td>
-										<Moment format='D/M/YY'>{order.createdAt}</Moment>
-									</td>
-									<td>{formatter.format(order.totalPrice)}</td>
-									<td>
-										{order.isPaid ? (
-											<Moment format='D/M/YY'>{order.paidAt}</Moment>
-										) : (
-											<i className='fas fa-times' style={{ color: 'red' }}></i>
-										)}
-									</td>
-									<td>
-										{order.isDelivered ? (
-											<Moment format='D/M/YY'>{order.deliveredAt}</Moment>
-										) : (
-											<i className='fas fa-times' style={{ color: 'red' }}></i>
-										)}
-									</td>
-									<td>
-										<LinkContainer to={`/orders/${order._id}`}>
-											<Button className='btn-sm' variant='link'>
-												Details
-											</Button>
-										</LinkContainer>
-									</td>
-								</tr>
-							))}
+							{orders.map(
+								(order) =>
+									!order.isDeleted && (
+										<tr key={order._id}>
+											<td>{order._id}</td>
+											<td>
+												<Moment format='D/M/YY'>{order.createdAt}</Moment>
+											</td>
+											<td>{formatter.format(order.totalPrice)}</td>
+											<td>
+												{order.isPaid ? (
+													<Moment format='D/M/YY'>{order.paidAt}</Moment>
+												) : (
+													<i className='fas fa-times' style={{ color: 'red' }}></i>
+												)}
+											</td>
+											<td>
+												{order.isDelivered ? (
+													<Moment format='D/M/YY'>{order.deliveredAt}</Moment>
+												) : (
+													<i className='fas fa-times' style={{ color: 'red' }}></i>
+												)}
+											</td>
+											<td>
+												<LinkContainer to={`/orders/${order._id}`}>
+													<Button className='btn-sm' variant='link'>
+														Details
+													</Button>
+												</LinkContainer>
+											</td>
+										</tr>
+									)
+							)}
 						</tbody>
 					</Table>
 				) : (

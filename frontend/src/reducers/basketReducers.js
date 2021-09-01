@@ -4,6 +4,7 @@ import {
 	BASKET_SAVE_PAYMENT_METHOD,
 	BASKET_SAVE_DELIVERY_ADDRESS,
 	BASKET_RESET,
+	BASKET_ADD_ORDER,
 } from '../constants/basketConstants';
 
 export const basketReducer = (state = { basketItems: [], deliveryAddress: {}, paymentMethod: null }, { type, payload }) => {
@@ -41,6 +42,11 @@ export const basketReducer = (state = { basketItems: [], deliveryAddress: {}, pa
 			return {
 				...state,
 				paymentMethod: payload,
+			};
+		case BASKET_ADD_ORDER:
+			return {
+				...state,
+				basketItems: payload,
 			};
 		case BASKET_RESET:
 			return {

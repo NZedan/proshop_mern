@@ -11,7 +11,7 @@ import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { deliverOrder, getOrderDetails, payOrder } from '../actions/orderActions';
 import { ORDER_DELIVER_RESET, ORDER_PAY_RESET } from '../constants/orderConstants';
-import { basketReset } from '../actions/basketActions';
+import { addOrderToBasket, basketReset } from '../actions/basketActions';
 
 const OrderScreen = ({ history, match }) => {
 	const orderId = match.params.id;
@@ -69,6 +69,15 @@ const OrderScreen = ({ history, match }) => {
 		}
 	}, [dispatch, success]);
 
+	// Refreshes order details so deleted order can't be paid
+	// Order marked as deleted at 0.99 hrs so still possibility of paying a deleted order!!!
+	useEffect(() => {
+		setTimeout(() => {
+			dispatch(getOrderDetails(orderId));
+		}, 1000 * 60 * 60);
+		dispatch(basketReset());
+	}, [dispatch, orderId]);
+
 	useEffect(() => {
 		// Gets order details if no order, order id's don't match (if coming from a different order page) or after a successful payment
 		if (!order || order._id !== orderId || success) {
@@ -88,8 +97,6 @@ const OrderScreen = ({ history, match }) => {
 		}
 	}, [dispatch, order, orderId, success, status]);
 
-	// NEED TO HANDLE COUNT IN STOCK!!!
-
 	const successPaymentHandler = (paymentResult) => {
 		console.log(paymentResult);
 		dispatch(payOrder(orderId, paymentResult));
@@ -99,10 +106,21 @@ const OrderScreen = ({ history, match }) => {
 		dispatch(deliverOrder(order));
 	};
 
+	const reOrderHandler = () => {
+		dispatch(addOrderToBasket(order.orderItems));
+	};
+
 	return !order ? (
 		<Loader />
 	) : error ? (
 		<Message variant='danger'>{error}</Message>
+	) : order.isDeleted ? (
+		<Message variant='danger'>
+			{order.message}.{' '}
+			<Link to='/basket' onClick={reOrderHandler}>
+				Click to Re-order.
+			</Link>
+		</Message>
 	) : (
 		<Fragment>
 			{!userInfo.isAdmin && (

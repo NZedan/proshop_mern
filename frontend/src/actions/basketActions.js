@@ -5,6 +5,7 @@ import {
 	BASKET_RESET,
 	BASKET_SAVE_PAYMENT_METHOD,
 	BASKET_SAVE_DELIVERY_ADDRESS,
+	BASKET_ADD_ORDER,
 } from '../constants/basketConstants';
 
 // getState makes all state available to the action
@@ -53,6 +54,15 @@ export const savePaymentMethod = (data) => (dispatch) => {
 	});
 	// For production this data should be encrypted
 	localStorage.setItem('paymentMethod', JSON.stringify(data));
+};
+
+export const addOrderToBasket = (order) => (dispatch, getState) => {
+	dispatch({
+		type: BASKET_ADD_ORDER,
+		payload: order,
+	});
+	// For production this data should be encrypted
+	localStorage.setItem('basketItems', JSON.stringify(getState().basket.basketItems));
 };
 
 export const basketReset = () => (dispatch) => {
