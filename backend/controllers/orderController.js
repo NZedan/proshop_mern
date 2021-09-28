@@ -1,3 +1,4 @@
+import axios from 'axios';
 // Middleware to simplify the error handling in asynchronous interaction with the database
 // Simply wrap the async function
 import asyncHandler from 'express-async-handler';
@@ -219,4 +220,53 @@ export const getOrders = asyncHandler(async (req, res) => {
 		res.status(404);
 		throw new Error('No orders found');
 	}
+});
+
+// @desc    Capture funds from PayPal
+// @route   GET /api/orders/capture-paypal-transaction
+// @access  Private/Admin
+// @called  PayPal Buttons onApprove() OrderScreen.js -> orderRoutes.js
+const paypalClientId = process.env.PAYPAL_CLIENT_ID;
+const paypalSecret = process.env.PAYPAL_SECRET;
+
+// 1b. Point your server to the PayPal API
+const paypalOAuthAPI = 'https://api-m.sandbox.paypal.com/v1/oauth2/token/';
+const paypalOrderAPI = 'https://api-m.sandbox.paypal.com/v2/checkout/orders/';
+
+export const paypalCapture = asyncHandler(async (req, res) => {
+	// 1c. Get an access token from the PayPal API
+	const basicAuth = `${paypalClientId}:${paypalSecret}`;
+	const auth = await axios.post(paypalOAuthAPI, {
+		headers: {
+			Accept: `application/json`,
+			Authorization: `Basic ${basicAuth}`,
+		},
+		data: `grant_type=client_credentials`,
+	});
+
+	// 2a. Get the order ID from the request body
+	orderID = req.body.orderID;
+
+	// 3. Call PayPal to capture the order
+	capture = await axios.post(paypalOrderAPI + orderID + '/capture', {
+		headers: {
+			Accept: `application/json`,
+			Authorization: `Bearer ${auth.access_token}`,
+		},
+	});
+
+	// 4. Save the capture ID to your database
+	if (!capture.error) {
+		captureID = capture.purchase_units[0].payments.captures[0].id;
+		database.saveCaptureID(captureID);
+	}
+
+	// 5. Handle any errors from the call
+	if (capture.error) {
+		console.error(capture.error);
+		return response.send(500);
+	}
+
+	// 6. Return a successful response to the client
+	response.send(200);
 });

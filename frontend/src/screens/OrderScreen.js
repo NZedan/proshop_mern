@@ -70,7 +70,7 @@ const OrderScreen = ({ history, match }) => {
 	}, [dispatch, success]);
 
 	// Refreshes order details so deleted order can't be paid
-	// Order marked as deleted at 0.99 hrs so still possibility of paying a deleted order!!!
+	// Order marked as deleted at 0.99 hrs so still possibility of paying a deleted order (36 seconds)!!!
 	useEffect(() => {
 		setTimeout(() => {
 			dispatch(getOrderDetails(orderId));
