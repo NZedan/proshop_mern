@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ORDER_USER_LIST_RESET } from '../constants/orderConstants';
+import { ORDER_CREATE_RESET, ORDER_USER_LIST_RESET } from '../constants/orderConstants';
 import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants';
 import { RESET_ITEMS_PER_PAGE } from '../constants/screenConstants';
 import {
@@ -63,9 +63,10 @@ export const login = (email, password) => async (dispatch) => {
 export const logout = () => (dispatch) => {
 	localStorage.clear();
 	dispatch({ type: USER_LOGOUT });
-	dispatch({ type: ORDER_USER_LIST_RESET });
 	dispatch({ type: USER_LIST_RESET });
 	dispatch({ type: USER_EDIT_RESET });
+	dispatch({ type: ORDER_USER_LIST_RESET });
+	dispatch({ type: ORDER_CREATE_RESET });
 	dispatch({ type: PRODUCT_CREATE_REVIEW_RESET });
 	dispatch({ type: RESET_ITEMS_PER_PAGE });
 };

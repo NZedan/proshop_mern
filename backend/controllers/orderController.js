@@ -245,7 +245,7 @@ export const paypalCapture = asyncHandler(async (req, res) => {
 	});
 
 	// 2a. Get the order ID from the request body
-	orderID = req.body.orderID;
+	const orderID = req.body.orderID;
 
 	// 3. Call PayPal to capture the order
 	capture = await axios.post(paypalOrderAPI + orderID + '/capture', {
@@ -258,7 +258,7 @@ export const paypalCapture = asyncHandler(async (req, res) => {
 	// 4. Save the capture ID to your database
 	if (!capture.error) {
 		captureID = capture.purchase_units[0].payments.captures[0].id;
-		database.saveCaptureID(captureID);
+		// database.saveCaptureID(captureID);
 	}
 
 	// 5. Handle any errors from the call
