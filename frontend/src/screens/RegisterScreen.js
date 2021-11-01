@@ -20,14 +20,14 @@ const RegisterScreen = ({ location, history }) => {
 	const dispatch = useDispatch();
 
 	const user = useSelector((state) => state.user);
-	const { error, userInfo } = user;
+	const { error, userStatus } = user;
 
 	// Redirects directly to shipping from basket checkout if user already logged in
 	useEffect(() => {
-		if (userInfo) {
+		if (userStatus === 'loggedIn') {
 			history.push(redirect);
 		}
-	}, [history, userInfo, redirect]);
+	}, [history, userStatus, redirect]);
 
 	const submitHandler = (e) => {
 		e.preventDefault();
