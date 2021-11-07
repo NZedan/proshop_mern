@@ -87,8 +87,29 @@ export const addOrderItems = asyncHandler(async (req, res) => {
 			});
 		};
 
+		// Set reserve items timeout, reset stock if order not paid in time
+		const reserveOrder = (orderId) => {
+			setTimeout(async () => {
+				const order = await Order.findById(orderId);
+
+				if (!order.isPaid && !order.message) {
+					order.message = 'Order timed out and has been deleted';
+					order.isDeleted = true;
+					await order.save();
+					// Reset products quantity in stock
+					order.orderItems.forEach(async (orderItem) => {
+						const product = await Product.findById(orderItem.productId);
+						product.countInStock += orderItem.qty;
+						await product.save();
+						console.log('Product updated');
+					});
+				}
+			}, 1000 * 60 * 60);
+		};
+
 		const saveOrder = async (newOrder) => {
 			const createdOrder = await newOrder.save();
+			reserveOrder(createdOrder._id);
 			// 201 - something created
 			res.status(201).json(createdOrder);
 		};
