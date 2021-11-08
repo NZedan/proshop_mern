@@ -2,6 +2,7 @@
 import path from 'path';
 // Using ES module syntax by adding type: module to package.json
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 // Colours logs to the console
 import colors from 'colors/safe.js';
@@ -22,6 +23,8 @@ dotenv.config();
 connectDB();
 
 const app = express();
+
+app.use(cookieParser());
 
 // Morgan shows http requests in console with status codes and time etc. This runs only in development mode
 if (process.env.NODE_ENV === 'development') {

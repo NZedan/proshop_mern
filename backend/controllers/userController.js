@@ -1,3 +1,4 @@
+import Cookies from 'cookies';
 // Middleware to simplify the error handling in asynchronous interaction with the database
 // Simply wrap the async function
 import asyncHandler from 'express-async-handler';
@@ -11,6 +12,7 @@ import User from '../models/userModel.js';
 // @access  Public
 // @called  login() userActions.js
 export const authUser = asyncHandler(async (req, res) => {
+	const cookies = new Cookies(req, res);
 	const { email, password } = req.body;
 	// // Test to show access to request object functions
 	// res.send({email, password});
@@ -18,6 +20,7 @@ export const authUser = asyncHandler(async (req, res) => {
 
 	// Maybe refactor to only send id and token
 	if (user && (await user.matchPassword(password))) {
+		cookies.set('id', String(user._id), { maxAge: 1000 * 60 * 60 * 24, sameSite: 'strict' });
 		res.json({
 			_id: user._id,
 			name: user.name,
@@ -25,6 +28,7 @@ export const authUser = asyncHandler(async (req, res) => {
 			isAdmin: user.isAdmin,
 			token: generateToken(user._id),
 		});
+		res.end();
 	} else {
 		res.status(401);
 		throw new Error('Invalid email or password');
@@ -36,6 +40,7 @@ export const authUser = asyncHandler(async (req, res) => {
 // @access  Public
 // @called  register() userActions.js
 export const registerUser = asyncHandler(async (req, res) => {
+	const cookies = new Cookies(req, res);
 	const { name, email, password } = req.body;
 
 	const userExists = await User.findOne({ email });
@@ -52,6 +57,7 @@ export const registerUser = asyncHandler(async (req, res) => {
 	});
 
 	if (user) {
+		cookies.set('id', String(user._id), { maxAge: 1000 * 60 * 60 * 24, sameSite: 'strict' });
 		res.status(201).json({
 			_id: user._id,
 			name: user.name,
@@ -59,9 +65,46 @@ export const registerUser = asyncHandler(async (req, res) => {
 			isAdmin: user.isAdmin,
 			token: generateToken(user._id),
 		});
+		res.end();
 	} else {
 		res.status(400);
 		throw new Error('Invalid user data');
+	}
+});
+
+// @desc    Refresh token
+// @route   GET /api/users/refresh
+// @access  Private
+// @called  refreshToken() Header.js -> userActions -> userRoutes
+export const refreshToken = asyncHandler(async (req, res) => {
+	if (req.cookies.id) {
+		const user = await User.findById(req.cookies.id).select('-password');
+		if (user) {
+			res.json({
+				_id: user._id,
+				name: user.name,
+				email: user.email,
+				isAdmin: user.isAdmin,
+				token: generateToken(user._id),
+			});
+		}
+	}
+});
+
+// @desc    Clear Refresh Cookie
+// @route   POST /api/users/refresh
+// @access  Private
+// @called  logout() -> userActions -> userRoutes
+export const clearRefreshToken = asyncHandler(async (req, res) => {
+	const cookies = new Cookies(req, res);
+
+	if (req.cookies.id) {
+		const user = await User.findById(req.cookies.id).select('-password');
+		if (user) {
+			cookies.set('id', String(user._id), { maxAge: -1, sameSite: 'strict' });
+			res.json({});
+			res.end();
+		}
 	}
 });
 

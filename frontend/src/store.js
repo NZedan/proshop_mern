@@ -43,7 +43,7 @@ const reducer = combineReducers({
 
 const basketItemsFromStorage = localStorage.getItem('basketItems') ? JSON.parse(localStorage.getItem('basketItems')) : [];
 
-const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : {};
+// const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : {};
 
 const userStatusFromStorage = localStorage.getItem('userStatus') && localStorage.getItem('userStatus');
 
@@ -59,7 +59,7 @@ const initialState = {
 		deliveryAddress: deliveryAddressFromStorage,
 		paymentMethod: paymentMethodFromStorage,
 	},
-	user: { userInfo: userInfoFromStorage, error: null, loading: false, updated: null, userStatus: userStatusFromStorage },
+	user: { userInfo: {}, error: null, loading: false, updated: null, userStatus: userStatusFromStorage },
 	// userUpdateProfile: { success: false },
 	// orderDetails: { loading: true, error: null, order: { orderItems: [], shippingAddress: {} }, success: false },
 };

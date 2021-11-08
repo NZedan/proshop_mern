@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 // Route can be used to pass in props.history to an embedded component through a render prop and then as a prop
 // Not necessary when using withRouter from react-router-dom
 // import { Route } from 'react-router-dom';
@@ -8,13 +8,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import SearchBox from './SearchBox';
-import { logout } from '../actions/userActions';
+import { logout, refreshToken } from '../actions/userActions';
 
 const Header = () => {
 	const dispatch = useDispatch();
 
 	const user = useSelector((state) => state.user);
 	const { userInfo, userStatus } = user;
+
+	useEffect(() => {
+		dispatch(refreshToken());
+		setTimeout(() => {
+			dispatch(refreshToken());
+		}, 1000 * 60 * 9.9);
+		// eslint-disable-next-line
+	}, []);
 
 	const logoutHandler = () => {
 		dispatch(logout());

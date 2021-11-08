@@ -20,6 +20,9 @@ import {
 	USER_LOGIN_SUCCESS,
 	USER_LOGOUT,
 	USER_LOGOUT_RESET,
+	USER_REFRESH_FAIL,
+	USER_REFRESH_REQUEST,
+	USER_REFRESH_SUCCESS,
 	USER_REGISTER_FAIL,
 	USER_REGISTER_REQUEST,
 	USER_REGISTER_SUCCESS,
@@ -50,7 +53,7 @@ export const login = (email, password) => async (dispatch) => {
 			payload: data,
 		});
 
-		localStorage.setItem('userInfo', JSON.stringify(data));
+		// localStorage.setItem('userInfo', JSON.stringify(data));
 		localStorage.setItem('userStatus', 'loggedIn');
 	} catch (err) {
 		dispatch({
@@ -60,7 +63,8 @@ export const login = (email, password) => async (dispatch) => {
 	}
 };
 
-export const logout = () => (dispatch) => {
+export const logout = () => async (dispatch) => {
+	await axios.post('/api/users/refresh');
 	localStorage.clear();
 	dispatch({ type: USER_LOGOUT });
 	dispatch({ type: USER_LIST_RESET });
@@ -99,10 +103,31 @@ export const register = (name, email, password) => async (dispatch) => {
 			payload: data,
 		});
 
-		localStorage.setItem('userInfo', JSON.stringify(data));
+		localStorage.setItem('userStatus', 'loggedIn');
+		// localStorage.setItem('userInfo', JSON.stringify(data));
 	} catch (err) {
 		dispatch({
 			type: USER_REGISTER_FAIL,
+			payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+		});
+	}
+};
+
+export const refreshToken = () => async (dispatch) => {
+	try {
+		dispatch({
+			type: USER_REFRESH_REQUEST,
+		});
+
+		const { data } = await axios.get('/api/users/refresh');
+
+		dispatch({
+			type: USER_REFRESH_SUCCESS,
+			payload: data,
+		});
+	} catch (err) {
+		dispatch({
+			type: USER_REFRESH_FAIL,
 			payload: err.response && err.response.data.message ? err.response.data.message : err.message,
 		});
 	}
