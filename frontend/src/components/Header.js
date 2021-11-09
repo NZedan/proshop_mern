@@ -9,12 +9,16 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import SearchBox from './SearchBox';
 import { logout, refreshToken } from '../actions/userActions';
+import BasketItem from './BasketItem';
 
 const Header = () => {
 	const dispatch = useDispatch();
 
 	const user = useSelector((state) => state.user);
 	const { userInfo, userStatus } = user;
+
+	const basket = useSelector((state) => state.basket);
+	const { basketItems } = basket;
 
 	useEffect(() => {
 		dispatch(refreshToken());
@@ -41,11 +45,29 @@ const Header = () => {
 						{/* <Route render={({ history }) => <SearchBox history={history} />} /> */}
 						<SearchBox />
 						<Nav className='ml-auto'>
-							<LinkContainer to='/basket'>
-								<Nav.Link>
-									<i className='fas fa-shopping-cart'></i> Basket
-								</Nav.Link>
-							</LinkContainer>
+							{basketItems.length === 0 ? (
+								<LinkContainer to='/basket'>
+									<Nav.Link>
+										<i className='fas fa-shopping-cart'></i> Basket
+									</Nav.Link>
+								</LinkContainer>
+							) : (
+								<NavDropdown title='Basket' id='basket'>
+									{basketItems.map((item) => (
+										<LinkContainer key={item.productId} to={`/product/${item.productId}`}>
+											<NavDropdown.Item>
+												<BasketItem product={item} />
+												<NavDropdown.Divider />
+											</NavDropdown.Item>
+										</LinkContainer>
+									))}
+									<LinkContainer to='/basket'>
+										<NavDropdown.Item>
+											<i className='fas fa-shopping-cart'></i> Go To Basket
+										</NavDropdown.Item>
+									</LinkContainer>
+								</NavDropdown>
+							)}
 							{!userStatus || userStatus === 'guest' ? (
 								<LinkContainer to='/login'>
 									<Nav.Link>

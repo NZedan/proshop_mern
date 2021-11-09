@@ -49,7 +49,6 @@ export const userReducer = (
 			};
 		case USER_LOGIN_SUCCESS:
 		case USER_REGISTER_SUCCESS:
-		case USER_REFRESH_SUCCESS:
 		case USER_DETAILS_SUCCESS:
 			return {
 				...state,
@@ -57,6 +56,11 @@ export const userReducer = (
 				userInfo: payload,
 				userStatus: 'loggedIn',
 				error: null,
+			};
+		case USER_REFRESH_SUCCESS:
+			return {
+				...state,
+				userInfo: payload,
 			};
 		case USER_LOGIN_FAIL:
 		case USER_REGISTER_FAIL:

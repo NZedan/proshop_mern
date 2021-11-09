@@ -88,6 +88,8 @@ export const refreshToken = asyncHandler(async (req, res) => {
 				token: generateToken(user._id),
 			});
 		}
+	} else {
+		res.json({});
 	}
 });
 
