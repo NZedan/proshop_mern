@@ -43,7 +43,7 @@ const BasketScreen = ({ history }) => {
 		// if (productId) {
 		// 	dispatch(addToBasket(productId, qty));
 		// }
-	}, [userStatus, history, dispatch]);
+	}, [userStatus, history]);
 
 	// Items in basket
 	const items = basketItems.reduce((acc, item) => acc + item.qty, 0);

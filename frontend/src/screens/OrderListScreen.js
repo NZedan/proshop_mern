@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
 // Moment formats date
 import Moment from 'react-moment';
 import { LinkContainer } from 'react-router-bootstrap';
@@ -7,10 +7,12 @@ import { Table, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { getOrders } from '../actions/orderActions';
+import { getOrders, removeOrderErrors } from '../actions/orderActions';
 
 const OrderListScreen = ({ history }) => {
 	const dispatch = useDispatch();
+
+	const [alert, setAlert] = useState(false);
 
 	const user = useSelector((state) => state.user);
 	const { userStatus } = user;
@@ -34,12 +36,23 @@ const OrderListScreen = ({ history }) => {
 		}
 	}, [history, dispatch, userStatus]);
 
+	// Remove error message after 5 seconds
+	useEffect(() => {
+		if (error) {
+			setAlert(true);
+			setTimeout(() => {
+				setAlert(false);
+				dispatch(removeOrderErrors());
+			}, 5000);
+		}
+	}, [error, dispatch]);
+
 	return (
 		<Fragment>
 			<h1>Orders</h1>
 			{!orders ? (
 				<Loader />
-			) : error ? (
+			) : alert ? (
 				<Message variant='danger'>{error}</Message>
 			) : (
 				<Table striped bordered responsive className='table-sm'>

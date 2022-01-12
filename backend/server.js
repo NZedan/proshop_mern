@@ -92,7 +92,8 @@ app.use(notFound);
 // Middleware for custom error handling - returns error message and stack trace in json format
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5000;
+// macOS Monterey now uses PORT 5000 for AirPlay Reciever
+const PORT = process.env.PORT || 6000;
 
 app.listen(PORT, console.log(colors.verbose(`Server started in ${process.env.NODE_ENV} mode on port ${PORT}`)));
 

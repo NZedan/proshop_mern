@@ -1,9 +1,9 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Col, Row, Form } from 'react-bootstrap';
 // dispatch to call an action and selector to select parts of state, eg. productList from store
 import { useDispatch, useSelector } from 'react-redux';
-import { listProducts } from '../actions/productActions';
+import { listProducts, removeProductErrors } from '../actions/productActions';
 import { basketReset } from '../actions/basketActions';
 import { orderDetailsReset } from '../actions/orderActions';
 import { userLogoutReset } from '../actions/userActions';
@@ -27,6 +27,7 @@ const HomeScreen = ({ history, match }) => {
 
 	// Now handled in reducer
 	// const [products, setProducts] = useState([]);
+	const [alert, setAlert] = useState(false);
 
 	// useSelector makes state accessible to the component
 	// Selector takes in arrow function and then selects from state, in this case productList and sets to variable productList
@@ -71,6 +72,17 @@ const HomeScreen = ({ history, match }) => {
 		}
 	}, [dispatch, history, pages, singlePage, keyword]);
 
+	// Remove error message after 5 seconds
+	useEffect(() => {
+		if (error) {
+			setAlert(true);
+			setTimeout(() => {
+				setAlert(false);
+				dispatch(removeProductErrors());
+			}, 5000);
+		}
+	}, [error, dispatch]);
+
 	const onChangeHandler = (e) => {
 		dispatch(setItemsPerPage(e.target.value));
 	};
@@ -97,7 +109,7 @@ const HomeScreen = ({ history, match }) => {
 			{products.length === 0 && !loading && <h2>No results found</h2>}
 			{products.length === 0 ? (
 				<Loader />
-			) : error ? (
+			) : alert ? (
 				<Message variant='danger'>{error}</Message>
 			) : (
 				<Fragment>

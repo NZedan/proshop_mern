@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
-import { listProductDetails, updateProduct } from '../actions/productActions';
+import { listProductDetails, removeProductErrors, updateProduct } from '../actions/productActions';
 import { PRODUCT_UPDATE_RESET } from '../constants/productConstants';
 
 const ProductEditScreen = ({ match, history }) => {
@@ -22,6 +22,9 @@ const ProductEditScreen = ({ match, history }) => {
 	const [description, setDescription] = useState('');
 	const [uploading, setUploading] = useState(false);
 	const [uploadError, setUploadError] = useState(false);
+
+	const [alert, setAlert] = useState(false);
+	const [errorUpdateAlert, setErrorUpdateAlert] = useState(false);
 
 	const dispatch = useDispatch();
 
@@ -63,6 +66,24 @@ const ProductEditScreen = ({ match, history }) => {
 			}
 		}
 	}, [history, userStatus, dispatch, productId, product._id, successUpdate, product]);
+
+	// Remove error message after 5 seconds
+	useEffect(() => {
+		if (error) {
+			setAlert(true);
+			setTimeout(() => {
+				setAlert(false);
+				dispatch(removeProductErrors());
+			}, 5000);
+		}
+		if (errorUpdate) {
+			setErrorUpdateAlert(true);
+			setTimeout(() => {
+				setAlert(false);
+				dispatch(removeProductErrors());
+			}, 5000);
+		}
+	}, [error, errorUpdate, dispatch]);
 
 	// The files event of a form file field is an array as it can take multiple files
 	const uploadFileHandler = async (e) => {
@@ -116,10 +137,10 @@ const ProductEditScreen = ({ match, history }) => {
 			<FormContainer>
 				<h1>Edit Product</h1>
 				{loadingUpdate && <Loader />}
-				{errorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
+				{errorUpdateAlert && <Message variant='danger'>{errorUpdate}</Message>}
 				{loading ? (
 					<Loader />
-				) : error ? (
+				) : alert ? (
 					<Message variant='danger'>{error}</Message>
 				) : (
 					<Form onSubmit={submitHandler}>

@@ -7,6 +7,7 @@ import CheckoutSteps from '../components/CheckoutSteps';
 import { saveDeliveryAddress } from '../actions/basketActions';
 
 const DeliveryScreen = ({ history }) => {
+	const dispatch = useDispatch();
 	// True if user logs out
 	const user = useSelector((state) => state.user);
 	const { userStatus } = user;
@@ -25,8 +26,6 @@ const DeliveryScreen = ({ history }) => {
 	const [city, setCity] = useState(deliveryAddress.city || '');
 	const [postCode, setPostCode] = useState(deliveryAddress.postCode || '');
 	const [country, setCountry] = useState(deliveryAddress.country || '');
-
-	const dispatch = useDispatch();
 
 	const submitHandler = (e) => {
 		e.preventDefault();

@@ -89,7 +89,8 @@ export const refreshToken = asyncHandler(async (req, res) => {
 			});
 		}
 	} else {
-		res.json({});
+		res.status(401);
+		throw new Error('Session expired');
 	}
 });
 
@@ -107,6 +108,8 @@ export const clearRefreshToken = asyncHandler(async (req, res) => {
 			res.json({});
 			res.end();
 		}
+	} else {
+		res.json({});
 	}
 });
 

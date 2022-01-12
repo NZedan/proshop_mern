@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
-import { getUserDetails, updateUser } from '../actions/userActions';
+import { getUserDetails, removeUserErrors, updateUser } from '../actions/userActions';
 import { USER_UPDATE_RESET } from '../constants/userConstants';
 
 const UserEditScreen = ({ match, history }) => {
@@ -15,6 +15,9 @@ const UserEditScreen = ({ match, history }) => {
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
 	const [isAdmin, setIsAdmin] = useState(false);
+
+	const [alert, setAlert] = useState(false);
+	const [errorUpdateAlert, setErrorUpdateAlert] = useState(false);
 
 	const dispatch = useDispatch();
 
@@ -46,6 +49,24 @@ const UserEditScreen = ({ match, history }) => {
 		}
 	}, [history, userStatus, dispatch, editUserInfo, userId, successUpdate]);
 
+	// Remove error message after 5 seconds
+	useEffect(() => {
+		if (error) {
+			setAlert(true);
+			setTimeout(() => {
+				setAlert(false);
+				dispatch(removeUserErrors());
+			}, 5000);
+		}
+		if (errorUpdate) {
+			setErrorUpdateAlert(true);
+			setTimeout(() => {
+				setAlert(false);
+				dispatch(removeUserErrors());
+			}, 5000);
+		}
+	}, [error, errorUpdate, errorUpdateAlert, dispatch]);
+
 	const submitHandler = (e) => {
 		e.preventDefault();
 		dispatch(updateUser({ _id: userId, name, email, isAdmin }));
@@ -59,10 +80,10 @@ const UserEditScreen = ({ match, history }) => {
 			<FormContainer>
 				<h1>Edit User</h1>
 				{loadingUpdate && <Loader />}
-				{errorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
+				{errorUpdateAlert && <Message variant='danger'>{errorUpdate}</Message>}
 				{!editUserInfo.name || editUserInfo._id !== userId ? (
 					<Loader />
-				) : error ? (
+				) : alert ? (
 					<Message variant='danger'>{error}</Message>
 				) : (
 					<Form onSubmit={submitHandler}>

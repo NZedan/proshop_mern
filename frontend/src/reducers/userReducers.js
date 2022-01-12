@@ -1,32 +1,40 @@
 import {
 	USER_DELETE_FAIL,
+	USER_DELETE_REMOVE_ERROR,
 	USER_DELETE_REQUEST,
 	USER_DELETE_RESET,
 	USER_DELETE_SUCCESS,
 	USER_DETAILS_FAIL,
+	USER_DETAILS_REMOVE_ERROR,
 	USER_DETAILS_REQUEST,
 	USER_DETAILS_RESET,
 	USER_DETAILS_SUCCESS,
 	USER_EDIT_DETAILS,
 	USER_EDIT_RESET,
 	USER_LIST_FAIL,
+	USER_LIST_REMOVE_ERROR,
 	USER_LIST_REQUEST,
 	USER_LIST_RESET,
 	USER_LIST_SUCCESS,
 	USER_LOGIN_FAIL,
+	USER_LOGIN_REMOVE_ERROR,
 	USER_LOGIN_REQUEST,
 	USER_LOGIN_SUCCESS,
 	USER_LOGOUT,
 	USER_LOGOUT_RESET,
 	USER_REFRESH_FAIL,
+	USER_REFRESH_REMOVE_ERROR,
 	USER_REFRESH_REQUEST,
 	USER_REFRESH_SUCCESS,
 	USER_REGISTER_FAIL,
+	USER_REGISTER_REMOVE_ERROR,
 	USER_REGISTER_REQUEST,
 	USER_REGISTER_SUCCESS,
 	USER_UPDATE_FAIL,
 	USER_UPDATE_PROFILE_FAIL,
+	USER_UPDATE_PROFILE_REMOVE_ERROR,
 	USER_UPDATE_PROFILE_REQUEST,
+	USER_UPDATE_REMOVE_ERROR,
 	USER_UPDATE_REQUEST,
 	USER_UPDATE_RESET,
 	USER_UPDATE_SUCCESS,
@@ -71,6 +79,15 @@ export const userReducer = (
 				...state,
 				loading: false,
 				error: payload,
+			};
+		case USER_LOGIN_REMOVE_ERROR:
+		case USER_REGISTER_REMOVE_ERROR:
+		case USER_REFRESH_REMOVE_ERROR:
+		case USER_UPDATE_PROFILE_REMOVE_ERROR:
+		case USER_DETAILS_REMOVE_ERROR:
+			return {
+				...state,
+				error: null,
 			};
 		case USER_DETAILS_RESET:
 		case USER_LOGOUT_RESET:
@@ -124,6 +141,11 @@ export const userListReducer = (state = { users: [], loading: false, error: null
 				...state,
 				error: payload,
 			};
+		case USER_LIST_REMOVE_ERROR:
+			return {
+				...state,
+				error: null,
+			};
 		case USER_LIST_RESET:
 			return {
 				users: [],
@@ -150,6 +172,11 @@ export const userDeleteReducer = (state = { loading: false, success: null, error
 			return {
 				...state,
 				error: payload,
+			};
+		case USER_DELETE_REMOVE_ERROR:
+			return {
+				...state,
+				error: null,
 			};
 		case USER_DELETE_RESET:
 			return {
@@ -181,6 +208,11 @@ export const userUpdateReducer = (state = { loading: false, success: null, error
 				...state,
 				loading: false,
 				error: payload,
+			};
+		case USER_UPDATE_REMOVE_ERROR:
+			return {
+				...state,
+				error: null,
 			};
 		case USER_UPDATE_RESET:
 			return {

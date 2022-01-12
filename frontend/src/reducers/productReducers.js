@@ -1,23 +1,30 @@
 import {
 	PRODUCT_CREATE_FAIL,
+	PRODUCT_CREATE_REMOVE_ERROR,
 	PRODUCT_CREATE_REQUEST,
 	PRODUCT_CREATE_RESET,
 	PRODUCT_CREATE_REVIEW_FAIL,
+	PRODUCT_CREATE_REVIEW_REMOVE_ERROR,
 	PRODUCT_CREATE_REVIEW_REQUEST,
 	PRODUCT_CREATE_REVIEW_RESET,
 	PRODUCT_CREATE_REVIEW_SUCCESS,
 	PRODUCT_CREATE_SUCCESS,
 	PRODUCT_DELETE_FAIL,
+	PRODUCT_DELETE_REMOVE_ERROR,
 	PRODUCT_DELETE_REQUEST,
 	PRODUCT_DELETE_RESET,
 	PRODUCT_DELETE_SUCCESS,
 	PRODUCT_DETAILS_FAIL,
+	PRODUCT_DETAILS_REMOVE_ERROR,
 	PRODUCT_DETAILS_SUCCESS,
 	PRODUCT_LIST_FAIL,
+	PRODUCT_LIST_REMOVE_ERROR,
 	PRODUCT_LIST_SUCCESS,
 	PRODUCT_TOP_FAIL,
+	PRODUCT_TOP_REMOVE_ERROR,
 	PRODUCT_TOP_SUCCESS,
 	PRODUCT_UPDATE_FAIL,
+	PRODUCT_UPDATE_REMOVE_ERROR,
 	PRODUCT_UPDATE_REQUEST,
 	PRODUCT_UPDATE_RESET,
 	PRODUCT_UPDATE_SUCCESS,
@@ -39,6 +46,11 @@ export const productListReducer = (state = { products: [], pages: 1, page: 1, er
 				...state,
 				error: payload,
 			};
+		case PRODUCT_LIST_REMOVE_ERROR:
+			return {
+				...state,
+				error: null,
+			};
 		default:
 			return state;
 	}
@@ -55,6 +67,11 @@ export const productDetailsReducer = (state = { product: { reviews: [] }, error:
 			return {
 				...state,
 				error: payload,
+			};
+		case PRODUCT_DETAILS_REMOVE_ERROR:
+			return {
+				...state,
+				error: null,
 			};
 		default:
 			return state;
@@ -79,6 +96,11 @@ export const productDeleteReducer = (state = { loading: false, error: null, prod
 				...state,
 				loading: false,
 				error: payload,
+			};
+		case PRODUCT_DELETE_REMOVE_ERROR:
+			return {
+				...state,
+				error: null,
 			};
 		case PRODUCT_DELETE_RESET:
 			return {
@@ -113,6 +135,11 @@ export const productCreateReducer = (state = { loading: false, error: null, prod
 				loading: false,
 				error: payload,
 			};
+		case PRODUCT_CREATE_REMOVE_ERROR:
+			return {
+				...state,
+				error: null,
+			};
 		case PRODUCT_CREATE_RESET:
 			return {
 				...state,
@@ -145,6 +172,11 @@ export const productUpdateReducer = (state = { loading: false, error: null, prod
 				...state,
 				loading: false,
 				error: payload,
+			};
+		case PRODUCT_UPDATE_REMOVE_ERROR:
+			return {
+				...state,
+				error: null,
 			};
 		case PRODUCT_UPDATE_RESET:
 			return {
@@ -181,6 +213,11 @@ export const productCreateReviewReducer = (
 				loading: false,
 				error: payload,
 			};
+		case PRODUCT_CREATE_REVIEW_REMOVE_ERROR:
+			return {
+				...state,
+				error: null,
+			};
 		case PRODUCT_CREATE_REVIEW_RESET:
 			return {
 				loading: false,
@@ -204,6 +241,11 @@ export const productTopRatedReducer = (state = { products: [], error: null }, { 
 			return {
 				...state,
 				error: payload,
+			};
+		case PRODUCT_TOP_REMOVE_ERROR:
+			return {
+				...state,
+				error: null,
 			};
 		default:
 			return state;

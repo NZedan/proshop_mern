@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
-import { createProduct } from '../actions/productActions';
+import { createProduct, removeProductErrors } from '../actions/productActions';
 import { PRODUCT_CREATE_RESET } from '../constants/productConstants';
 
 const ProductCreateScreen = ({ history }) => {
@@ -20,6 +20,8 @@ const ProductCreateScreen = ({ history }) => {
 	const [description, setDescription] = useState('');
 	const [uploading, setUploading] = useState(false);
 	const [uploadError, setUploadError] = useState(false);
+
+	const [alert, setAlert] = useState(false);
 
 	const dispatch = useDispatch();
 
@@ -45,6 +47,17 @@ const ProductCreateScreen = ({ history }) => {
 			history.push('/admin/productlist');
 		}
 	}, [history, userStatus, dispatch, success]);
+
+	// Remove error message after 5 seconds
+	useEffect(() => {
+		if (error) {
+			setAlert(true);
+			setTimeout(() => {
+				setAlert(false);
+				dispatch(removeProductErrors());
+			}, 5000);
+		}
+	}, [error, dispatch]);
 
 	// The files event of a form file field is an array as it can take multiple files
 	const uploadFileHandler = async (e) => {
@@ -99,7 +112,7 @@ const ProductCreateScreen = ({ history }) => {
 				{loading && <Loader />}
 				{loading ? (
 					<Loader />
-				) : error ? (
+				) : alert ? (
 					<Message variant='danger'>{error}</Message>
 				) : (
 					<Form onSubmit={submitHandler}>

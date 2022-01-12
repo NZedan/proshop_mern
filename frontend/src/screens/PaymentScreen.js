@@ -14,6 +14,8 @@ const PaymentScreen = ({ history }) => {
 	const basket = useSelector((state) => state.basket);
 	const { deliveryAddress } = basket;
 
+	const dispatch = useDispatch();
+
 	useEffect(() => {
 		// Redirects to home on logout
 		if (userStatus === 'logout') {
@@ -25,8 +27,6 @@ const PaymentScreen = ({ history }) => {
 	}, [userStatus, history, deliveryAddress]);
 
 	const [paymentMethod, setPaymentMethod] = useState(null);
-
-	const dispatch = useDispatch();
 
 	const submitHandler = (e) => {
 		e.preventDefault();

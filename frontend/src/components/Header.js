@@ -20,11 +20,22 @@ const Header = () => {
 	const basket = useSelector((state) => state.basket);
 	const { basketItems } = basket;
 
+	// // Logs out if token or session cookie expired or not present
+	// useEffect(() => {
+	// 	if (error) {
+	// 		if (error.status === 401) {
+	// 			dispatch(logout());
+	// 		}
+	// 	}
+	// }, [error, dispatch]);
+
 	useEffect(() => {
-		dispatch(refreshToken());
-		setTimeout(() => {
+		if (userStatus === 'loggedIn') {
 			dispatch(refreshToken());
-		}, 1000 * 60 * 9.9);
+			setTimeout(() => {
+				dispatch(refreshToken());
+			}, 1000 * 59.9);
+		}
 		// eslint-disable-next-line
 	}, []);
 

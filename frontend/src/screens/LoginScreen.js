@@ -7,11 +7,12 @@ import Message from '../components/Message';
 import FormContainer from '../components/FormContainer';
 import { basketReset } from '../actions/basketActions';
 import { orderDetailsReset } from '../actions/orderActions';
-import { login, userLogoutReset } from '../actions/userActions';
+import { login, removeUserErrors, userLogoutReset } from '../actions/userActions';
 
 const LoginScreen = ({ location, history }) => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
+	const [alert, setAlert] = useState(false);
 
 	// This will be shipping else home
 	const redirect = location.search ? location.search.split('=')[1] : '/';
@@ -33,6 +34,17 @@ const LoginScreen = ({ location, history }) => {
 		}
 	}, [dispatch, userStatus, history, redirect]);
 
+	// Remove error message after 5 seconds
+	useEffect(() => {
+		if (error) {
+			setAlert(true);
+			setTimeout(() => {
+				setAlert(false);
+				dispatch(removeUserErrors());
+			}, 5000);
+		}
+	}, [error, dispatch]);
+
 	const submitHandler = (e) => {
 		e.preventDefault();
 		dispatch(login(email, password));
@@ -42,7 +54,7 @@ const LoginScreen = ({ location, history }) => {
 		// Component that provides a styling context
 		<FormContainer>
 			<h1>Sign In</h1>
-			{error && <Message variant='danger'>{error}</Message>}
+			{alert && <Message variant='danger'>{error}</Message>}
 			<Form onSubmit={submitHandler}>
 				<Form.Group controlId='email'>
 					<Form.Label>Email Address</Form.Label>

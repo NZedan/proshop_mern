@@ -7,8 +7,8 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { getUserDetails, updateUserProfile } from '../actions/userActions';
-import { listUserOrders } from '../actions/orderActions';
+import { getUserDetails, logout, removeUserErrors, updateUserProfile } from '../actions/userActions';
+import { listUserOrders, removeOrderErrors } from '../actions/orderActions';
 import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstants';
 
 const ProfileScreen = ({ history }) => {
@@ -17,6 +17,9 @@ const ProfileScreen = ({ history }) => {
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [message, setMessage] = useState(null);
+
+	const [alert, setAlert] = useState(false);
+	const [errorOrdersAlert, setErrorOrdersAlert] = useState(false);
 
 	const dispatch = useDispatch();
 	// Is only filled if user logged in, logout true if user logs out
@@ -60,6 +63,24 @@ const ProfileScreen = ({ history }) => {
 		}
 	}, [status, dispatch]);
 
+	// Remove error message after 5 seconds
+	useEffect(() => {
+		if (error) {
+			setAlert(true);
+			setTimeout(() => {
+				setAlert(false);
+				dispatch(removeUserErrors());
+			}, 5000);
+		}
+		if (errorOrders) {
+			setErrorOrdersAlert(true);
+			setTimeout(() => {
+				setErrorOrdersAlert(false);
+				dispatch(removeOrderErrors());
+			}, 5000);
+		}
+	}, [error, errorOrders, dispatch]);
+
 	const submitHandler = (e) => {
 		e.preventDefault();
 		if (password !== confirmPassword) {
@@ -76,7 +97,7 @@ const ProfileScreen = ({ history }) => {
 				<h2>My Orders</h2>
 				{status === 'pending' ? (
 					<Loader />
-				) : errorOrders ? (
+				) : errorOrdersAlert ? (
 					<Message variant='danger'>{errorOrders}</Message>
 				) : status === 'resolved' && orders.length > 0 ? (
 					<Table striped bordered hover responsive className='table-sm'>
@@ -135,7 +156,7 @@ const ProfileScreen = ({ history }) => {
 				{/* Messages should have a timeout */}
 				{message && <Message variant='danger'>{message}</Message>}
 				{success && <Message variant='success'>Profile Updated</Message>}
-				{error && <Message variant='danger'>{error}</Message>}
+				{alert && <Message variant='danger'>{error.message}</Message>}
 				{loading && <Loader />}
 
 				<Form onSubmit={submitHandler}>

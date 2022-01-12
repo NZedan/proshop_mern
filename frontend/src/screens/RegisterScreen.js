@@ -5,7 +5,7 @@ import { Form, Button, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import FormContainer from '../components/FormContainer';
-import { register } from '../actions/userActions';
+import { register, removeUserErrors } from '../actions/userActions';
 
 const RegisterScreen = ({ location, history }) => {
 	const [name, setName] = useState('');
@@ -13,6 +13,7 @@ const RegisterScreen = ({ location, history }) => {
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [message, setMessage] = useState(null);
+	const [alert, setAlert] = useState(false);
 
 	// This will be shipping else home
 	const redirect = location.search ? location.search.split('=')[1] : '/';
@@ -29,6 +30,17 @@ const RegisterScreen = ({ location, history }) => {
 		}
 	}, [history, userStatus, redirect]);
 
+	// Remove error message after 5 seconds
+	useEffect(() => {
+		if (error) {
+			setAlert(true);
+			setTimeout(() => {
+				setAlert(false);
+				dispatch(removeUserErrors());
+			}, 5000);
+		}
+	}, [error, dispatch]);
+
 	const submitHandler = (e) => {
 		e.preventDefault();
 		if (password !== confirmPassword) {
@@ -43,7 +55,7 @@ const RegisterScreen = ({ location, history }) => {
 		<FormContainer>
 			<h1>Sign Up</h1>
 			{message && <Message variant='danger'>{message}</Message>}
-			{error && <Message variant='danger'>{error}</Message>}
+			{alert && <Message variant='danger'>{error}</Message>}
 
 			<Form onSubmit={submitHandler}>
 				<Form.Group controlId='name'>

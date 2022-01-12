@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Table, Button, Row, Col, Form } from 'react-bootstrap';
 // To interact with Redux state
@@ -6,13 +6,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import Paginate from '../components/Paginate';
-import { deleteProduct, listProducts } from '../actions/productActions';
+import { deleteProduct, listProducts, removeProductErrors } from '../actions/productActions';
 import { setItemsPerPage } from '../actions/screenActions';
 import { SET_MULTIPLE_PAGES, SET_SINGLE_PAGE } from '../constants/screenConstants';
 import { PRODUCT_DELETE_RESET } from '../constants/productConstants';
 
 const ProductListScreen = ({ history, match }) => {
 	const pageNumber = match.params.pageNumber || 1;
+
+	const [alert, setAlert] = useState(false);
+	const [errorDeleteAlert, setErrorDeleteAlert] = useState(false);
 
 	const dispatch = useDispatch();
 
@@ -58,6 +61,24 @@ const ProductListScreen = ({ history, match }) => {
 		}
 	}, [dispatch, history, pages, singlePage]);
 
+	// Remove error message after 5 seconds
+	useEffect(() => {
+		if (error) {
+			setAlert(true);
+			setTimeout(() => {
+				setAlert(false);
+				dispatch(removeProductErrors());
+			}, 5000);
+		}
+		if (errorDelete) {
+			setErrorDeleteAlert(true);
+			setTimeout(() => {
+				setAlert(false);
+				dispatch(removeProductErrors());
+			}, 5000);
+		}
+	}, [error, errorDelete, dispatch]);
+
 	const onChangeHandler = (e) => {
 		dispatch(setItemsPerPage(e.target.value));
 	};
@@ -90,10 +111,10 @@ const ProductListScreen = ({ history, match }) => {
 				</Col>
 			</Row>
 			{loadingDelete && <Loader />}
-			{errorDelete && <Message variant='danger'>{errorDelete}</Message>}
+			{errorDeleteAlert && <Message variant='danger'>{errorDelete}</Message>}
 			{products.length === 0 ? (
 				<Loader />
-			) : error ? (
+			) : alert ? (
 				<Message variant='danger'>{error}</Message>
 			) : (
 				<Fragment>

@@ -9,7 +9,7 @@ import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { deliverOrder, getOrderDetails, payOrder } from '../actions/orderActions';
+import { deliverOrder, getOrderDetails, payOrder, removeOrderErrors } from '../actions/orderActions';
 import { ORDER_DELIVER_RESET, ORDER_PAY_RESET } from '../constants/orderConstants';
 import { addOrderToBasket, basketReset } from '../actions/basketActions';
 
@@ -18,6 +18,7 @@ const OrderScreen = ({ history, match }) => {
 
 	// PayPal SDK
 	const [sdkReady, setSdkReady] = useState(false);
+	const [alert, setAlert] = useState(false);
 
 	const dispatch = useDispatch();
 
@@ -69,6 +70,17 @@ const OrderScreen = ({ history, match }) => {
 		}
 	}, [dispatch, success]);
 
+	// Remove error message after 5 seconds
+	useEffect(() => {
+		if (error) {
+			setAlert(true);
+			setTimeout(() => {
+				setAlert(false);
+				dispatch(removeOrderErrors());
+			}, 5000);
+		}
+	}, [error, dispatch]);
+
 	// Refreshes order details so deleted order can't be paid
 	// Order marked as deleted at 0.99 hrs so still possibility of paying a deleted order (36 seconds)!!!
 	useEffect(() => {
@@ -112,7 +124,7 @@ const OrderScreen = ({ history, match }) => {
 
 	return !order ? (
 		<Loader />
-	) : error ? (
+	) : alert ? (
 		<Message variant='danger'>{error}</Message>
 	) : order.isDeleted ? (
 		<Message variant='danger'>
