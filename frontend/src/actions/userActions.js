@@ -32,6 +32,7 @@ import {
 	USER_REGISTER_REMOVE_ERROR,
 	USER_REGISTER_REQUEST,
 	USER_REGISTER_SUCCESS,
+	USER_UNAUTHORISED,
 	USER_UPDATE_FAIL,
 	USER_UPDATE_PROFILE_FAIL,
 	USER_UPDATE_PROFILE_REMOVE_ERROR,
@@ -64,13 +65,18 @@ export const login = (email, password) => async (dispatch) => {
 		// localStorage.setItem('userInfo', JSON.stringify(data));
 		localStorage.setItem('userStatus', 'loggedIn');
 	} catch (err) {
-		dispatch({
-			type: USER_LOGIN_FAIL,
-			payload:
-				err.response && err.response.data.message
-					? { status: err.response.status, message: err.response.data.message }
-					: { status: err.response.status, message: err.message },
-		});
+		// If status unauthorised eg. token expired, trigger logout
+		if (err.response && err.response.status === 401) {
+			dispatch({
+				type: USER_UNAUTHORISED,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		} else {
+			dispatch({
+				type: USER_LOGIN_FAIL,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		}
 	}
 };
 
@@ -117,13 +123,17 @@ export const register = (name, email, password) => async (dispatch) => {
 		localStorage.setItem('userStatus', 'loggedIn');
 		// localStorage.setItem('userInfo', JSON.stringify(data));
 	} catch (err) {
-		dispatch({
-			type: USER_REGISTER_FAIL,
-			payload:
-				err.response && err.response.data.message
-					? { status: err.response.status, message: err.response.data.message }
-					: { status: err.response.status, message: err.message },
-		});
+		if (err.response && err.response.status === 401) {
+			dispatch({
+				type: USER_UNAUTHORISED,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		} else {
+			dispatch({
+				type: USER_REGISTER_FAIL,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		}
 	}
 };
 
@@ -140,13 +150,17 @@ export const refreshToken = () => async (dispatch) => {
 			payload: data,
 		});
 	} catch (err) {
-		dispatch({
-			type: USER_REFRESH_FAIL,
-			payload:
-				err.response && err.response.data.message
-					? { status: err.response.status, message: err.response.data.message }
-					: { status: err.response.status, message: err.message },
-		});
+		if (err.response && err.response.status === 401) {
+			dispatch({
+				type: USER_UNAUTHORISED,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		} else {
+			dispatch({
+				type: USER_REFRESH_FAIL,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		}
 	}
 };
 
@@ -184,13 +198,17 @@ export const getUserDetails = (idOrProfile) => async (dispatch, getState) => {
 			});
 		}
 	} catch (err) {
-		dispatch({
-			type: USER_DETAILS_FAIL,
-			payload:
-				err.response && err.response.data.message
-					? { status: err.response.status, message: err.response.data.message }
-					: { status: err.response.status, message: err.message },
-		});
+		if (err.response && err.response.status === 401) {
+			dispatch({
+				type: USER_UNAUTHORISED,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		} else {
+			dispatch({
+				type: USER_DETAILS_FAIL,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		}
 	}
 };
 
@@ -232,13 +250,17 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
 
 		localStorage.setItem('userInfo', JSON.stringify(data));
 	} catch (err) {
-		dispatch({
-			type: USER_UPDATE_PROFILE_FAIL,
-			payload:
-				err.response && err.response.data.message
-					? { status: err.response.status, message: err.response.data.message }
-					: { status: err.response.status, message: err.message },
-		});
+		if (err.response && err.response.status === 401) {
+			dispatch({
+				type: USER_UNAUTHORISED,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		} else {
+			dispatch({
+				type: USER_UPDATE_PROFILE_FAIL,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		}
 	}
 };
 
@@ -267,13 +289,17 @@ export const listUsers = () => async (dispatch, getState) => {
 			payload: data,
 		});
 	} catch (err) {
-		dispatch({
-			type: USER_LIST_FAIL,
-			payload:
-				err.response && err.response.data.message
-					? { status: err.response.status, message: err.response.data.message }
-					: { status: err.response.status, message: err.message },
-		});
+		if (err.response && err.response.status === 401) {
+			dispatch({
+				type: USER_UNAUTHORISED,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		} else {
+			dispatch({
+				type: USER_LIST_FAIL,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		}
 	}
 };
 
@@ -299,13 +325,17 @@ export const deleteUser = (id) => async (dispatch, getState) => {
 
 		dispatch({ type: USER_DELETE_SUCCESS });
 	} catch (err) {
-		dispatch({
-			type: USER_DELETE_FAIL,
-			payload:
-				err.response && err.response.data.message
-					? { status: err.response.status, message: err.response.data.message }
-					: { status: err.response.status, message: err.message },
-		});
+		if (err.response && err.response.status === 401) {
+			dispatch({
+				type: USER_UNAUTHORISED,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		} else {
+			dispatch({
+				type: USER_DELETE_FAIL,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		}
 	}
 };
 
@@ -333,13 +363,17 @@ export const updateUser = (user) => async (dispatch, getState) => {
 		dispatch({ type: USER_UPDATE_SUCCESS });
 		dispatch({ type: USER_EDIT_DETAILS, payload: data });
 	} catch (err) {
-		dispatch({
-			type: USER_UPDATE_FAIL,
-			payload:
-				err.response && err.response.data.message
-					? { status: err.response.status, message: err.response.data.message }
-					: { status: err.response.status, message: err.message },
-		});
+		if (err.response && err.response.status === 401) {
+			dispatch({
+				type: USER_UNAUTHORISED,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		} else {
+			dispatch({
+				type: USER_UPDATE_FAIL,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		}
 	}
 };
 

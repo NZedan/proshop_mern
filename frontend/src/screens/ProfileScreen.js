@@ -7,7 +7,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { getUserDetails, logout, removeUserErrors, updateUserProfile } from '../actions/userActions';
+import { getUserDetails, removeUserErrors, updateUserProfile } from '../actions/userActions';
 import { listUserOrders, removeOrderErrors } from '../actions/orderActions';
 import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstants';
 

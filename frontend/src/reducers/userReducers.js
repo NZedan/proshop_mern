@@ -30,6 +30,7 @@ import {
 	USER_REGISTER_REMOVE_ERROR,
 	USER_REGISTER_REQUEST,
 	USER_REGISTER_SUCCESS,
+	USER_UNAUTHORISED,
 	USER_UPDATE_FAIL,
 	USER_UPDATE_PROFILE_FAIL,
 	USER_UPDATE_PROFILE_REMOVE_ERROR,
@@ -102,6 +103,11 @@ export const userReducer = (
 			return {
 				...state,
 				userStatus: 'logout',
+			};
+		case USER_UNAUTHORISED:
+			return {
+				...state,
+				userStatus: 'unauthorised',
 			};
 		default:
 			return state;

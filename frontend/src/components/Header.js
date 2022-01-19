@@ -20,14 +20,12 @@ const Header = () => {
 	const basket = useSelector((state) => state.basket);
 	const { basketItems } = basket;
 
-	// // Logs out if token or session cookie expired or not present
-	// useEffect(() => {
-	// 	if (error) {
-	// 		if (error.status === 401) {
-	// 			dispatch(logout());
-	// 		}
-	// 	}
-	// }, [error, dispatch]);
+	// Logs out if token or session cookie expired or not present
+	useEffect(() => {
+		if (userStatus === 'unauthorised') {
+			dispatch(logout());
+		}
+	}, [userStatus, dispatch]);
 
 	useEffect(() => {
 		if (userStatus === 'loggedIn') {
