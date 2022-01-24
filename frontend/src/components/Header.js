@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import SearchBox from './SearchBox';
-import { logout, refreshToken } from '../actions/userActions';
+import { logout } from '../actions/userActions';
 import BasketItem from './BasketItem';
 
 const Header = () => {
@@ -27,19 +27,9 @@ const Header = () => {
 		}
 	}, [userStatus, dispatch]);
 
-	useEffect(() => {
-		if (userStatus === 'loggedIn') {
-			dispatch(refreshToken());
-			setTimeout(() => {
-				dispatch(refreshToken());
-			}, 1000 * 59.9);
-		}
-		// eslint-disable-next-line
-	}, []);
-
-	const logoutHandler = () => {
+	function logoutHandler() {
 		dispatch(logout());
-	};
+	}
 
 	return (
 		<header>

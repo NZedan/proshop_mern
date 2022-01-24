@@ -72,6 +72,7 @@ const HomeScreen = ({ history, match }) => {
 		}
 	}, [dispatch, history, pages, singlePage, keyword]);
 
+	// FIX ISSUE OF CLEARING TIMEOUT IN EVENT OF 401 LOGOUT - Cant perform React state update on unmounted component error
 	// Remove error message after 5 seconds
 	useEffect(() => {
 		if (error) {

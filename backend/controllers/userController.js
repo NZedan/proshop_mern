@@ -20,13 +20,13 @@ export const authUser = asyncHandler(async (req, res) => {
 
 	// Maybe refactor to only send id and token
 	if (user && (await user.matchPassword(password))) {
-		cookies.set('id', String(user._id), { maxAge: 1000 * 60 * 60 * 24, sameSite: 'strict' });
+		cookies.set('id', String(user._id), { maxAge: 1000 * 60 * 60 * 6, sameSite: 'strict' });
 		res.json({
 			_id: user._id,
 			name: user.name,
 			email: user.email,
 			isAdmin: user.isAdmin,
-			token: generateToken(user._id),
+			token: generateToken(user._id, password),
 		});
 		res.end();
 	} else {
@@ -63,7 +63,7 @@ export const registerUser = asyncHandler(async (req, res) => {
 			name: user.name,
 			email: user.email,
 			isAdmin: user.isAdmin,
-			token: generateToken(user._id),
+			token: generateToken(user._id, password),
 		});
 		res.end();
 	} else {
@@ -72,30 +72,8 @@ export const registerUser = asyncHandler(async (req, res) => {
 	}
 });
 
-// @desc    Refresh token
-// @route   GET /api/users/refresh
-// @access  Private
-// @called  refreshToken() Header.js -> userActions -> userRoutes
-export const refreshToken = asyncHandler(async (req, res) => {
-	if (req.cookies.id) {
-		const user = await User.findById(req.cookies.id).select('-password');
-		if (user) {
-			res.json({
-				_id: user._id,
-				name: user.name,
-				email: user.email,
-				isAdmin: user.isAdmin,
-				token: generateToken(user._id),
-			});
-		}
-	} else {
-		res.status(401);
-		throw new Error('Session expired');
-	}
-});
-
 // @desc    Clear Refresh Cookie
-// @route   POST /api/users/refresh
+// @route   POST /api/users/logout
 // @access  Private
 // @called  logout() -> userActions -> userRoutes
 export const clearRefreshToken = asyncHandler(async (req, res) => {

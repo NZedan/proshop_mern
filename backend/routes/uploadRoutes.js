@@ -3,7 +3,7 @@ import path from 'path';
 import express from 'express';
 // Middleware to handle upload of files through forms
 import multer from 'multer';
-import { admin, protect } from '../middleware/authMiddleware.js';
+import { refreshToken, protect, admin } from '../middleware/authMiddleware.js';
 const router = express.Router();
 
 // Should create methods to check for file duplicates and delete on update
@@ -68,7 +68,7 @@ const errorHandler = (err, req, res, next) => {
 };
 
 // Can upload multiple files, here it's a single image. File named image needs to be specified in front end
-router.post('/', protect, admin, upload.single('image'), errorHandler, (req, res) => {
+router.post('/', refreshToken, protect, admin, upload.single('image'), errorHandler, (req, res) => {
 	if (!req.file) {
 		res.status(400);
 		throw new Error('Please select file');

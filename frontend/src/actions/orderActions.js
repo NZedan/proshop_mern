@@ -26,6 +26,7 @@ import {
 	ORDER_USER_LIST_REQUEST,
 	ORDER_USER_LIST_SUCCESS,
 } from '../constants/orderConstants';
+import { USER_UNAUTHORISED } from '../constants/userConstants';
 
 export const createOrder = (order) => async (dispatch, getState) => {
 	try {
@@ -53,10 +54,18 @@ export const createOrder = (order) => async (dispatch, getState) => {
 			payload: data,
 		});
 	} catch (err) {
-		dispatch({
-			type: ORDER_CREATE_FAIL,
-			payload: err.response && err.response.data.message ? err.response.data.message : err.message,
-		});
+		// If status unauthorised eg. token expired, trigger logout
+		if (err.response && err.response.status === 401) {
+			dispatch({
+				type: USER_UNAUTHORISED,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		} else {
+			dispatch({
+				type: ORDER_CREATE_FAIL,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		}
 	}
 };
 
@@ -85,10 +94,17 @@ export const getOrderDetails = (id) => async (dispatch, getState) => {
 			payload: data,
 		});
 	} catch (err) {
-		dispatch({
-			type: ORDER_DETAILS_FAIL,
-			payload: err.response && err.response.data.message ? err.response.data.message : err.message,
-		});
+		if (err.response && err.response.status === 401) {
+			dispatch({
+				type: USER_UNAUTHORISED,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		} else {
+			dispatch({
+				type: ORDER_DETAILS_FAIL,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		}
 	}
 };
 
@@ -118,10 +134,17 @@ export const payOrder = (orderId, paymentResult) => async (dispatch, getState) =
 			payload: data,
 		});
 	} catch (err) {
-		dispatch({
-			type: ORDER_PAY_FAIL,
-			payload: err.response && err.response.data.message ? err.response.data.message : err.message,
-		});
+		if (err.response && err.response.status === 401) {
+			dispatch({
+				type: USER_UNAUTHORISED,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		} else {
+			dispatch({
+				type: ORDER_PAY_FAIL,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		}
 	}
 };
 
@@ -150,10 +173,17 @@ export const deliverOrder = (order) => async (dispatch, getState) => {
 			payload: data,
 		});
 	} catch (err) {
-		dispatch({
-			type: ORDER_DELIVER_FAIL,
-			payload: err.response && err.response.data.message ? err.response.data.message : err.message,
-		});
+		if (err.response && err.response.status === 401) {
+			dispatch({
+				type: USER_UNAUTHORISED,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		} else {
+			dispatch({
+				type: ORDER_DELIVER_FAIL,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		}
 	}
 };
 
@@ -186,10 +216,17 @@ export const listUserOrders = () => async (dispatch, getState) => {
 			payload: data,
 		});
 	} catch (err) {
-		dispatch({
-			type: ORDER_USER_LIST_FAIL,
-			payload: err.response && err.response.data.message ? err.response.data.message : err.message,
-		});
+		if (err.response && err.response.status === 401) {
+			dispatch({
+				type: USER_UNAUTHORISED,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		} else {
+			dispatch({
+				type: ORDER_USER_LIST_FAIL,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		}
 	}
 };
 
@@ -218,10 +255,17 @@ export const getOrders = () => async (dispatch, getState) => {
 			payload: data,
 		});
 	} catch (err) {
-		dispatch({
-			type: ORDER_LIST_FAIL,
-			payload: err.response && err.response.data.message ? err.response.data.message : err.message,
-		});
+		if (err.response && err.response.status === 401) {
+			dispatch({
+				type: USER_UNAUTHORISED,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		} else {
+			dispatch({
+				type: ORDER_LIST_FAIL,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		}
 	}
 };
 

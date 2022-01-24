@@ -24,10 +24,6 @@ import {
 	USER_LOGIN_SUCCESS,
 	USER_LOGOUT,
 	USER_LOGOUT_RESET,
-	USER_REFRESH_FAIL,
-	USER_REFRESH_REMOVE_ERROR,
-	USER_REFRESH_REQUEST,
-	USER_REFRESH_SUCCESS,
 	USER_REGISTER_FAIL,
 	USER_REGISTER_REMOVE_ERROR,
 	USER_REGISTER_REQUEST,
@@ -81,7 +77,8 @@ export const login = (email, password) => async (dispatch) => {
 };
 
 export const logout = () => async (dispatch) => {
-	await axios.post('/api/users/refresh');
+	// Clears session cookie
+	await axios.post('/api/users/logout');
 	localStorage.clear();
 	dispatch({ type: USER_LOGOUT });
 	dispatch({ type: USER_LIST_RESET });
@@ -131,33 +128,6 @@ export const register = (name, email, password) => async (dispatch) => {
 		} else {
 			dispatch({
 				type: USER_REGISTER_FAIL,
-				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
-			});
-		}
-	}
-};
-
-export const refreshToken = () => async (dispatch) => {
-	try {
-		dispatch({
-			type: USER_REFRESH_REQUEST,
-		});
-
-		const { data } = await axios.get('/api/users/refresh');
-
-		dispatch({
-			type: USER_REFRESH_SUCCESS,
-			payload: data,
-		});
-	} catch (err) {
-		if (err.response && err.response.status === 401) {
-			dispatch({
-				type: USER_UNAUTHORISED,
-				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
-			});
-		} else {
-			dispatch({
-				type: USER_REFRESH_FAIL,
 				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
 			});
 		}
@@ -380,7 +350,6 @@ export const updateUser = (user) => async (dispatch, getState) => {
 export const removeUserErrors = () => (dispatch) => {
 	dispatch({ type: USER_LOGIN_REMOVE_ERROR });
 	dispatch({ type: USER_REGISTER_REMOVE_ERROR });
-	dispatch({ type: USER_REFRESH_REMOVE_ERROR });
 	dispatch({ type: USER_DETAILS_REMOVE_ERROR });
 	dispatch({ type: USER_UPDATE_PROFILE_REMOVE_ERROR });
 	dispatch({ type: USER_LIST_REMOVE_ERROR });

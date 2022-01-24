@@ -45,7 +45,7 @@ const basketItemsFromStorage = localStorage.getItem('basketItems') ? JSON.parse(
 
 // const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : {};
 
-const userStatusFromStorage = localStorage.getItem('userStatus') && localStorage.getItem('userStatus');
+const userStatusFromStorage = localStorage.getItem('userStatus') ? localStorage.getItem('userStatus') : 'guest';
 
 const deliveryAddressFromStorage = localStorage.getItem('deliveryAddress')
 	? JSON.parse(localStorage.getItem('deliveryAddress'))

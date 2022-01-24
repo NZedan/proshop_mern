@@ -22,10 +22,6 @@ import {
 	USER_LOGIN_SUCCESS,
 	USER_LOGOUT,
 	USER_LOGOUT_RESET,
-	USER_REFRESH_FAIL,
-	USER_REFRESH_REMOVE_ERROR,
-	USER_REFRESH_REQUEST,
-	USER_REFRESH_SUCCESS,
 	USER_REGISTER_FAIL,
 	USER_REGISTER_REMOVE_ERROR,
 	USER_REGISTER_REQUEST,
@@ -49,7 +45,6 @@ export const userReducer = (
 	switch (type) {
 		case USER_LOGIN_REQUEST:
 		case USER_REGISTER_REQUEST:
-		case USER_REFRESH_REQUEST:
 		case USER_DETAILS_REQUEST:
 		case USER_UPDATE_PROFILE_REQUEST:
 			return {
@@ -66,14 +61,8 @@ export const userReducer = (
 				userStatus: 'loggedIn',
 				error: null,
 			};
-		case USER_REFRESH_SUCCESS:
-			return {
-				...state,
-				userInfo: payload,
-			};
 		case USER_LOGIN_FAIL:
 		case USER_REGISTER_FAIL:
-		case USER_REFRESH_FAIL:
 		case USER_UPDATE_PROFILE_FAIL:
 		case USER_DETAILS_FAIL:
 			return {
@@ -83,7 +72,6 @@ export const userReducer = (
 			};
 		case USER_LOGIN_REMOVE_ERROR:
 		case USER_REGISTER_REMOVE_ERROR:
-		case USER_REFRESH_REMOVE_ERROR:
 		case USER_UPDATE_PROFILE_REMOVE_ERROR:
 		case USER_DETAILS_REMOVE_ERROR:
 			return {
@@ -102,11 +90,14 @@ export const userReducer = (
 		case USER_LOGOUT:
 			return {
 				...state,
+				loading: false,
 				userStatus: 'logout',
 			};
 		case USER_UNAUTHORISED:
 			return {
 				...state,
+				loading: false,
+				error: payload,
 				userStatus: 'unauthorised',
 			};
 		default:

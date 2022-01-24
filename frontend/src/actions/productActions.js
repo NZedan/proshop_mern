@@ -27,6 +27,7 @@ import {
 	PRODUCT_UPDATE_REQUEST,
 	PRODUCT_UPDATE_SUCCESS,
 } from '../constants/productConstants';
+import { USER_UNAUTHORISED } from '../constants/userConstants';
 
 // Keyword is the search query
 export const listProducts =
@@ -87,46 +88,20 @@ export const deleteProduct = (id) => async (dispatch, getState) => {
 
 		dispatch({ type: PRODUCT_DELETE_SUCCESS });
 	} catch (err) {
-		dispatch({
-			type: PRODUCT_DELETE_FAIL,
-			payload: err.response && err.response.data.message ? err.response.data.message : err.message,
-		});
+		// If status unauthorised eg. token expired, trigger logout
+		if (err.response && err.response.status === 401) {
+			dispatch({
+				type: USER_UNAUTHORISED,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		} else {
+			dispatch({
+				type: PRODUCT_DELETE_FAIL,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		}
 	}
 };
-
-// Creates sample product
-// export const createProduct = () => async (dispatch, getState) => {
-// 	try {
-// 		dispatch({
-// 			type: PRODUCT_CREATE_REQUEST,
-// 		});
-
-// 		// Get token from state
-// 		const {
-// 			userLogin: { userInfo },
-// 		} = getState();
-
-// 		// Set token to header
-// 		const config = {
-// 			headers: {
-// 				'Content-Type': 'application/json',
-// 				Authorization: `Bearer ${userInfo.token}`,
-// 			},
-// 		};
-
-// 		const { data } = await axios.post('/api/products', {}, config);
-
-// 		dispatch({
-// 			type: PRODUCT_CREATE_SUCCESS,
-// 			payload: data,
-// 		});
-// 	} catch (err) {
-// 		dispatch({
-// 			type: PRODUCT_CREATE_FAIL,
-// 			payload: err.response && err.response.data.message ? err.response.data.message : err.message,
-// 		});
-// 	}
-// };
 
 export const createProduct = (product) => async (dispatch, getState) => {
 	try {
@@ -154,10 +129,17 @@ export const createProduct = (product) => async (dispatch, getState) => {
 			payload: data,
 		});
 	} catch (err) {
-		dispatch({
-			type: PRODUCT_CREATE_FAIL,
-			payload: err.response && err.response.data.message ? err.response.data.message : err.message,
-		});
+		if (err.response && err.response.status === 401) {
+			dispatch({
+				type: USER_UNAUTHORISED,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		} else {
+			dispatch({
+				type: PRODUCT_CREATE_FAIL,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		}
 	}
 };
 
@@ -187,10 +169,17 @@ export const updateProduct = (product) => async (dispatch, getState) => {
 			payload: data,
 		});
 	} catch (err) {
-		dispatch({
-			type: PRODUCT_UPDATE_FAIL,
-			payload: err.response && err.response.data.message ? err.response.data.message : err.message,
-		});
+		if (err.response && err.response.status === 401) {
+			dispatch({
+				type: USER_UNAUTHORISED,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		} else {
+			dispatch({
+				type: PRODUCT_UPDATE_FAIL,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		}
 	}
 };
 
@@ -219,10 +208,17 @@ export const createProductReview = (productId, review) => async (dispatch, getSt
 			type: PRODUCT_CREATE_REVIEW_SUCCESS,
 		});
 	} catch (err) {
-		dispatch({
-			type: PRODUCT_CREATE_REVIEW_FAIL,
-			payload: err.response && err.response.data.message ? err.response.data.message : err.message,
-		});
+		if (err.response && err.response.status === 401) {
+			dispatch({
+				type: USER_UNAUTHORISED,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		} else {
+			dispatch({
+				type: PRODUCT_CREATE_REVIEW_FAIL,
+				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+			});
+		}
 	}
 };
 

@@ -65,14 +65,14 @@ const ProfileScreen = ({ history }) => {
 
 	// Remove error message after 5 seconds
 	useEffect(() => {
-		if (error) {
+		if (error && error !== 401) {
 			setAlert(true);
 			setTimeout(() => {
 				setAlert(false);
 				dispatch(removeUserErrors());
 			}, 5000);
 		}
-		if (errorOrders) {
+		if (errorOrders && errorOrders !== 401) {
 			setErrorOrdersAlert(true);
 			setTimeout(() => {
 				setErrorOrdersAlert(false);
