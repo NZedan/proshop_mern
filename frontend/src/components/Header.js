@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import SearchBox from './SearchBox';
-import { logout } from '../actions/userActions';
+import { getUserDetails, logout } from '../actions/userActions';
 import BasketItem from './BasketItem';
 
 const Header = () => {
@@ -21,11 +21,18 @@ const Header = () => {
 	const { basketItems } = basket;
 
 	// Logs out if token or session cookie expired or not present
-	// useEffect(() => {
-	// 	if (userStatus === 'unauthorised' || (userStatus === 'loggedIn' && !userInfo._id)) {
-	// 		dispatch(logout());
-	// 	}
-	// }, [userStatus, userInfo, dispatch]);
+	useEffect(() => {
+		if (userStatus === 'unauthorised') {
+			dispatch(logout());
+		}
+	}, [userStatus, userInfo, dispatch]);
+
+	// Repopulates user state on page refresh
+	useEffect(() => {
+		if (userStatus === 'loggedIn' && !userInfo._id) {
+			dispatch(getUserDetails('profile'));
+		}
+	}, [userStatus, userInfo, dispatch]);
 
 	function logoutHandler() {
 		dispatch(logout());

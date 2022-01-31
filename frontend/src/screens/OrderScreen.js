@@ -58,10 +58,10 @@ const OrderScreen = ({ history, match }) => {
 
 	useEffect(() => {
 		// Redirects to home on logout
-		if (userStatus === 'logout' || !userInfo) {
+		if (userStatus === 'logout') {
 			history.push('/');
 		}
-	}, [userStatus, userInfo, history]);
+	}, [userStatus, history]);
 
 	useEffect(() => {
 		// Clears basket after successful payment
