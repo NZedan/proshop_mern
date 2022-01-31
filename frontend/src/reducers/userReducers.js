@@ -9,8 +9,6 @@ import {
 	USER_DETAILS_REQUEST,
 	USER_DETAILS_RESET,
 	USER_DETAILS_SUCCESS,
-	USER_EDIT_DETAILS,
-	USER_EDIT_RESET,
 	USER_LIST_FAIL,
 	USER_LIST_REMOVE_ERROR,
 	USER_LIST_REQUEST,
@@ -26,15 +24,15 @@ import {
 	USER_REGISTER_REMOVE_ERROR,
 	USER_REGISTER_REQUEST,
 	USER_REGISTER_SUCCESS,
-	USER_UNAUTHORISED,
-	USER_UPDATE_FAIL,
 	USER_UPDATE_PROFILE_FAIL,
 	USER_UPDATE_PROFILE_REMOVE_ERROR,
 	USER_UPDATE_PROFILE_REQUEST,
 	USER_UPDATE_REMOVE_ERROR,
 	USER_UPDATE_REQUEST,
-	USER_UPDATE_RESET,
 	USER_UPDATE_SUCCESS,
+	USER_UPDATE_FAIL,
+	USER_UPDATE_RESET,
+	USER_UNAUTHORISED,
 } from '../constants/userConstants';
 
 // state = initial state, destructured action into type and payload
@@ -99,23 +97,6 @@ export const userReducer = (
 				loading: false,
 				error: payload,
 				userStatus: 'unauthorised',
-			};
-		default:
-			return state;
-	}
-};
-
-export const userEditReducer = (state = { editUserInfo: {} }, { type, payload }) => {
-	switch (type) {
-		case USER_EDIT_DETAILS:
-			return {
-				...state,
-				editUserInfo: payload,
-			};
-		case USER_EDIT_RESET:
-			return {
-				...state,
-				editUserInfo: {},
 			};
 		default:
 			return state;

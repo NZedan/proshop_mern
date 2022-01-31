@@ -65,7 +65,7 @@ const ProfileScreen = ({ history }) => {
 
 	// Remove error message after 5 seconds
 	useEffect(() => {
-		if (error && error !== 401) {
+		if (error && userStatus !== 'unauthorised') {
 			setAlert(true);
 			setTimeout(() => {
 				setAlert(false);
@@ -79,7 +79,7 @@ const ProfileScreen = ({ history }) => {
 				dispatch(removeOrderErrors());
 			}, 5000);
 		}
-	}, [error, errorOrders, dispatch]);
+	}, [error, errorOrders, userStatus, dispatch]);
 
 	const submitHandler = (e) => {
 		e.preventDefault();
@@ -87,7 +87,7 @@ const ProfileScreen = ({ history }) => {
 			setMessage("Passwords don't match");
 		} else {
 			// Had * id: user._id * passed in, don't think it's necessary?
-			dispatch(updateUserProfile({ name, email, password }));
+			dispatch(updateUserProfile({ id: user._id, name, email, password }));
 		}
 	};
 

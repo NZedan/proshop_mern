@@ -21,11 +21,11 @@ const Header = () => {
 	const { basketItems } = basket;
 
 	// Logs out if token or session cookie expired or not present
-	useEffect(() => {
-		if (userStatus === 'unauthorised') {
-			dispatch(logout());
-		}
-	}, [userStatus, dispatch]);
+	// useEffect(() => {
+	// 	if (userStatus === 'unauthorised' || (userStatus === 'loggedIn' && !userInfo._id)) {
+	// 		dispatch(logout());
+	// 	}
+	// }, [userStatus, userInfo, dispatch]);
 
 	function logoutHandler() {
 		dispatch(logout());

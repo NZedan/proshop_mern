@@ -11,8 +11,6 @@ import {
 	USER_DETAILS_REMOVE_ERROR,
 	USER_DETAILS_REQUEST,
 	USER_DETAILS_SUCCESS,
-	USER_EDIT_DETAILS,
-	USER_EDIT_RESET,
 	USER_LIST_FAIL,
 	USER_LIST_REMOVE_ERROR,
 	USER_LIST_REQUEST,
@@ -33,7 +31,6 @@ import {
 	USER_UPDATE_PROFILE_FAIL,
 	USER_UPDATE_PROFILE_REMOVE_ERROR,
 	USER_UPDATE_PROFILE_REQUEST,
-	USER_UPDATE_PROFILE_SUCCESS,
 	USER_UPDATE_REMOVE_ERROR,
 	USER_UPDATE_REQUEST,
 	USER_UPDATE_SUCCESS,
@@ -82,7 +79,6 @@ export const logout = () => async (dispatch) => {
 	localStorage.clear();
 	dispatch({ type: USER_LOGOUT });
 	dispatch({ type: USER_LIST_RESET });
-	dispatch({ type: USER_EDIT_RESET });
 	dispatch({ type: ORDER_USER_LIST_RESET });
 	dispatch({ type: ORDER_CREATE_RESET });
 	dispatch({ type: PRODUCT_CREATE_REVIEW_RESET });
@@ -156,17 +152,10 @@ export const getUserDetails = (idOrProfile) => async (dispatch, getState) => {
 		// Hits users/id or users/profile endpoints
 		const { data } = await axios.get(`/api/users/${idOrProfile}`, config);
 
-		if (idOrProfile === 'profile') {
-			dispatch({
-				type: USER_DETAILS_SUCCESS,
-				payload: data,
-			});
-		} else {
-			dispatch({
-				type: USER_EDIT_DETAILS,
-				payload: data,
-			});
-		}
+		dispatch({
+			type: USER_DETAILS_SUCCESS,
+			payload: data,
+		});
 	} catch (err) {
 		if (err.response && err.response.status === 401) {
 			dispatch({
@@ -204,21 +193,9 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
 		const { data } = await axios.put('/api/users/profile', user, config);
 		// Sets success and outputs errors for updateProfile messages
 		dispatch({
-			type: USER_UPDATE_PROFILE_SUCCESS,
-			payload: data,
-		});
-		// Only necessary to keep user details consistent
-		dispatch({
-			type: USER_LOGIN_SUCCESS,
-			payload: data,
-		});
-		// Used to fill form fields and set loading, could easily be refactored into single state
-		dispatch({
 			type: USER_DETAILS_SUCCESS,
 			payload: data,
 		});
-
-		localStorage.setItem('userInfo', JSON.stringify(data));
 	} catch (err) {
 		if (err.response && err.response.status === 401) {
 			dispatch({
@@ -331,7 +308,7 @@ export const updateUser = (user) => async (dispatch, getState) => {
 		const { data } = await axios.put(`/api/users/${user._id}`, user, config);
 
 		dispatch({ type: USER_UPDATE_SUCCESS });
-		dispatch({ type: USER_EDIT_DETAILS, payload: data });
+		dispatch({ type: USER_DETAILS_SUCCESS, payload: data });
 	} catch (err) {
 		if (err.response && err.response.status === 401) {
 			dispatch({

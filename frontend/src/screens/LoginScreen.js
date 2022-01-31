@@ -25,9 +25,7 @@ const LoginScreen = ({ location, history }) => {
 	// Redirects directly to shipping from basket checkout if user already logged in
 	useEffect(() => {
 		if (userStatus === 'logout') {
-			dispatch(basketReset());
-			dispatch(orderDetailsReset());
-			dispatch(userLogoutReset());
+			dispatch(userLogoutReset(), basketReset(), orderDetailsReset());
 		}
 		if (userStatus === 'loggedIn') {
 			history.push(redirect);

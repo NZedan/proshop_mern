@@ -53,9 +53,7 @@ const HomeScreen = ({ history, match }) => {
 		// fetchProducts();
 		// * eslint-disable-next-line *
 		if (userStatus === 'logout') {
-			dispatch(basketReset());
-			dispatch(orderDetailsReset());
-			dispatch(userLogoutReset());
+			dispatch(userLogoutReset(), basketReset(), orderDetailsReset());
 		}
 		// keyword is the search query
 		dispatch(listProducts(keyword, pageNumber, itemsPerPage));

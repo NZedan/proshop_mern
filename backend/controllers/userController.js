@@ -118,7 +118,8 @@ export const getUserProfile = asyncHandler(async (req, res) => {
 // @called  updateUserProfile() ProfileScreen.js
 export const updateUserProfile = asyncHandler(async (req, res) => {
 	// User is sent in the request object by the auth middleware
-	const { user } = req;
+	// const { user } = req;
+	const user = await User.findById(req.user._id);
 
 	if (user) {
 		// Sets name and email to new details or if none then origianl value
@@ -136,7 +137,7 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
 			name: updatedUser.name,
 			email: updatedUser.email,
 			isAdmin: updatedUser.isAdmin,
-			token: generateToken(updatedUser._id),
+			token: generateToken(updatedUser._id, req.body.password ? req.body.password : user.password),
 		});
 	} else {
 		res.status(404);
