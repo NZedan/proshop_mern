@@ -58,18 +58,10 @@ export const login = (email, password) => async (dispatch) => {
 		// localStorage.setItem('userInfo', JSON.stringify(data));
 		localStorage.setItem('userStatus', 'loggedIn');
 	} catch (err) {
-		// If status unauthorised eg. token expired, trigger logout
-		if (err.response && err.response.status === 401) {
-			dispatch({
-				type: USER_UNAUTHORISED,
-				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
-			});
-		} else {
-			dispatch({
-				type: USER_LOGIN_FAIL,
-				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
-			});
-		}
+		dispatch({
+			type: USER_LOGIN_FAIL,
+			payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+		});
 	}
 };
 
@@ -116,17 +108,10 @@ export const register = (name, email, password) => async (dispatch) => {
 		localStorage.setItem('userStatus', 'loggedIn');
 		// localStorage.setItem('userInfo', JSON.stringify(data));
 	} catch (err) {
-		if (err.response && err.response.status === 401) {
-			dispatch({
-				type: USER_UNAUTHORISED,
-				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
-			});
-		} else {
-			dispatch({
-				type: USER_REGISTER_FAIL,
-				payload: err.response && err.response.data.message ? err.response.data.message : err.message,
-			});
-		}
+		dispatch({
+			type: USER_REGISTER_FAIL,
+			payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+		});
 	}
 };
 
