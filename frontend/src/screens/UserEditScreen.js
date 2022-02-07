@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, CloseButton } from 'react-bootstrap';
 // To interact with Redux state
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
@@ -46,28 +46,29 @@ const UserEditScreen = ({ match, history }) => {
 		}
 	}, [history, userStatus, dispatch, userInfo, userId, successUpdate]);
 
-	// Remove error message after 5 seconds
 	useEffect(() => {
 		if (error) {
 			setAlert(true);
-			setTimeout(() => {
-				setAlert(false);
-				dispatch(removeUserErrors());
-			}, 5000);
 		}
 		if (errorUpdate) {
 			setErrorUpdateAlert(true);
-			setTimeout(() => {
-				setAlert(false);
-				dispatch(removeUserErrors());
-			}, 5000);
 		}
 	}, [error, errorUpdate, errorUpdateAlert, dispatch]);
 
-	const submitHandler = (e) => {
+	function dismissHandler1() {
+		setAlert(false);
+		dispatch(removeUserErrors());
+	}
+
+	function dismissHandler2() {
+		setErrorUpdateAlert(false);
+		dispatch(removeUserErrors());
+	}
+
+	function submitHandler(e) {
 		e.preventDefault();
 		dispatch(updateUser({ _id: userId, name, email, isAdmin }));
-	};
+	}
 
 	return (
 		<Fragment>
@@ -77,11 +78,17 @@ const UserEditScreen = ({ match, history }) => {
 			<FormContainer>
 				<h1>Edit User</h1>
 				{loadingUpdate && <Loader />}
-				{errorUpdateAlert && <Message variant='danger'>{errorUpdate}</Message>}
+				{errorUpdateAlert && (
+					<Message variant='danger'>
+						{errorUpdate} <CloseButton onClick={dismissHandler2} aria-label='Hide' />
+					</Message>
+				)}
 				{!userInfo.name || userInfo._id !== userId ? (
 					<Loader />
 				) : alert ? (
-					<Message variant='danger'>{error}</Message>
+					<Message variant='danger'>
+						{error} <CloseButton onClick={dismissHandler1} aria-label='Hide' />
+					</Message>
 				) : (
 					<Form onSubmit={submitHandler}>
 						<Form.Group controlId='name'>

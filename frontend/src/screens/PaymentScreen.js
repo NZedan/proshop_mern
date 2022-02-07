@@ -28,11 +28,11 @@ const PaymentScreen = ({ history }) => {
 
 	const [paymentMethod, setPaymentMethod] = useState(null);
 
-	const submitHandler = (e) => {
+	function submitHandler(e) {
 		e.preventDefault();
 		dispatch(savePaymentMethod(paymentMethod));
 		history.push('/placeorder');
-	};
+	}
 
 	return (
 		<Fragment>

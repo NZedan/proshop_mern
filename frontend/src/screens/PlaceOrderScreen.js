@@ -53,7 +53,7 @@ const PlaceOrderScreen = ({ history }) => {
 	basket.taxPrice = Number((basket.itemsPrice - basket.itemsPrice / 1.2).toFixed(2));
 	basket.totalPrice = Number(basket.itemsPrice) > 100 ? Number(basket.itemsPrice) : Number(basket.itemsPrice) + 10;
 
-	const placeOrderHandler = () => {
+	function placeOrderHandler() {
 		dispatch(
 			createOrder({
 				orderItems: basketItems,
@@ -61,7 +61,7 @@ const PlaceOrderScreen = ({ history }) => {
 				paymentMethod: basket.paymentMethod,
 			})
 		);
-	};
+	}
 
 	return (
 		<Fragment>

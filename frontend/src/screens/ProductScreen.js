@@ -85,19 +85,19 @@ const ProductScreen = ({ history, match }) => {
 	// };
 
 	// Refactored to dispatch addToBasket on click to avoid qty reset when page refreshed after changing in basket screen
-	const addToBasketHandler = () => {
+	function addToBasketHandler() {
 		dispatch(addToBasket(id, qty));
 		// history is a mutable object associated with routes
 		// This redirects to this route
 		history.push(`/basket/${id}`);
-	};
+	}
 
-	const submitHandler = (e) => {
+	function submitHandler(e) {
 		e.preventDefault();
 		dispatch(createProductReview(id, { rating, comment }));
-	};
+	}
 
-	// MAKE ADD TO BASKET A POPUP INSTEAD OF REDIRECT
+	// TODO: MAKE ADD TO BASKET A POPUP INSTEAD OF REDIRECT
 
 	return (
 		<Fragment>

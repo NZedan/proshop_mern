@@ -41,14 +41,14 @@ const RegisterScreen = ({ location, history }) => {
 		}
 	}, [error, dispatch]);
 
-	const submitHandler = (e) => {
+	function submitHandler(e) {
 		e.preventDefault();
 		if (password !== confirmPassword) {
 			setMessage("Passwords don't match");
 		} else {
 			dispatch(register(name, email, password));
 		}
-	};
+	}
 
 	return (
 		// Component that provides a styling context

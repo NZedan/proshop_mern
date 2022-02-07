@@ -48,18 +48,18 @@ const BasketScreen = ({ history }) => {
 	// Items in basket
 	const items = basketItems.reduce((acc, item) => acc + item.qty, 0);
 
-	const removeFromBasketHandler = (id) => {
+	function removeFromBasketHandler(id) {
 		dispatch(removeFromBasket(id));
-	};
+	}
 
-	const continueShoppingHandler = () => {
+	function continueShoppingHandler() {
 		history.push('/');
-	};
+	}
 
-	const checkoutHandler = () => {
+	function checkoutHandler() {
 		// Redirects to login, if logged in useEffect in LoginScreen sees userInfo and redirects to shipping
 		history.push('/login?redirect=delivery');
-	};
+	}
 
 	return (
 		<Row className='justify-content-md-center'>

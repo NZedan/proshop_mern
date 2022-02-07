@@ -43,10 +43,10 @@ const LoginScreen = ({ location, history }) => {
 		}
 	}, [error, dispatch]);
 
-	const submitHandler = (e) => {
+	function submitHandler(e) {
 		e.preventDefault();
 		dispatch(login(email, password));
-	};
+	}
 
 	return (
 		// Component that provides a styling context

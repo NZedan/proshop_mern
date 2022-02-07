@@ -1,6 +1,6 @@
 import React, { useState, Fragment, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Col, Row, Form } from 'react-bootstrap';
+import { Col, Row, Form, CloseButton } from 'react-bootstrap';
 // dispatch to call an action and selector to select parts of state, eg. productList from store
 import { useDispatch, useSelector } from 'react-redux';
 import { listProducts, removeProductErrors } from '../actions/productActions';
@@ -70,21 +70,20 @@ const HomeScreen = ({ history, match }) => {
 		}
 	}, [dispatch, history, pages, singlePage, keyword]);
 
-	// FIX ISSUE OF CLEARING TIMEOUT IN EVENT OF 401 LOGOUT - Cant perform React state update on unmounted component error
-	// Remove error message after 5 seconds
 	useEffect(() => {
 		if (error) {
 			setAlert(true);
-			setTimeout(() => {
-				setAlert(false);
-				dispatch(removeProductErrors());
-			}, 5000);
 		}
 	}, [error, dispatch]);
 
-	const onChangeHandler = (e) => {
+	function onChangeHandler(e) {
 		dispatch(setItemsPerPage(e.target.value));
-	};
+	}
+
+	function dismissHandler() {
+		setAlert(false);
+		dispatch(removeProductErrors());
+	}
 
 	return (
 		<Fragment>
@@ -106,10 +105,10 @@ const HomeScreen = ({ history, match }) => {
 				<option value={20}>20</option>
 			</Form.Control>
 			{products.length === 0 && !loading && <h2>No results found</h2>}
-			{products.length === 0 ? (
-				<Loader />
-			) : alert ? (
-				<Message variant='danger'>{error}</Message>
+			{alert ? (
+				<Message variant='danger'>
+					{error} <CloseButton onClick={dismissHandler} aria-label='Hide' />
+				</Message>
 			) : (
 				<Fragment>
 					<Row>
@@ -123,6 +122,7 @@ const HomeScreen = ({ history, match }) => {
 					<Paginate pages={pages} page={page} keyword={keyword ? keyword : ''} itemsPerPage={itemsPerPage} />
 				</Fragment>
 			)}
+			{products.length === 0 && <Loader />}
 		</Fragment>
 	);
 };

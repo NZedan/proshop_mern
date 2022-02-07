@@ -2,7 +2,7 @@ import React, { useState, Fragment, useEffect } from 'react';
 // Moment formats date
 import Moment from 'react-moment';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Table, Button } from 'react-bootstrap';
+import { Table, Button, CloseButton } from 'react-bootstrap';
 // To interact with Redux state
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
@@ -36,16 +36,16 @@ const OrderListScreen = ({ history }) => {
 		}
 	}, [history, dispatch, userStatus]);
 
-	// Remove error message after 5 seconds
 	useEffect(() => {
 		if (error) {
 			setAlert(true);
-			setTimeout(() => {
-				setAlert(false);
-				dispatch(removeOrderErrors());
-			}, 5000);
 		}
 	}, [error, dispatch]);
+
+	function dismissHandler() {
+		setAlert(false);
+		dispatch(removeOrderErrors());
+	}
 
 	return (
 		<Fragment>
@@ -53,7 +53,9 @@ const OrderListScreen = ({ history }) => {
 			{!orders ? (
 				<Loader />
 			) : alert ? (
-				<Message variant='danger'>{error}</Message>
+				<Message variant='danger'>
+					{error} <CloseButton onClick={dismissHandler} aria-label='Hide' />
+				</Message>
 			) : (
 				<Table striped bordered responsive className='table-sm'>
 					<thead>

@@ -27,11 +27,11 @@ const DeliveryScreen = ({ history }) => {
 	const [postCode, setPostCode] = useState(deliveryAddress.postCode || '');
 	const [country, setCountry] = useState(deliveryAddress.country || '');
 
-	const submitHandler = (e) => {
+	function submitHandler(e) {
 		e.preventDefault();
 		dispatch(saveDeliveryAddress({ address, city, postCode, country }));
 		history.push('/payment');
-	};
+	}
 
 	// Check out form validation - https://react-bootstrap.github.io/components/forms/#forms-validation
 

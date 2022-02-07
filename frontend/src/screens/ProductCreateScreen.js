@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, CloseButton } from 'react-bootstrap';
 // To interact with Redux state
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
@@ -48,19 +48,19 @@ const ProductCreateScreen = ({ history }) => {
 		}
 	}, [history, userStatus, dispatch, success]);
 
-	// Remove error message after 5 seconds
 	useEffect(() => {
 		if (error) {
 			setAlert(true);
-			setTimeout(() => {
-				setAlert(false);
-				dispatch(removeProductErrors());
-			}, 5000);
 		}
 	}, [error, dispatch]);
 
+	function dismissHandler() {
+		setAlert(false);
+		dispatch(removeProductErrors());
+	}
+
 	// The files event of a form file field is an array as it can take multiple files
-	const uploadFileHandler = async (e) => {
+	async function uploadFileHandler(e) {
 		const file = e.target.files[0];
 		// JS for creating form data that takes the file
 		const formData = new FormData();
@@ -85,9 +85,9 @@ const ProductCreateScreen = ({ history }) => {
 			setUploadError(err.response && err.response.data.message ? err.response.data.message : err.message);
 			setUploading(false);
 		}
-	};
+	}
 
-	const submitHandler = (e) => {
+	function submitHandler(e) {
 		e.preventDefault();
 		dispatch(
 			createProduct({
@@ -100,7 +100,7 @@ const ProductCreateScreen = ({ history }) => {
 				description,
 			})
 		);
-	};
+	}
 
 	return (
 		<Fragment>
@@ -113,7 +113,9 @@ const ProductCreateScreen = ({ history }) => {
 				{loading ? (
 					<Loader />
 				) : alert ? (
-					<Message variant='danger'>{error}</Message>
+					<Message variant='danger'>
+						{error} <CloseButton onClick={dismissHandler} aria-label='Hide' />
+					</Message>
 				) : (
 					<Form onSubmit={submitHandler}>
 						<Form.Group controlId='name'>

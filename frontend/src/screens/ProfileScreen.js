@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 // Moment formats date
 import Moment from 'react-moment';
-import { Table, Form, Button, Row, Col } from 'react-bootstrap';
+import { Table, Form, Button, Row, Col, CloseButton } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 // To interact with Redux state
 import { useDispatch, useSelector } from 'react-redux';
@@ -63,25 +63,26 @@ const ProfileScreen = ({ history }) => {
 		}
 	}, [status, dispatch]);
 
-	// Remove error message after 5 seconds
 	useEffect(() => {
-		if (error && userStatus !== 'unauthorised') {
+		if (error) {
 			setAlert(true);
-			setTimeout(() => {
-				setAlert(false);
-				dispatch(removeUserErrors());
-			}, 5000);
 		}
-		if (errorOrders && errorOrders !== 401) {
+		if (errorOrders) {
 			setErrorOrdersAlert(true);
-			setTimeout(() => {
-				setErrorOrdersAlert(false);
-				dispatch(removeOrderErrors());
-			}, 5000);
 		}
 	}, [error, errorOrders, userStatus, dispatch]);
 
-	const submitHandler = (e) => {
+	function dismissHandler1() {
+		setAlert(false);
+		dispatch(removeUserErrors());
+	}
+
+	function dismissHandler2() {
+		setErrorOrdersAlert(false);
+		dispatch(removeOrderErrors());
+	}
+
+	function submitHandler(e) {
 		e.preventDefault();
 		if (password !== confirmPassword) {
 			setMessage("Passwords don't match");
@@ -89,7 +90,7 @@ const ProfileScreen = ({ history }) => {
 			// Had * id: user._id * passed in, don't think it's necessary?
 			dispatch(updateUserProfile({ id: user._id, name, email, password }));
 		}
-	};
+	}
 
 	return (
 		<Row>
@@ -98,7 +99,9 @@ const ProfileScreen = ({ history }) => {
 				{status === 'pending' ? (
 					<Loader />
 				) : errorOrdersAlert ? (
-					<Message variant='danger'>{errorOrders}</Message>
+					<Message variant='danger'>
+						{errorOrders} <CloseButton onClick={dismissHandler2} aria-label='Hide' />
+					</Message>
 				) : status === 'resolved' && orders.length > 0 ? (
 					<Table striped bordered hover responsive className='table-sm'>
 						<thead>
@@ -156,7 +159,11 @@ const ProfileScreen = ({ history }) => {
 				{/* Messages should have a timeout */}
 				{message && <Message variant='danger'>{message}</Message>}
 				{success && <Message variant='success'>Profile Updated</Message>}
-				{alert && <Message variant='danger'>{error.message}</Message>}
+				{alert && (
+					<Message variant='danger'>
+						{error} <CloseButton onClick={dismissHandler1} aria-label='Hide' />
+					</Message>
+				)}
 				{loading && <Loader />}
 
 				<Form onSubmit={submitHandler}>

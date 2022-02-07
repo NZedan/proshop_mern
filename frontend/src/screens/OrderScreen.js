@@ -4,7 +4,7 @@ import axios from 'axios';
 import Moment from 'react-moment';
 import { PayPalButton } from 'react-paypal-button-v2';
 import { Link } from 'react-router-dom';
-import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
+import { Button, Row, Col, ListGroup, Image, Card, CloseButton } from 'react-bootstrap';
 // To interact with Redux state
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
@@ -70,16 +70,16 @@ const OrderScreen = ({ history, match }) => {
 		}
 	}, [dispatch, success]);
 
-	// Remove error message after 5 seconds
 	useEffect(() => {
 		if (error) {
 			setAlert(true);
-			setTimeout(() => {
-				setAlert(false);
-				dispatch(removeOrderErrors());
-			}, 5000);
 		}
 	}, [error, dispatch]);
+
+	function dismissHandler() {
+		setAlert(false);
+		dispatch(removeOrderErrors());
+	}
 
 	// Refreshes order details so deleted order can't be paid
 	// Order marked as deleted at 0.99 hrs so still possibility of paying a deleted order (36 seconds)!!!
@@ -109,23 +109,25 @@ const OrderScreen = ({ history, match }) => {
 		}
 	}, [dispatch, order, orderId, success, status]);
 
-	const successPaymentHandler = (paymentResult) => {
+	function successPaymentHandler(paymentResult) {
 		console.log(paymentResult);
 		dispatch(payOrder(orderId, paymentResult));
-	};
+	}
 
-	const deliverHandler = () => {
+	function deliverHandler() {
 		dispatch(deliverOrder(order));
-	};
+	}
 
-	const reOrderHandler = () => {
+	function reOrderHandler() {
 		dispatch(addOrderToBasket(order.orderItems));
-	};
+	}
 
 	return !order ? (
 		<Loader />
 	) : alert ? (
-		<Message variant='danger'>{error}</Message>
+		<Message variant='danger'>
+			{error} <CloseButton onClick={dismissHandler} aria-label='Hide' />
+		</Message>
 	) : order.isDeleted ? (
 		<Message variant='danger'>
 			{order.message}.{' '}

@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Table, Button } from 'react-bootstrap';
+import { Table, Button, CloseButton } from 'react-bootstrap';
 // To interact with Redux state
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
@@ -34,23 +34,23 @@ const UserListScreen = ({ history }) => {
 		}
 	}, [history, dispatch, userStatus, success]);
 
-	// Remove error message after 5 seconds
 	useEffect(() => {
 		if (error) {
 			setAlert(true);
-			setTimeout(() => {
-				setAlert(false);
-				dispatch(removeUserErrors());
-			}, 5000);
 		}
 	}, [error, dispatch]);
 
+	function dismissHandler() {
+		setAlert(false);
+		dispatch(removeUserErrors());
+	}
+
 	// Best practice would be to set a deleted flag in DB instead of permanently removing the record
-	const deleteHandler = (id) => {
+	function deleteHandler(id) {
 		if (window.confirm('Are you sure?')) {
 			dispatch(deleteUser(id));
 		}
-	};
+	}
 
 	return (
 		<Fragment>
@@ -58,7 +58,9 @@ const UserListScreen = ({ history }) => {
 			{!users ? (
 				<Loader />
 			) : alert ? (
-				<Message variant='danger'>{error}</Message>
+				<Message variant='danger'>
+					{error} <CloseButton onClick={dismissHandler} aria-label='Hide' />
+				</Message>
 			) : (
 				<Table striped bordered responsive className='table-sm'>
 					<thead>

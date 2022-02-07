@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, CloseButton } from 'react-bootstrap';
 // To interact with Redux state
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
@@ -67,26 +67,27 @@ const ProductEditScreen = ({ match, history }) => {
 		}
 	}, [history, userStatus, dispatch, productId, product._id, successUpdate, product]);
 
-	// Remove error message after 5 seconds
 	useEffect(() => {
 		if (error) {
 			setAlert(true);
-			setTimeout(() => {
-				setAlert(false);
-				dispatch(removeProductErrors());
-			}, 5000);
 		}
 		if (errorUpdate) {
 			setErrorUpdateAlert(true);
-			setTimeout(() => {
-				setAlert(false);
-				dispatch(removeProductErrors());
-			}, 5000);
 		}
 	}, [error, errorUpdate, dispatch]);
 
+	function dismissHandler1() {
+		setAlert(false);
+		dispatch(removeProductErrors());
+	}
+
+	function dismissHandler2() {
+		setErrorUpdateAlert(false);
+		dispatch(removeProductErrors());
+	}
+
 	// The files event of a form file field is an array as it can take multiple files
-	const uploadFileHandler = async (e) => {
+	async function uploadFileHandler(e) {
 		const file = e.target.files[0];
 		// JS for creating form data that takes the file
 		const formData = new FormData();
@@ -111,9 +112,9 @@ const ProductEditScreen = ({ match, history }) => {
 			setUploadError(err.response && err.response.data.message ? err.response.data.message : err.message);
 			setUploading(false);
 		}
-	};
+	}
 
-	const submitHandler = (e) => {
+	function submitHandler(e) {
 		e.preventDefault();
 		dispatch(
 			updateProduct({
@@ -127,7 +128,7 @@ const ProductEditScreen = ({ match, history }) => {
 				description,
 			})
 		);
-	};
+	}
 
 	return (
 		<Fragment>
@@ -137,11 +138,17 @@ const ProductEditScreen = ({ match, history }) => {
 			<FormContainer>
 				<h1>Edit Product</h1>
 				{loadingUpdate && <Loader />}
-				{errorUpdateAlert && <Message variant='danger'>{errorUpdate}</Message>}
+				{errorUpdateAlert && (
+					<Message variant='danger'>
+						{errorUpdate} <CloseButton onClick={dismissHandler2} aria-label='Hide' />
+					</Message>
+				)}
 				{loading ? (
 					<Loader />
 				) : alert ? (
-					<Message variant='danger'>{error}</Message>
+					<Message variant='danger'>
+						{error} <CloseButton onClick={dismissHandler1} aria-label='Hide' />
+					</Message>
 				) : (
 					<Form onSubmit={submitHandler}>
 						<Form.Group controlId='name'>
