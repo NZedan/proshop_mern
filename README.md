@@ -3,7 +3,7 @@
 > eCommerce platform built with the MERN stack & Redux.
 > This is the course project for Brad Traversy's [MERN eCommerce From Scratch](https://www.udemy.com/course/mern-ecommerce) course
 
-![screenshot](https://github.com/NZedan/proshop_mern/screenshot.png)
+![screenshot](https://github.com/NZedan/proshop_mern/blob/master/screenshot.png)
 
 ## Features
 
