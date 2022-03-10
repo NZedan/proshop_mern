@@ -33,11 +33,13 @@ import {
 	USER_UPDATE_FAIL,
 	USER_UPDATE_RESET,
 	USER_UNAUTHORISED,
+	USER_UPDATE_PROFILE_SUCCESS,
+	USER_UPDATE_PROFILE_RESET,
 } from '../constants/userConstants';
 
 // state = initial state, destructured action into type and payload
 export const userReducer = (
-	state = { userInfo: {}, error: null, loading: false, updated: null, userStatus: 'guest' },
+	state = { userInfo: {}, error: null, loading: false, updated: null, userStatus: 'guest', success: false },
 	{ type, payload }
 ) => {
 	switch (type) {
@@ -59,6 +61,11 @@ export const userReducer = (
 				userStatus: 'loggedIn',
 				error: null,
 			};
+		case USER_UPDATE_PROFILE_SUCCESS:
+			return {
+				...state,
+				success: true,
+			};
 		case USER_LOGIN_FAIL:
 		case USER_REGISTER_FAIL:
 		case USER_UPDATE_PROFILE_FAIL:
@@ -75,6 +82,11 @@ export const userReducer = (
 			return {
 				...state,
 				error: null,
+			};
+		case USER_UPDATE_PROFILE_RESET:
+			return {
+				...state,
+				success: false,
 			};
 		case USER_DETAILS_RESET:
 		case USER_LOGOUT_RESET:

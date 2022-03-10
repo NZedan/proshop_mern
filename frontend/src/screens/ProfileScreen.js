@@ -20,6 +20,7 @@ const ProfileScreen = ({ history }) => {
 
 	const [alert, setAlert] = useState(false);
 	const [errorOrdersAlert, setErrorOrdersAlert] = useState(false);
+	const [successAlert, setSuccessAlert] = useState(false);
 
 	const dispatch = useDispatch();
 	// Is only filled if user logged in, logout true if user logs out
@@ -70,7 +71,10 @@ const ProfileScreen = ({ history }) => {
 		if (errorOrders) {
 			setErrorOrdersAlert(true);
 		}
-	}, [error, errorOrders, userStatus, dispatch]);
+		if (success) {
+			setSuccessAlert(true);
+		}
+	}, [error, errorOrders, success, userStatus, dispatch]);
 
 	function dismissHandler1() {
 		setAlert(false);
@@ -82,12 +86,17 @@ const ProfileScreen = ({ history }) => {
 		dispatch(removeOrderErrors());
 	}
 
+	function dismissHandler3() {
+		setSuccessAlert(false);
+	}
+
 	function submitHandler(e) {
 		e.preventDefault();
 		if (password !== confirmPassword) {
 			setMessage("Passwords don't match");
 		} else {
 			// Had * id: user._id * passed in, don't think it's necessary?
+			setMessage(null);
 			dispatch(updateUserProfile({ id: user._id, name, email, password }));
 		}
 	}
@@ -156,9 +165,12 @@ const ProfileScreen = ({ history }) => {
 			</Col>
 			<Col lg={4}>
 				<h2>User Profile</h2>
-				{/* Messages should have a timeout */}
 				{message && <Message variant='danger'>{message}</Message>}
-				{success && <Message variant='success'>Profile Updated</Message>}
+				{successAlert && (
+					<Message variant='success'>
+						Profile Updated <CloseButton onClick={dismissHandler3} aria-label='Hide' />
+					</Message>
+				)}
 				{alert && (
 					<Message variant='danger'>
 						{error} <CloseButton onClick={dismissHandler1} aria-label='Hide' />

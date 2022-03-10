@@ -31,6 +31,7 @@ import {
 	USER_UPDATE_PROFILE_FAIL,
 	USER_UPDATE_PROFILE_REMOVE_ERROR,
 	USER_UPDATE_PROFILE_REQUEST,
+	USER_UPDATE_PROFILE_SUCCESS,
 	USER_UPDATE_REMOVE_ERROR,
 	USER_UPDATE_REQUEST,
 	USER_UPDATE_SUCCESS,
@@ -177,6 +178,7 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
 
 		const { data } = await axios.put('/api/users/profile', user, config);
 		// Sets success and outputs errors for updateProfile messages
+		dispatch({ type: USER_UPDATE_PROFILE_SUCCESS });
 		dispatch({
 			type: USER_DETAILS_SUCCESS,
 			payload: data,
